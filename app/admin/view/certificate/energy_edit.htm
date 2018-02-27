@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>能源绩效信息</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$('#major_person').live( 'click', select_pduser );
+	$( "#certificate-tab" ).tabs({
+		collapsible: false
+	});
+});
+function select_pduser(){ 
+	var href = '<?php sysinfo('url');?>/?c=ajax&a=select_zy_name';
+ 	$this = $(this).parent().find("input"); 
+	$('<iframe border="0" id="frame1" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业管理人员',
+		autoOpen: true,
+		width: 600,
+		height: 380,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();}
+	}).width(600 - 30).height(380);
+}
+function update_user( uid, name ){
+	var val=$this.val();
+	if(val)
+	val+="；";
+	val+=name;
+	$this.val(val);
+
+	$('#frame1').dialog('close');
+}
+</script>
+
+</head>
+
+<body>
+<?php echo einfo("ct_id=$ct_id&width=800");?>
+<br/>
+<div id="certificate-tab" style="margin: 0 auto;width:800px;" class="tal">
+	<ul>
+		<li><a href="#tab-basic">能源绩效信息</a></li>
+	</ul>
+	<div id="tab-basic">
+    <form name="winput" method="post" action="?c=certificate&a=energy_edit">
+<input type="hidden" name="pid" value="<?=$id;?>" />
+
+		<table class="grid-table">
+			<tbody>
+
+			
+            <tr align="right">
+				<td colspan="">报送周期标识：</td>
+				<td colspan=""><input type="text" name="CYCLE_IDENTIFY" value="<?=$CYCLE_IDENTIFY;?>" /></td>
+			</tr>
+            <tr align="right">
+				<td colspan="">能耗统计开始日期：</td>
+				<td colspan=""><input type="text" name="EN_S_DATE" value="<?=$EN_S_DATE;?>" class="input-date" /></td>
+				<td colspan="">耗统计截止日期：</td>
+				<td colspan=""><input type="text" name="EN_E_DATE" value="<?=$EN_E_DATE;?>"  class="input-date"/></td>
+				
+			</tr>
+            <tr align="right">
+				<td colspan="">审核统计期间工业总产值：</td>
+				<td colspan=""><input type="text" name="OUT_VALUE" value="<?=$OUT_VALUE;?>" /></td>
+				<td colspan="">审核统计期间综合能耗：</td>
+				<td colspan=""><input type="text" name="INTEG_EN" value="<?=$INTEG_EN;?>" /></td>
+				
+			</tr>
+             <tr align="right">
+				<td colspan="">审核统计期间第Pi种产品名称：</td>
+				<td colspan=""><input type="text" name="P_PRO_NAME" value="<?=$P_PRO_NAME;?>" /></td>
+				<td colspan="">审核统计期间第Pi种产品产量：</td>
+				<td colspan=""><input type="text" name="P_PRO_OUT" value="<?=$P_PRO_OUT;?>" /></td>
+				
+			</tr>
+             <tr align="right">
+				<td colspan="">第PI种产品单位：</td>
+				<td colspan=""><input type="text" name="P_PRO_UNIT" value="<?=$P_PRO_UNIT;?>" /></td>
+				<td colspan="">第PI种产品单位说明：</td>
+				<td colspan=""><input type="text" name="P_PRO_UNIT_DES" value="<?=$P_PRO_UNIT_DES;?>" /></td>
+				
+			</tr>
+            <tr align="right">
+				<td colspan="">审核对应Pi种产品的综合能耗Ei：</td>
+				<td colspan=""><input type="text" name="P_PRO_EN_EI" value="<?=$P_PRO_EN_EI;?>" /></td>
+				
+			</tr>
+             <tr align="">
+				<td colspan="">能源边界：</td>
+				<td colspan="3"><textarea name="ORG_EN_BORDER" style="width:500px; height:100px;"><?=$ORG_EN_BORDER;?></textarea></td>
+				
+			</tr>
+			
+			</tbody>
+		</table>
+		<br/>
+		<p align="left">注：不要填写单位</p>
+		<p class="button-panel tac" style="margin:12px 0 20px;">
+        <label><input type="checkbox" name="energy_status" value="1" <?=$energy_status?"checked":"";?>/>已登记</label>
+        <button type="submit" class="btn btn-submit" > 保存 </button>
+		</p>
+	
+</form>
+</div>
+</div>
+
+</body>
+</html>

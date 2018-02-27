@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?=get_conf('charset');?>" />
+<title>选择人员</title>
+
+<link href="<?=get_conf('theme_url');?>css/style.css" type="text/css" rel="stylesheet" />
+<link href="<?=get_conf('theme_url');?>css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+    });
+    </script>
+</head>
+
+<body>  
+<form method="get" action="">
+	<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="app" value="<?=$app;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" /> 
+        <input type="hidden" name="app" value="<?=$app;?>" /> 
+	<table>
+		<tr>  
+			<td>工厂编码:</td>
+			<td ><input type="text" name="code" value="<?=$_GET['code'];?>"  class="input input-search-basic" /></td>
+			<td>组织名称：</td>
+			<td ><input type="text" name="ep_name" value="<?=$_GET['ep_name'];?>"  class="input input-search-basic" /></td>
+ 			<td align="left">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</td>
+		</tr>
+	</table>
+</form>
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="60">编码</th>
+          
+			<th>组织名称</th>
+            <th>生产地址</th> 
+            
+		</tr>
+		</thead>
+		<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $list_datas ){
+	foreach( $list_datas as $id => $row ){
+?>
+		<tr align="left">
+			<td><a href="javascript:window.parent.update_eps( '<?=$row['eid'];?>', '<?=$row['ep_name'];?>', '<?=$row['prod_addr'];?>', '<?=$row['work_code'];?>' );"><img src="theme/images/b_edit.png" border="0" /></a></td>
+
+			
+			<td><?=$row['code'];?></td> 
+			<td><?=$row['ep_name'];?></td> 
+            <td><?=$row['prod_addr'];?></td>
+            
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

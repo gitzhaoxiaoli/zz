@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>项目列表</title>
+    <meta name="generator" content="editplus" />
+    <meta name="author" content="" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="theme/js/jquery.js"></script>
+    <script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+    <script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+    <style  type="text/css">
+<!--
+.trans_msg {
+	filter: alpha(opacity=100, enabled=1) revealTrans(duration=.2, transition=1) blendtrans(duration=.2);
+}
+-->
+</style>
+    <script type="text/javascript">
+$(function(){
+	$('.c-del').click(function(){
+			confirm_dialog('确认要删除该记录吗？', $(this).attr( 'href' ), 'warning' );
+			return false;
+		});
+
+	$( ".input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$('#export-xls-btn').click( do_export_xls );
+});
+    function clearForm(objE){
+        $(objE).find(':input').each(
+            function(){
+                switch(this.type){
+                    case "text":
+                    case "select-one":
+                    	$(this).val('');
+                        break;
+                }
+            }
+        );
+    }
+function do_export_xls(){
+	var form = $('#search-form');
+	form.append($('<input type="hidden" name="export" value="1" />'));
+	form.submit();
+	form.find('input[name=export]').remove();
+}
+    </script>
+    </head>
+
+    <body>
+<form method="get" action="" class="search-form tal" id="search-form"  style='width:1050px;margin:0 auto;'>
+      <input type="hidden" name="m" value="<?=$m;?>" />
+      <input type="hidden" name="c" value="<?=$c;?>" />
+      <input type="hidden" name="a" value="<?=$a;?>" />
+      <input type="hidden" name="status" value="<?=$status;?>" />
+      <table >
+    <tr>
+          <td class="left">企业名称：</td>
+          <td class='right'><input type="text" name="ep_name" value="<?=$ep_name;?>" class="input finput"/></td>
+       
+      
+      <td class="left">认证体系：</td>
+      <td class="right"><select name="iso" class='fselect'><option value=""></option><?=$iso_select;?></select></td>
+       
+        <td class="left">合同号：</td>
+          <td class='right'><input type="text" name="ct_code" class="input" value="<?=$ct_code;?>" /></td>
+          <td class="left">项目号</td>
+          <td class='right'><input type="text" name="cti_code" class="input" value="<?=$cti_code;?>" /></td>
+
+         </TR>
+    
+
+  </table>
+      <p class="button-panel">
+    <button class="btn btn-submit" type="submit"> 搜 索 </button>
+    &nbsp;
+    <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>
+    &nbsp;
+    <?php if(current_user('check_auth') == 1){ ?>
+    <button class="btn btn-button" type="button" id="export-xls-btn"> 批量导出 </button>
+    <?php }?>
+  </p>
+    </form>
+<br/>
+<div id="toolTipLayer" style="position:absolute; visibility: hidden"></div>
+<div style='width:1145px;margin:0 auto;' class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+      <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top <?=$tab_0;?>"><a href="?c=finance&a=project&is_finance=0<?=gettourl();?>">未收完<span class="cnt-total">&nbsp;&nbsp;
+      <?=$is_finance_count[0];?>
+      </span></a></li>
+      <li class="ui-state-default ui-corner-top <?=$tab_2;?>"><a href="?c=finance&a=project&is_finance=2<?=gettourl();?>">已收完<span class="cnt-total">&nbsp;&nbsp;
+      <?=$is_finance_count[2];?>
+      </span></a></li>
+  </ul>
+      <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table class="grid-table tal">
+          <thead>
+        <tr>  
+              <th width="40">操作</th>
+              <th width="">企业名称</th>
+              <th width="">合同号</th>
+              <th width="">项目号 </th>
+              <th width="">体系</th>
+              <th width="">合同来源</th>
+              <th width="">审核类型</th>
+            </tr>
+      </thead>
+          <tbody>
+        <?php
+if( $datas ){
+	foreach( $datas as $row ){
+?>
+        <tr align='center'>
+              <td align="center"><a class="icon-edit" href="?c=finance&a=xlist&eid=<?=$row['eid'];?>&ct_id=<?=$row['ct_id']?>"></a></td>
+              <td><?=$row['ep_name'];?></td>
+              <td><?=$row['ct_code'];?></td>
+              <td><?=$row['cti_code'];?></td>
+              <td><?=$row['iso'];?></td>
+              <td><?=$row['ctfrom'];?></td>
+              <td><?=$row['audit_type'];?></td>
+            </tr>
+        <?php
+	}
+} else {
+?>
+        <tr>
+              <td align="center" colspan="12">未找到相关记录</td>
+            </tr>
+        <?php
+}
+?>
+      </tbody>
+        </table>
+    <p>
+          <?=$pages['pages'];?>
+        </p>
+  </div>
+    </div>
+</body>
+</html>

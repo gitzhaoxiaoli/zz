@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>企业密码重置</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.url.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script> 
+<script>
+    $(function() {
+		var tooltips = $( "[title]" ).tooltip({position:{my:"left bottom+37", at:"left bottom"}});
+        $( "#user-tab" ).tabs({
+            collapsible: false
+        });
+		 $( "#role" ).tabs({
+            collapsible: false
+        });
+        
+		$('#select-username').click(function(){
+			$('#username').attr("disabled",false); 
+    	});
+		$('#select-newpassword').click(function(){
+			$('#newpassword').attr("disabled",false); 
+			$('#newpassword').attr("value",'');
+    	});
+    });
+
+
+</script>
+</head>
+<body>
+
+<form name="form1" method="post" action="" onSubmit="return form_check_username();">
+<input type="hidden" name="eid" value="<?=$users['eid'];?>">
+<div id="user-tab" style="margin:0 auto;width:800px;" class="tal">
+	<ul>
+		<li><a href="#tab-basic">企业账户信息</a></li>
+	</ul>
+	<div id="tab-basic">
+		<ul class="main-form">
+			<li>
+				<label class="field">企业名称：</label>
+				<span>
+					<input name="ep_name" value="<?=$users['ep_name'];?>" style="width:180px"  disabled='disabled' />
+					<em>*</em>
+				</span>
+			</li>
+			<li>
+				<label class="field">企业用户名：</label>
+				<span>
+					<input name="en_username" value="<?=$users['username'];?>" style="width:180px"/>
+					<em>*</em>
+				</span>
+			</li>
+			<li>
+				<label class="field">密码：</label>
+				<span>
+					<input name="en_password" id="newpassword" class="input" value="" style="width:160px; float:left;height:18px;border-width:1px 0 1px 1px;border-color:#ddd;border-style:solid; " title="该用户新密码，请谨慎修改！" disabled='disabled'>
+					<!-- <input name="en_password" value=""  title="该用户新密码，请谨慎修改！" style="width:180px"  disabled='disabled' /> -->
+					<i class="i-select" id="select-newpassword" ></i>
+					<em>*</em>
+				</span>
+			</li>
+		</ul>
+	</div>
+<p><center><button class="btn btn-submit" type="submit"> 保 存 </button></center></p>
+</div>
+<br />
+</form>
+<br/><br/>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>项目列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table>
+	<thead>
+		<tr>
+			
+            <th width="*">状态</th>
+			<th width="100">申请编码</th>
+			<th width="*">申请编号</th>
+			<th width="200">委托人名称</th>
+			<th width="*">认证标准</th>
+			<th width="*">证书状态</th>
+			<th width="*">检查类型</th>
+			<th width="*">检查开始</th>
+			<th width="*">检查结束</th>
+			<th width="*">审定日期</th>
+			<th width="*">签发日期</th>
+			<th width="*">项目所属单位</th>
+			<th width="*">是否收费</th>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); if( $auditLists ): foreach( $auditLists as $row ):?>
+		<tr>
+			<td><?=$row['status_V'];?></td>
+			<td><?=$row['ct_code'];?></td>
+			<td><?=$row['cti_code'];?></td>
+			<td align="left"><?=$row['ep_name'];?></td>
+			<td><?=$row['audit_ver_V'];?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); if( $row['cert_status'] ){ echo implode('<br/>',$row['cert_status']); }?></td>
+			<td><?=$row['audit_type_V'];?></td>
+			<td><?=$row['tb_date'];?></td>
+			<td><?=$row['te_date'];?></td>
+			<td><?=$row['assess_date'];?></td>
+			<td><?=$row['sp_date'];?></td>
+			<td><?=$row['ctfrom_V'];?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row['is_finance']=='y'){echo '是';}else{echo '否';}?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); endforeach; endif;?>
+	</tbody>
+</table>
+</body>
+</html>

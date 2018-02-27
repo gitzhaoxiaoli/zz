@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>客户文档列表</title> 
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script>
+//日期格式
+$(function() { 
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$(".btn-submit").click(function(){
+		
+		var s=$(":input[type=checkbox]:checked");
+		if(s.length<1){
+			message_dialog( '请选择的项目！', 'error' );
+			return false;
+			
+			}
+		
+		
+		})
+}); 
+//全选
+function select_all(){
+	$('input[type=checkbox][name="aid[]"]').each(function(){
+		$(this).attr("checked",true);})
+} 
+</script>
+</head>
+
+<body>
+<div style="margin:0 auto; width:750px" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;"><?=$ep_name;?> <span class="cnt-total">[<?=$total;?>]</span></a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+
+<form method="post" action="?c=attachment&a=batdown&class=pro">
+	<table class="grid-table" width="600">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="*">文件名</th>
+			<th width="80">文件类型</th>
+			<th width="80">上传时间</th>
+			<th width="60">上传人</th>
+			<th width="40">备注</th>
+			<th width="30">下载</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $attachs ){
+	foreach( $attachs as $row ){
+?>
+		<tr>
+			<td align="center"><input type="checkbox" name="aid[]" value="<?=$row['id'];?>" /></td>
+			<td><?=$row['name'];?></td>
+			<td align="center"><?=$row['ftype_V'];?></td>
+			<td align="center"><?=$row['postdate'];?></td>
+			<td align="center" ><?=f_username($row['create_uid']);?></td>
+			<td align="center">
+<?php
+if( $row['description'] ){
+?>
+<a href="javascript:;" title="<?=$row['description'];?>"><img src="theme/images/other.png" border="0" /></a> 
+<?php
+}
+?>
+			</td>
+			<td align="center"><a href="?c=attachment&a=down&aid=<?=$row['id'];?>&class=pro"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a></td>
+		</tr>
+
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="7">没有找到相关文档</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+		<tr>
+			<td><a href="javascript:select_all();">全选</a></td>
+			<td colspan="6" align="left"><button type="submit" class="btn btn-submit">批量打包下载</button></td>
+		</tr>
+	</table>
+</form>
+	<p><?=$pages['pages'];?></p>
+
+</div>
+</div>
+</body>
+</html>

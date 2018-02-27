@@ -1,0 +1,185 @@
+<?php tpl('header')?>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script>
+    $(function() {
+    	$( "#contract-tab" ).tabs({
+    		collapsible: false
+    	});
+        $( "#enterprise-tab" ).tabs({
+            collapsible: false
+        });
+        $( "#enterprise2-tab" ).tabs({
+            collapsible: false
+        });
+        $( "#enterprise1-tab" ).tabs({
+            collapsible: false
+        });
+		 $( "#enterprise3-tab" ).tabs({
+            collapsible: false
+        });
+        $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+         
+      $("#bc").click(function(){
+              if($(".id2:checked").length<1){
+                  alert('请选择项目');
+                  return false;
+              }
+      });
+
+
+
+});
+    function check_form(obj){
+        $("#check_tab").find(); 
+		
+	 
+ 		if(Validator.Validate(obj,2)){
+			return true;
+		}else{
+			return false;
+		} 
+    } 
+    </script>
+</head>
+<body>
+<?php  echo einfo("ct_id=$ct_id&eid=$eid");?>
+<br />
+
+<div id="enterprise1-tab" style="margin: 0 auto; width: 750px;" class="tal">
+    <ul>
+      <li><a href="#tab-basic">应收费用</a></li>
+    </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table class="grid-table">
+      <thead>
+       <tr align='center'>
+            <th width="60">收费类型</th>
+            <th width="60">应收金额</th>
+            <th width="60">收费备注</th>
+            <th width="60">收费状态</th>
+        </tr>
+
+<?php
+if( $data1 ){
+    foreach( $data1 as $row ){
+    	if($row['is_finance']==2){
+	         $row['is_finance']='已收完';
+	      }else{
+	         $row['is_finance']='未收完';
+	      }
+
+?>      
+            
+        <tr align='center'>
+            
+            <td><?=$row['cost_type']?></td>
+            <td><?=$row['cost'];?></td>
+            <td><?=$row['note']?></td>
+            <td><?=$row['is_finance']?></td>
+        </tr>
+<?php
+    }?>
+<?php
+    }?>
+          </thead>
+    </table>
+  </div>
+ </div>
+
+ <br/>
+<br/>
+<div id="enterprise3-tab" style="margin: 0 auto; width: 750px;" class="tal">
+   <ul>
+      <li><a href="#tab-basic">收费明细</a></li>
+    </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table class="grid-table">
+      <thead>
+       <tr align='center'>
+            <th width="60">到款时间</th>
+            <th width="60">收费金额</th>
+            <th width="60">收费类型</th>
+            
+
+        </tr>
+
+<?php
+if( $data2 ){
+    foreach( $data2 as $row ){
+      
+?>
+        <tr align='center'>
+
+            <td><?=$row['dk_date']?></td>
+            <td><?=$row['dk_cost'];?></td>
+            <td><?=$row['cost_type']?></td>
+            
+        </tr>
+<?php
+    }?>
+<?php
+    }?>
+          </thead>
+    </table>
+
+</div>
+</div>
+<br>
+<form method="post">
+
+<div id="enterprise2-tab" style="margin: 0 auto; width: 750px;" class="tal">
+   <ul>
+      <li><a href="#tab-basic">项目信息</a></li>
+    </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table class="grid-table">
+      <thead>
+       <tr align='center'>
+            <th width="60">选择</th>
+            <th width="60">体系</th>
+            <th width="60">审核类型</th>
+            <th width="60">合同编号</th>
+            <th width="60">项目编号</th>
+            
+        </tr>
+
+<?php
+if( $data3 ){
+    foreach( $data3 as $row ){
+    
+?>
+        <tr align='center'>
+            <td>
+             <input type="checkbox" class="id2" name="id2[<?=$row['id']?>]" value="<?=$row['id']?>" <?=$row[is_finance]=='2'?"checked":""?>/>
+            
+
+            </td>
+            <td>
+            <?=$row['iso']?>
+            </td>
+            <td><?=$row['audit_type']?></td>
+            <td><?=$row['ct_code'];?></td>
+            <td><?=$row['cti_code']?></td>
+
+        </tr>
+<?php
+    }?>
+<?php
+    }?>
+      </thead>
+    </table>
+          <center><label>
+            <td><label><input type="radio" name="id1" value="0" />未收完 </label>
+            <label><label><input type="radio" name="id1" value="2" checked="checked" />已收完 </label></td>
+            <button class="btn btn-submit" type="submit" id='bc' > 保 存 </button>
+          </center>
+</div>
+
+</div>
+ </form>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	<table class="grid-table tal">
+    <thead>
+    <tr align='center'>
+          
+      
+      <!--<th width="*">合同编号</th>-->
+      <th width="*">认证申请编号</th>
+      <th width="*">证书编号</th>
+      <th width="200">委托人</th>
+            <th width="200">生产者</th>
+            <th width="200">生产企业</th>
+            <th width="*">状态</th>
+            <th width="*">注册时间</th>
+            <th width="*">证书到期</th>
+            <th width="*">暂停时间</th>
+            <th width="*">暂停到期</th>
+            <th width="*">撤销时间</th>
+            <th>恢复时间</th>
+      <th width="*">合同来源</th>
+      
+    </tr>
+    </thead>
+    <tbody>
+<?php
+if( $datas ){
+  foreach( $datas as $row ){
+?>
+    <tr>
+          
+      
+      <!--<td align="center"><?=$row['ct_code'];?></td>-->
+      <td align="center"><?=$row['cti_code'];?></a></td>
+      <td align="center"><?=$row['certno'];?></a></td>
+      <td align="left"><?=$row['cert_name'];?></td>
+            <td align="left"><?=$row['manu_name'];?></a></td>
+            <td align="left"><?=$row['pro_name'];?></a></td>
+            <td align="center"><?=$row['status'];?></td>
+            <td align="center"><?=$row['s_date'];?></td>
+            <td align="center"><?=$row['e_date'];?></td>
+            <td align="center"><?=$row['time1'];?></td> <!--暂停时间-->
+            <td align="center"><?=$row['time2'];?></td> <!--暂停到期-->
+            <td align="center"><?=$row['time3'];?></td><!--撤销日期-->
+            <td align="center"><?=$row['time4'];?></td><!--恢复时间-->
+      <td align="center"><?=$row['ctfrom'];?></td>
+      
+    </tr>
+       
+<?php
+  } ?>
+     
+<?php
+} else {
+?>
+    <tr>
+      <td align="center" colspan="13">没有找到数据 </td>
+    </tr>
+       
+<?php
+}
+?>
+  
+    </tbody>
+        
+  </table>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<?php tpl('header');?>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	$('#major_person').live( 'click', select_pduser );
+	$( "#certificate-tab" ).tabs();
+	
+	$( ".tab" ).tabs();
+	
+	$('.add-audit-code-btn').live('click', select_code );
+	$('.del-code').live( 'click', del_code );
+	//标准转换
+	$('#chang_audit_ver').click(function(){
+ 		if($(this).attr("checked")){
+			$('#new_audit_vers').show();
+ 		}else{
+			$('#new_audit_vers').hide();
+		} 
+	});
+	
+});
+function select_pduser(){  
+	var href = '?c=ajax&a=select_zy_name';
+ 	$this = $(this).parent().find("input"); 
+	$('<iframe border="0" id="frame1" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业管理人员',
+		autoOpen: true,
+		width: 600,
+		height: 380,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();}
+	}).width(600 - 30).height(380);
+}
+function update_user( uid, name ){
+	var val=$this.val();
+	if(val)
+	val+="；";
+	val+=name;
+	$this.val(val); 
+	$('#frame1').dialog('close');
+}
+//选择专业代码
+function select_code(){
+	var $this = $(this);
+	var iso = $this.attr( 'rel' );
+	var tbody = $this.parent().parent().find('.audit-codes'); 
+	var href = '?c=ajax&a=select_code&iso=' + iso;
+
+	$('<iframe border="0" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业代码',
+		autoOpen: true,
+		width: 800,
+		height: 420,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();},
+		buttons: {
+			'取消'	: function(){$(this).dialog('close');},
+			'确定'	: function(){
+				var audit_code_arr = new Array();
+				var use_code_arr = new Array();
+				var audit_input = $this.parent().parent().find('input.audit-code');
+				var use_input = $this.parent().parent().find('input.use-code');
+				var old_audit_code = audit_input.val();
+				var old_use_code = use_input.val();
+				$(this).contents().find('input[name="code[]"]:checked').each(function(index){
+					var _this = $(this);
+					var audit_code = _this.val();
+					var use_code = _this.parent().parent().find('.use-code').text();
+					var mark = _this.parent().parent().find('.mark').text();
+					var risk = _this.parent().parent().find('.risk').text();
+					var html = '<tr align="center"><td>';
+					html += use_code + '</td><td>';
+					html += audit_code + '</td><td>';
+					html += mark + '</td><td>'
+					html += risk + '</td><td><a href="javascript:;" class="del-code" rel="'+audit_code+'">'
+					html += '<img src="theme/images/b_drop.png" border=0 /></a></td></tr>';
+					$(html).appendTo( tbody );
+					audit_code_arr[index] = audit_code;
+					use_code_arr[index] = use_code;
+				});
+				audit_input.val( ( old_audit_code ? old_audit_code+'；' : '' ) + audit_code_arr.join('；') );
+				use_input.val( ( old_use_code ? old_use_code+'；' : '' ) + use_code_arr.join('；') );
+				$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(780);
+}
+
+
+function del_code(){
+	var $this = $(this);
+	var code = $this.attr( 'rel' );
+	var use_input = $this.parent().parent().parent().parent().parent().find('input.use-code');
+	var audit_input = $this.parent().parent().parent().parent().parent().find('input.audit-code');
+	var use_code_arr = use_input.val().split('；');
+	var audit_code_arr = audit_input.val().split('；');
+	var new_use_code_arr = [];
+	var new_audit_code_arr = [];
+	for( var i = 0; i < audit_code_arr.length; i++ ){
+		if( audit_code_arr[i] != code ){
+			new_audit_code_arr.push(audit_code_arr[i]);
+			new_use_code_arr.push(use_code_arr[i]);
+		}
+	}
+	use_input.val( new_use_code_arr.join( '；' ) );
+	audit_input.val( new_audit_code_arr.join( '；' ) );
+	$this.parent().parent().remove();
+}
+</script>
+</head>
+
+<body>
+<?php 
+ 
+echo einfo("ct_id=$ct_id&width=800");?>
+  <br>
+<form name="winput" method="post" >
+  <input type="hidden" name="ct_id" value="<?=$ct_id;?>" />
+  <div id="certificate-tab" style="margin: 0 auto;width:800px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">
+    合同修改</a></li>
+  </ul>
+  <div id="tab-basic">
+   
+  <table class="grid-table">
+    <tbody>
+    	<tr>
+    		<td>合同号</td>
+    		<td><input type="text" name="ct_code" value="<?=$ct_code?>"></td>
+    		<td>是否现场</td>
+    		<td><input type="radio" name="is_site" value="1" <?=$is_site?'checked':'';?> >是&nbsp;&nbsp;&nbsp;<input type="radio" name="is_site" value="0" <?=!$is_site?'checked':'';?> >否</td>
+    	</tr>
+        <tr>
+            <td>受理日期</td>
+            <td><input type="text" class="input-date"  name="accept_date" value="<?=$accept_date;?>"></td>
+        </tr>
+        <tr>
+        	<td>评审人</td>
+            <td><input type="text" name="review_user" value="<?=$review_user;?>"></td>
+            <td>评审日期</td>
+            <td><input type="text" class="input-date"  name="review_date" value="<?=$review_date;?>"></td>
+        </tr>
+        <tr>
+        	<td>审批人</td>
+            <td><input type="text" name="approval_user" value="<?=$approval_user;?>"></td>
+            <td>审批日期</td>
+            <td><input type="text" class="input-date"  name="approval_date" value="<?=$approval_date;?>"></td>
+        </tr>
+    </tbody>
+  </table>
+  
+  <br/>
+  <p class="button-panel tac" style="margin:12px 0 20px;">
+    
+    <button type="submit" class="btn btn-submit" > 保存 </button>
+  </p>
+ 
+  <br/>
+</form>
+</div>
+</div>
+</body>
+</html>

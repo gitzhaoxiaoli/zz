@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>证书邮寄列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	<table class="grid-table tal">
+		<thead>
+		<tr align='center'>
+			
+			<?php
+!defined('IN_SUPU') && exit('Forbidden'); if($is_sms=='y'){?>
+			<th width="*">邮寄日期</th>
+			<th width="*">快递公司</th>
+			<th width="*">快递单号</th>
+			<?php
+!defined('IN_SUPU') && exit('Forbidden'); } ?>
+			
+			<th width="*">申请编号</th>
+			<th width="*">证书编号</th>
+			<th width="200">委托人名称</th>
+			<th width="*">认可标志</th>
+			<th width="*">项目所属单位</th>
+			<th width="*">标准版本</th>
+			<th width="*">类型</th>
+			<th width="*">状态</th>
+			<th width="*">邮寄备注</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $datas ){
+	foreach( $datas as $row ){
+?>
+		<tr align='center'>
+			
+			<?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row[is_sms]=='y'){?>
+			<td align="center"><?=$row['sms_date'];?></td>
+			<td align="center"><?=$row['sms_name'];?></td>
+			<td align="center"><?=$row['sms_no'];?></td>
+			<?php
+!defined('IN_SUPU') && exit('Forbidden'); } ?>
+			
+			<td align="center"><?=$row['cti_code'];?></a></td>
+			<td align="center"><?=$row['certno'];?></a></td>
+			<td align="center"> <?=$row['ep_name'];?> </td>
+			<td align="center"><?=$row['mark'];?></a></td>
+			<td align="center"><?=$row['ctfrom'];?></td>
+			<td align="center"><?=$row['audit_ver'];?></td>
+			<td align="center"><?=$row['audit_type'];?></td>
+			<td align="center"><?=$row['status'];?></td>
+			<td align="center"><?=$row['sms_note'];?></td>
+	  	</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+}
+?>
+		</tbody>
+	</table>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<title>顶部菜单</title>
+<style type="text/css">
+body{margin:0;padding:0;font-size:12px;}
+</style>
+<script src="theme/js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+$(function(){
+	var uname,upwd;
+
+	var s = $("#login_out");
+	var func = function(){
+
+    	$.post("?c=login&a=login_out",{'login':'out'},function(r){
+        	var r = Trim(r);
+    		if(r == 'ok'){
+				<?php if($_SESSION[appname] == 'en_login'){ ?>
+    			parent.location.href='?m=customer&c=login';
+				<?php }else if($_SESSION[appname] == 'org_login'){ ?>
+    			parent.location.href='?m=testorg&c=login';
+				<?php }else{?>
+				parent.location.reload();
+				<?php }?>
+    		}else {
+    			alert(r);
+    		}
+    	});
+	}
+	
+	s.click(func);
+
+});
+function Trim(str){
+ var result; 
+ result = str.replace(/(^\s+)|(\s+$)/g,"");
+
+ return result;
+}
+//]]>
+
+</script>
+</head>
+
+<body background="theme/images/bg01.jpg">
+
+<table cellspacing=0 cellpadding=0 height="70" width="100%" border=0>
+  <tr>
+  
+    <td class="tal" width="1000px" ><img src="theme/images/supusoft.png" border=0 /></td>
+    <?php if($_SESSION[appname] == 'login'){ ?>
+    <?php foreach($top_nav as $k=>$v){?>
+     <td class="tal" style=" text-align:center;" ><a href="?c=index&a=left&op=<?=$k?>" target="left"><img src="theme/images/<?=$v['icon']?>.png" border=0 /></a><br />
+     
+      <a style="color:#009;" target="left" href="?c=index&a=left&op=<?=$k?>"><?=$v['name']?></a></td>
+     <?php } ?> 
+     <?php }?>
+<!--	<TD class="tal" style=" text-align:center;"><a href="./help/code.php" target="_blank"><img src="theme/images/a04.png" border=0 /></a></TD>-->
+	<TD class="tal " style=" text-align:center;"><img src="theme/images/a05.png" border=0 id='login_out' style='cursor:pointer;' /></TD>
+	<TD align="center" width="20"></TD>
+  </tr>
+</table>
+
+</body>
+</html>

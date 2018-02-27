@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>产品报表</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="theme/js/w2ui-1.2/w2ui-1.2.min.css" />
+<script type="text/javascript" src="theme/js/w2ui-1.2/w2ui-1.2.min.js"></script>
+
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$( "#month-1" ).tabs({
+		collapsible: false
+	});
+	$( "#month-2" ).tabs({
+		collapsible: false
+	});
+	$( "#month-3" ).tabs({
+		collapsible: false
+	});
+	$( "#month-change" ).tabs({
+		collapsible: false
+	});
+	
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$('.btn-excel').click(function(){
+		
+	var s_date = $(this).parent().parent().find('.s_date');
+	var e_date = $(this).parent().parent().find('.e_date');
+	var fac_code = $(this).parent().parent().find('.fac_code')
+	var type = $(this).parent().parent().find('.url').val();
+	var load_excel=$(this).parent().parent().parent().find('.load-excel');
+	if(!s_date.val() || !e_date.val()){
+		alert('请输入时间');
+		s_date.focus();
+		return false;
+	}
+	if(s_date.val()>e_date.val()){
+		alert('开始时间不能大于结束时间');
+		s_date.focus();
+		return false;
+	}
+	
+	var export_xls_url = "?c=xls&a=prod&type="+type;
+	var param = '';
+	param += '&s_date='+s_date.val();
+	param += '&e_date='+e_date.val();
+	param += '&fac_code='+fac_code
+	load_excel.css('display','inline-block');
+	$.post( export_xls_url + param, function(result) {
+	load_excel.css('background-image','');
+	load_excel.html('恭喜, 生成Excel表成功! 请点击' + '<a style="color:red" href="' + result + '" target="_blank">此处</a>' + '下载');
+	$(this).attr('disabled', true);
+		
+	});
+		})
+	
+});
+</script>
+</head>
+<body>
+<div id="month-1" style="margin: 0 auto; width: 750px;" class="tal">
+	<ul>
+		<li><a href="#tab-basic">工厂检查计划信息表</a></li>
+	</ul>
+	<div id="tab-basic" style="100%">
+		<table style="100%" class='grid-table'>
+			<thead>
+			<tr align='center'>
+				<th width="150" align='center'>开始时间</th>
+				<th width="150">结束时间</th>
+				<th width="150">工厂编号</th>
+                <th width="*">生成数据表</th>
+			</tr>
+			</thead>
+            <form action="" method="post" class="excel_form">
+			<tr align='center'>
+				<td width="150"><input type='text'  name='s_date' value='<?=$s_date?>' class="input input-date s_date"/></td>
+				<td width="150"><input type='text'  name='e_date' value='<?=$e_date?>' class="input input-date e_date"/></td>
+                <td><input type="text" name="fac_code" class="fac_code" /></td>
+                <td>
+                <input type="hidden" value="1" class='url'/>
+				</form>
+                 <button  class="btn btn-button btn-excel" type="button">生成数据表</button></td></td>
+			</tr>
+			<tr>
+				<td colspan="4" height="54" align="center" valign="middle">
+                <span class="load-excel" style="padding-left:40px;height:54px;line-height:54px;background:url(theme/images/loading.gif) 0 8px no-repeat;display:none;">数据表生成中，请您稍等...</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<br/>
+
+<div id="month-2" style="margin: 0 auto; width: 750px;" class="tal">
+	<ul>
+		<li><a href="#tab-basic">工厂检查结果信息表</a></li>
+	</ul>
+	<div id="tab-basic" style="100%">
+		<table style="100%" class='grid-table'>
+			<thead>
+			<tr align='center'>
+				<th width="150" align='center'>开始时间</th>
+				<th width="150">结束时间</th>
+                <th width="150">工厂编号</th>
+				<th width="*">生成数据表</th>
+			</tr>
+			</thead>
+            <form action="" method="post" class="excel_form">
+			<tr align='center'>
+				<td width="150"><input type='text'  name='s_date' value='<?=$s_date?>' class="input input-date s_date"/></td>
+				<td width="150"><input type='text'  name='e_date' value='<?=$e_date?>' class="input input-date e_date"/></td>
+                <td><input type="text" name="fac_code" class="fac_code" /></td>
+                <td>
+                <input type="hidden" value="2" class='url'/>
+				</form>
+                 <button  class="btn btn-button btn-excel" type="button">生成数据表</button></td></td>
+			</tr>
+			<tr>
+				<td colspan="4" height="54" align="center" valign="middle">
+                <span class="load-excel" style="padding-left:40px;height:54px;line-height:54px;background:url(theme/images/loading.gif) 0 8px no-repeat;display:none;">数据表生成中，请您稍等...</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<br/>
+
+<div id="month-3" style="margin: 0 auto; width: 750px;" class="tal">
+	<ul>
+		<li><a href="#tab-basic">证书信息表</a></li>
+	</ul>
+	<div id="tab-basic" style="100%">
+		<table style="100%" class='grid-table'>
+			<thead>
+			<tr align='center'>
+				<th width="150" align='center'>开始时间</th>
+				<th width="150">结束时间</th>
+                <th width="150">工厂编号</th>
+				<th width="*">生成数据表</th>
+			</tr>
+			</thead>
+            <form action="" method="post" class="excel_form">
+			<tr align='center'>
+				<td width="150"><input type='text'  name='s_date' value='<?=$s_date?>' class="input input-date s_date"/></td>
+				<td width="150"><input type='text'  name='e_date' value='<?=$e_date?>' class="input input-date e_date"/></td>
+                <td><input type="text" name="fac_code" class="fac_code" /></td>
+                <td>
+				</form>
+                <input type="hidden" value="3" class='url'/>
+                 <button  class="btn btn-button btn-excel" type="button">生成数据表</button></td></td>
+			</tr>
+			<tr>
+				<td colspan="4" height="54" align="center" valign="middle">
+                <span class="load-excel" style="padding-left:40px;height:54px;line-height:54px;background:url(theme/images/loading.gif) 0 8px no-repeat;display:none;">数据表生成中，请您稍等...</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<br/>
+</body>
+</html>

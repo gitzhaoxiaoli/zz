@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        <link href="themecss/style.css" type="text/css" rel="stylesheet" />
+        <link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+        <script type="text/javascript" src="themejs/jquery.js"></script>
+        <script type="text/javascript" src="themejs/jquery-ui.js"></script>
+        <script type="text/javascript" src="themejs/core.js"></script>
+        <script>
+
+        </script>
+        </head>
+        <body>
+        <table style="width: <?=$widht?>px" class='grid-table'>		 		
+          <tr>			
+            <th width="40">项目编号</th>
+			<th width="40">项目状态</th>
+			<th width="40">检查类型</th>
+			<th width="40">生产者</th>
+			<th width="40">委托人名称</th>
+			<th width="40">最后监察日</th>
+          </tr>
+		 <?if($projectLists){foreach($projectLists as $key=>$val){?>
+          <tr>			
+            <td width="100"><?=$val['cti_code'];?></td>
+			<td >
+				<?php 
+					switch($val['status']){
+						case 0:
+							echo "未安排";
+							break;
+						case 1:
+							echo "已安排";
+							break;
+							
+						case 2:
+							echo "待审批";
+							break;
+						case 3:
+							echo "已审批";
+							break;
+						case 5:
+							echo "监督维护";
+							break;
+						case 6:
+							echo "退回";
+							break;
+						default:echo "有误";	
+					}
+			    ?>
+			</td>
+			<td ><?=$val['audit_type_V'];?></td>
+            <td ><?=$val['proder'];?></td>
+            <td width="100"><?=$val['applyer'];?></td>
+            <td><?=$val['final_date'];?></td>
+          </tr>        
+         <?php } } ?>        
+         
+        </table>
+</body>
+</html>

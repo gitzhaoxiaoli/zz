@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>59</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+  <table>
+<thead>
+        <tr>
+         
+          
+          <th colspan="1" width="60"  align="center">生产企业名称</th>
+          <th width="100"  align="center">省份</th>
+          <th width="50" align="center">组织机构代码</th>
+          <th width="50" align="center">联系人</th>
+          <th width="50" align="center">联系人手机</th>
+          <th width="50" align="center">邮箱</th>
+          
+          
+       
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+if( $arr ){
+  foreach( $arr as $eid => $row ){
+?>
+      <div class="<?=$row['eid'];?> show_block">
+
+        <tr>
+ 
+          <td align="center"><?=$row['ep_name'];?></td>
+          
+          <!--其中hr获ef属性是用来添加分场所取eid 用的-->   
+          <td align="center"><?=$row['areaaddr'];?></td>
+          <td align="center"><?=$row['work_code'];?></td>
+          <td align="center"><?=$row['person'] ;?></td>
+          <td align="center"><?=$row['person_tel'];?></td>
+           <td align="center"><?=$row['person_email'];?></td>
+
+        </tr>
+      </div>
+      <?php
+    
+  }
+    
+} else {
+?>
+      <tr>
+        <td colspan="14">没有找到客户</td>
+      </tr>
+      <?php
+}
+?>
+        </tbody>
+      
+    </table>
+</body>
+</html>

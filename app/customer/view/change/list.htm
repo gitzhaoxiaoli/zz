@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>企业列表</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                  $(this).val('');
+                    break;
+            }
+        }
+    );
+}
+$(function(){
+$('#export-xls-btn').click( function(){
+  
+    var form = $('#search-form');
+    form.append($('<input type="hidden" name="export" value="1" />'));
+    form.submit();
+    form.find('input[name=export]').remove();
+    
+   
+  } );
+  $('.c-del').click(function(){
+		confirm_dialog('确认要删除？', $(this).attr( 'href' ), 'warning' );
+		return false;
+	});
+})
+
+</script>
+</head>
+
+<body>
+
+<!--<form method="get" action="" id="search-form" class="search-form tal" style='width:1050px;margin:0 auto;'>
+<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="c" value="<?=$c;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+<input type="hidden" name="paged" value="<?=$paged;?>" />
+  <table>
+    <tr>
+      <td class="left">委托人：</td>
+      <td class="right"><input type="text" name="ep_name" value="<?=$ep_name;?>" class="input finput" /></td>
+      <td class="left">生产者：</td>
+      <td class="right"><input type="text" name="manu_name" value="<?=$manu_name;?>" class="input finput" /></td>
+      <td class="left">生产企业：</td>
+      <td class="right"><input type="text" name="prod_name" value="<?=$prod_name;?>" class="input finput" /></td>
+      <td class="left">产品小类：</td>
+      <td class="right"><input type="text" name="cti_name" value="<?=$cti_name;?>" class="input finput" /></td>
+    </tr>
+    <tr>
+      <td class="left">产品名称：</td>
+      <td class="right"><input type="text" name="name" value="<?=$name;?>" class="input finput" /></td>
+       
+      <td class="left"></td>
+      <td class="right"></td>
+      <td class="left"></td>
+      <td class="right"></td>
+      <td class="left"></td>
+      <td class="right"></td>
+    </tr>
+  </table>
+  <p class="button-panel">
+    <button class="btn btn-submit" type="submit"> 搜 索 </button>&nbsp;
+    <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>&nbsp;
+   <button id="export-xls-btn" class="btn btn-button" type="button"> 批量导出</button>
+  </p>
+</form>-->
+<br/>
+
+<div style="margin:0 auto;width:1350px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">申请变更 <span class="cnt-total"><?=$total;?></span></a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+  <table class="grid-table tal">
+    <thead>
+    <tr>
+      <th width="50">申请书下载</th>
+      <th width="30">操作</th>
+      <th width="80">变更描述</th>
+      <th width="80">状态</th>
+      <th width="80">证书号</th>
+      <th width="80">原测试报告编号</th>
+<!--      <th width="80">委托人</th>
+      <th width="80">生产者</th>
+      <th width="100">生产企业</th>
+      <th width="90">产品小类</th>
+      <th width="130">证书号</th>
+      <th width="80">注册日期</th>
+      <th width="80">注册到期</th>
+-->      <th width="80">申请日期</th>
+      <th width="*">变更前</th>
+      <th width="*">变更后</th>
+      <th width="*">备注</th>
+      <th width="40">删除</th>
+    </tr>
+    </thead>
+    <tbody>
+<?php
+if( $array ){
+  foreach( $array as $k=>$v ){
+      
+?>
+    <tr>
+      <td align="center"><a href="?m=doc&c=app-sqs&id=<?=$v['id'];?>"><img src="theme/images/word.gif" border="0">
+</a></td>
+      <td align="center"><a href="?m=customer&c=change&a=edit&id=<?=$v['id'];?>"><img src="theme/images/b_edit.png" border=0 /></a></td>
+      <td align="center"><?=$v['title']?></td>
+      <td align="center"><?=$v['status_V']?></td>
+      <!--<td align="center"><?=$v['cert_name']?></td>
+      <td><?=$v['manu_name'];?></td>
+      <td align="center"><?=$v['pro_name'];?></td>
+      <td align="center"><?=$v['prod_id'];?></td>
+      <td align="center"><?=$v['certno'];?></td>
+      <td align="center"><?=$v['s_date']?></td>
+      <td align="center"><?=$v['e_date']?></td>-->
+      <td align="center"><?=$v['certno']?></td>
+      <td align="center"><?=$v['reportno']?></td>
+      <td align="center"><?=$v['sq_date']?></td>
+      <td align="center"><?=$v['cg_af']?></td>
+      <td align="center"><?=$v['cg_bf']?></td>
+      <td align="center"><?=$v['note']?></td>
+	  <td align="center"><?php if($v['status'] != '1'){?><a href="?m=customer&c=change&a=del&id=<?=$v['id'];?>" class="c-del"><img src="theme/images/b_drop.png" border=0 /></a><?php }?></td>
+    </tr>
+<?php
+  }
+} else {
+?>
+    <tr>
+      <td align="center" colspan="10">没有找到项目</td>
+    </tr>
+<?php
+}
+?>
+    </tbody>
+  </table>
+<!--  -->
+<?=$pages['pages'];?>
+<!--  -->
+</div>
+</div>
+
+</body>
+</html>

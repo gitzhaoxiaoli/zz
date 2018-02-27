@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>证书列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	<table class="grid-table tal">
+		<thead>
+		<tr align='center'>
+			<th width="200">发证机构名称</th>
+			<th width="*">流水号</th>
+			<th width="*">证书编号</th>
+			<th width="*">证书生效时间</th>
+			<th width="*">证书有效期</th>
+			<th width="*">HS编号</th>
+			<th width="*">认证依据的标准和技术要求</th>
+			<th width="*">证书状态</th>
+			<th width="*">最后一次审查/跟踪审查日期</th>
+			<th width="*">申请人名称（主）</th>
+			<th width="*">申请人名称（次）</th>
+			<th width="*">申请人组织机构代码</th>
+		    <th>申请人法人（负责人）</th>
+		    <th>申请人机构类型 </th>
+		    <th>申请人经济行业</th>
+		    <th>申请人经济行业（新国标代码）</th>
+		    <th>申请人经济类型</th>
+		    <th>申请人经济类型（新国标代码）</th>
+		    <th>申请人经营范围</th>
+		    <th>申请人标志</th>
+		    <th>申请人所在国家</th>
+		    <th>申请人所在地区</th>
+		    <th>申请人地址（主)</th>
+		    <th>申请人地址（次）</th>
+		    <th>申请人邮政编码</th>
+		    <th>申请人EMAIL</th>
+		    <th>申请人联系人</th>
+		    <th>申请人电话</th>
+		    <th>申请人传真</th>
+		    <th>制造商名称（主）</th>
+		    <th>制造商名称（次）</th>
+		    <th>制造商组织机构代码 </th>
+		    <th>制造商法人（负责人）</th>
+		    <th>制造商机构类型</th>
+		    <th>制造商经济行业</th>
+		    <th>制造商经济行业（新国标代码）</th>
+		    <th>制造商经济类型</th>
+		    <th>制造商经济类型（新国标代码）</th>
+		    <th>制造商经营范围</th>
+		    <th>制造商标志</th>
+		    <th>制造商所在国家地区</th>
+		    <th>制造商所在地区</th>
+		    <th>制造商地址（主）</th>
+		    <th>制造商地址（次）</th>
+		    <th>制造商邮政编码</th>
+		    <th>制造商EMAIL</th>
+		    <th>制造商联系人</th>
+		    <th>制造商电话</th>
+		    <th>制造商传真</th>
+		    <th>生产厂名称（主）</th>
+		    <th>生产厂名称（次）</th>
+		    <th>生产厂组织机构代码</th>
+		    <th>生产厂法人（负责人）</th>
+		    <th>生产厂机构类型</th>
+		    <th>生产厂经济行业</th>
+		    <th>生产厂经济行业（新国标代码）</th>
+		    <th>生产厂经济类型</th>
+		    <th>生产厂经济类型（新国标代码）</th>
+		    <th>生产厂经营范围</th>
+		    <th>生产厂标志</th>
+		    <th>生产厂所在国家地区</th>
+		    <th>生产厂所在地区</th>
+		    <th>生产厂地址（主）</th>
+		    <th>生产厂地址（次）</th>
+		    <th>生产厂邮政编码</th>
+		    <th>生产厂编号</th>
+		    <th>生产厂EMAIL</th>
+		    <th>生产厂联系人</th>
+		    <th>生产厂电话</th>
+		    <th>生产厂传真</th>
+		    <th>产品名称（主）</th>
+		    <th>产品名称（次）</th>
+		    <th width="200px">型号</th>
+		    <th>产品商标</th>
+		    <th>认证备注</th>
+		    <th>备注</th>
+		    <th>有效日期-变更日期</th>
+		    <th>暂停原因</th>
+		    <th>注销原因</th>
+		    <th>撤销原因</th>
+		    <th>证书处理原因</th>
+		    <th>暂停到期日期</th>
+		    <th>temp3</th>
+		    <th>逻辑外键</th>
+		    <th>temp5</th>
+		    <th>原证书编号</th>
+		    <th>temp7</th>
+    		<th>temp8</th>
+		    <th>换证日期</th>
+		    <th>temp10</th>
+		    <th>工厂检查时间-非上报</th>
+		    <th>ID</th>
+		    <th>增量日期-非上报</th>
+		    <th>错误信息-非上报</th>
+		    <th>草稿状态</th>
+			
+		</tr>
+		</thead>
+		<tbody>
+<?php
+ if( $datas ){
+	foreach( $datas as $row ){
+	$cti_info=load('cti')->get(array('cti_id'=>$row['cti_id']));
+	//委托人信息
+	$applyer_info=load('ep')->get(array('eid'=>$row['applyId'])); 
+	//生产者信息
+	$proder_info=load('ep')->get(array('eid'=>$row['ep_manu_id']));
+	//生产企业信息
+	$prodEp_info=load('ep')->get(array('eid'=>$row['ep_prod_id']));
+ 
+
+?>
+
+		<tr>
+			<td align="left">方圆标志认证集团有限公司</td>
+			<td align="center"><?=$row['cti_code'];?></a></td>
+			<td align="center"><?=$row['certno'];?></a></td>
+			<td align="center"><?=$row['s_date'];?></td>
+			<td align="center"><?=$row['e_date'];?></td>
+			<td align="center"><?=$row['hsCode'];?></td>
+			<td align="center"><?=$row['prod_ver_id'];?></td>
+			<td align="center">0<?=$row['status_code'];?></td>
+			<td align="center"></td>
+			<td align="center"><?=$row['cert_name'];?></td>
+			<td align="center"><?=$row['cert_name_e'];?></td>
+			
+			<td><?=$applyer_info['work_code']?></td>
+    <td><?=$applyer_info['delegate']?></td>
+    <td><?=$applyer_info['ccc_nature']?></td>
+    <td><?=load('set')->get_set_name_by_id('audit_code',$cti_info['use_code'],'industry')?></td>
+    <td><?=load('set')->get_set_name_by_id('audit_code',$cti_info['use_code'],'industry')?></td>
+    <td><?=$applyer_info['ecoType']?></td>
+    <td><?=$applyer_info['ecoType']?></td>
+    <td></td>
+    <td></td>
+    <td><?=$applyer_info['statecode']?></td>
+    <td><?=$applyer_info['areacode']?></td>
+    <td><?=$applyer_info['ep_addr']?></td>
+    <td><?=$applyer_info['ep_addr_e']?></td>
+    <td><?=$applyer_info['ep_addrcode']?></td>
+    <td><?=$applyer_info['person_mail']?></td>
+    <td><?=$applyer_info['person']?></td>
+    <td><?=$applyer_info['person_tel']?></td>
+    <td><?=$applyer_info['ep_fax']?></td>
+    <td><?=$proder_info['ep_name']?></td>
+    <td><?=$proder_info['ep_name_e']?></td>
+    <td><?=$proder_info['work_code']?></td>
+    <td><?=$proder_info['delegate']?></td>
+    <td><?=$proder_info['ccc_nature']?></td>
+    <td><?=load('set')->get_set_name_by_id('audit_code',$cti_info['use_code'],'industry')?></td>
+    <td><?=load('set')->get_set_name_by_id('audit_code',$cti_info['use_code'],'industry')?></td>
+    <td><?=$proder_info['ecoType']?></td>
+    <td><?=$proder_info['ecoType']?></td>
+    <td></td>
+    <td></td>
+    <td><?=$proder_info['statecode']?></td>
+    <td><?=$proder_info['areacode']?></td>
+    <td><?=$proder_info['ep_addr']?></td>
+    <td><?=$proder_info['ep_addr_e']?></td>
+    <td><?=$proder_info['ep_addrcode']?></td>
+    <td><?=$proder_info['person_mail']?></td>
+    <td><?=$proder_info['person']?></td>
+    <td><?=$proder_info['person_tel']?></td>
+    <td><?=$proder_info['ep_fax']?></td>
+    <td><?=$prodEp_info['ep_name']?></td>
+    <td><?=$prodEp_info['ep_name_e']?></td>
+    <td><?=$prodEp_info['work_code']?></td>
+    <td><?=$prodEp_info['code']?></td>
+    <td><?=$prodEp_info['delegate']?></td>
+    <td><?=$prodEp_info['ccc_nature']?></td>
+    <td><?=load('set')->get_set_name_by_id('audit_code',$cti_info['use_code'],'industry')?></td>
+    <td><?=load('set')->get_set_name_by_id('audit_code',$cti_info['use_code'],'industry')?></td>
+    <td><?=$prodEp_info['ecoType']?></td>
+    <td><?=$prodEp_info['ecoType']?></td>
+    <td></td>
+    <td></td>
+    <td><?=$prodEp_info['statecode']?></td>
+    <td><?=$prodEp_info['areacode']?></td>
+    <td><?=$prodEp_info['ep_addr']?></td>
+    <td><?=$prodEp_info['ep_addr_e']?></td>
+    <td><?=$prodEp_info['ep_addrcode']?></td>
+    <td><?=$prodEp_info['person_mail']?></td>
+    <td><?=$prodEp_info['person']?></td>
+    <td><?=$prodEp_info['person_tel']?></td>
+    <td><?=$prodEp_info['ep_fax']?></td>
+    <td><?=load('set')->get_set_name_by_id('prod', $cti_info['prod_id'])?></td>
+    <td></td>
+    <td><?=$cti_info['appro_scope']?></td>
+    <td><?=$cti_info['brand']?></td>
+    <td><?=$cti_info['ctfrom']?></td>
+    <td></td>
+    <td><?=$row['cgs_date']?></td>
+    <td><!--暂停原因-->
+      
+      <?
+    	if($row['cg_type']=='97_01'){
+			echo $row['cg_reason'];
+ 		}
+	
+	?></td>
+    <td><!-- 注销原因-->
+      
+      <?
+    	if($row['cg_type']=='97_04'){
+			echo $row['cg_reason'];
+ 		}
+	
+	?></td>
+    <td><!-- 撤销原因-->
+      
+      <?
+    	if($row['cg_type']=='97_03'){
+			echo $row['cg_reason'];
+ 		}
+	
+	?></td>
+    <td></td>
+    <td><!--    暂停到期日期-->
+      
+      <?
+    	if($row['cg_type']=='97_01'){
+			echo $row['cge_date'];
+ 		}
+	
+	?></td>
+	<!-- temp3 -->
+	<td></td>
+    <td></td>
+    <!-- temp5 -->
+	<td></td>
+    <td><?=$row['old_certno']?></td>
+    <!-- temp7 -->
+	<td></td>
+	<!-- temp8 -->
+	<td></td>
+    <td><?
+    if($row['is_change']){
+		echo $row['change_date'];
+	}
+	?></td>
+	<!-- temp10 -->
+	<td></td>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+           
+		</tr>
+<?php 
+	}
+}
+?>
+		</tbody>
+	</table>
+</body>
+</html>

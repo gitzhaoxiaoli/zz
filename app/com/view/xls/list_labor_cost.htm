@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>劳务费列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table class="grid-table">
+	<thead>
+	<tr>
+			
+			<th width="*">申请编号</th>
+			<th width="*">姓名</th>
+			<th width="*">是否组长</th>
+			<th width="*">组内职务</th>
+			<th width="*">验证</th>
+			<th width="*">委托人名称</th>
+			<th width="*">项目所属单位</th>
+			<th width="*">认证版本</th>
+			<th width="*">检查类型</th>
+			<th width="*">注册资格</th>
+			<th width="*">检查开始时间</th>
+			<th width="*">检查结束时间</th>
+			<th width="*">审定时间</th>
+			<th width="*">签发日期</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $auditors ){
+	foreach( $auditors as $row ){
+?>
+		<tr>
+			
+			<td align="center"><?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row['cti_code']) echo implode('<br/>',$row['cti_code']);?></td>
+			<td align="center"><?=$row['name'];?></td>
+			<td align="center"><?=$is_leaders[$row['is_leader']];?></td>
+			<td align="center"><?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row['role']) echo implode('<br/>',$row['role']);?></td>
+			<td align="center"><?=$witness_array[$row['witness']];?></td>
+			<td><?=$row['ep_name'];?></td>
+			<td align="center"><?=$row['ctfrom_V'];?></td>
+			<td align="center"><?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row['audit_vers']) echo implode('<br/>',$row['audit_vers']);?></td>
+			<td align="center"><?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row['audit_types']) echo implode('<br/>',$row['audit_types']);?></td>
+			<td align="center"><?php
+!defined('IN_SUPU') && exit('Forbidden'); if($row['qua_types']) echo implode('<br/>',$row['qua_types']);?></td>
+			<td align="center"><?=$row['taskBeginDate'];?></td>
+			<td align="center"><?=$row['taskEndDate'];?></td>
+			<td align="center"><?=$row['assess_date'];?></td>
+			<td align="center"><?=$row['sp_date'];?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+} 
+?>
+	
+
+	</tbody>
+</table>
+</body>
+</html>

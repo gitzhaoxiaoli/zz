@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="themecss/style.css" type="text/css" rel="stylesheet" />
+<link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="themejs/jquery.js"></script>
+<script type="text/javascript" src="themejs/jquery-ui.js"></script>
+<script type="text/javascript" src="themejs/core.js"></script>
+<script type="text/javascript">
+  $(function(){
+        $( "#audit-down-tab" ).tabs(); 
+    }) 
+	//显示企业信息
+	function iframe_ep_info(ep_div){
+		   var eid=$(ep_div).next().attr("eid"); 
+           iframe_dialog('企业信息','?app=com&m=widget&a=ep_info.Widget&wh=614&eid='+eid,650,400); 
+ 	}
+	
+</script>
+<table style="margin:0 auto;width:<?=$args['width'];?>px;" class='grid-table'>
+  <tr>
+    <th width="40" colspan="4">项目信息</th>
+  </tr>
+  <tr>
+    <td align="right" width="25%">申请编号：</td>
+    <td width="25%"><?=$cti_info['cti_code'];?></td>
+    <td align="right" width="25%">与产品有关人数：</td>
+    <td width="25%"><?=$cti_info['total'];?></td>
+  </tr>
+  <!--<tr>
+    <td align="right">产量</td>
+    <td colspan="3" align="left"><?=$cti_info['ccc_output_num'];?></td>
+  </tr>
+  <tr>-->
+    <td align="right" valign="top">业务代码：</td>
+    <td><?=$cti_info['prod_id'].'('.load('set')->get_set_name_by_id('prod',$cti_info['prod_id'],'use_code').')';?></td>
+    <td align="right">检查类型:</td>
+    <td><?=read_cache('audit_type',$audit_type);?></td>
+  </tr>
+  <tr>
+    <th width="40" colspan="4">组织基本信息</th>
+  </tr>
+  <tr>
+    <th width="100">认证委托人<a class='icon-note' onclick="iframe_ep_info(this)" ></a>
+      <input type="hidden"  eid="<?php
+echo $cti_info['eid'] ?>"/>
+    </th>
+    <td><?=load('ep')->getEpFieldById($cti_info['eid'])?></td>
+    <td>认证委托人英文名称： </td>
+    <td><?=load('ep')->getEpFieldById($cti_info['eid'],'ep_name_e')?></td>
+  </tr>
+  <tr>
+    <td>认证委托人地址</td>
+    <td><?=load('ep')->getEpFieldById($cti_info['eid'],'ep_addr')?></td>
+    <td >认证委托人英文地址</td>
+    <td style=" word-break:break-all; width:300px;"><?=load('ep')->getEpFieldById($cti_info['eid'],'ep_addr_e')?></td>
+  </tr>
+  
+  <!--强制性产品与工业品有生产者，gap和有机产品没有生产者-->
+  <?php
+ if($cti_info['audit_ver']=='b01001'|| $cti_info['audit_ver']=='b0200x') { ?>
+  <tr>
+    <th> 生产者： <a class='icon-note' onclick="iframe_ep_info(this)" ></a>
+      <input type="hidden"  eid="<?=$cti_info['ep_manu_id']?>"/>
+    </th>
+    <td><?=load('ep')->getEpFieldById($cti_info['ep_manu_id'])?></td>
+    <td>生产者英文名称</td>
+    <td><?=load('ep')->getEpFieldById($cti_info['ep_manu_id'],'ep_name_e')?></td>
+  </tr>
+  <tr>
+    <td>生产者地址</td>
+    <td><?=load('ep')->getEpFieldById($cti_info['ep_manu_id'],'ep_addr')?></td>
+    <td >生产者英文地址</td>
+    <td style=" word-break:break-all; width:300px;"><?=load('ep')->getEpFieldById($cti_info['ep_manu_id'],'ep_addr_e')?></td>
+  </tr>
+  <?php
+} ?>
+  <tr>
+    <th>生产企业：<a  class='icon-note'  onclick="iframe_ep_info(this)" ></a>
+      <input type="hidden"  eid="<?=$cti_info['ep_prod_id']?>"/></th>
+    <td><?=load('ep')->getEpFieldById($cti_info['ep_prod_id']);  ?></td>
+    <td>生产企业英文名称</td>
+    <td><?=load('ep')->getEpFieldById($cti_info['ep_prod_id'],'ep_name_e')?></td>
+  </tr>
+  <tr>
+    <td>实际生产企业地址</td>
+    <td><?=$cti_info['ep_prod_addr']?></td>
+    <td >生产企业英文地址</td>
+    <td style=" word-break:break-all; width:300px;"><?=$cti_info['ep_prod_addr_e']?></td>
+  </tr>
+  <tr>
+    <td>工厂编码</td>
+    <td colspan='3'><?=load('ep')->getEpFieldById($cti_info['ep_prod_id'],'code')?></td>
+  </tr>
+  <tr>
+    <td>申请类型</td>
+    <td><?=read_cache('apply_type',$cti_info['apply_type']) ?></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th colspan="4">产品信息</th>
+  </tr>
+  <!--------------------------强制性产品与一般工业品产品信息------------------------->
+  
+  <?php
+if($cti_info['audit_ver']=='b01001'|| $cti_info['audit_ver']=='b0200x') { ?>
+  <tr>
+    <td width="100">产品小类</td>
+    <td><?=load('set')->get_set_name_by_id('prod',$cti_info['prod_id'])?></td>
+    <td> 认证模式 </td>
+    <td><?php $prod_cate=load('set')->get_set_name_by_id('prod',$cti_info['prod_id'],'prod_cate');?>		
+		<select style="width:260px;" disabled="disabled">
+			<?=f_select('b01001_audit_tpl',$prod_cate);?>
+		</select>
+	</td>
+  </tr>
+  <tr>
+	<td align="left" colspan="4" id="protr">
+		<?if($pros){ foreach($pros as $key=>$val) {?>
+					<div id="proclone" style="float:left;margin-top:3px;">
+						<div style="float:left;">
+						产品名称:<input type="text" style="width:210px;" value="<?=$val['prod_name_chinese'];?>" disabled="disabled" />&nbsp;&nbsp;&nbsp;<br/>
+						产品型号:<br/>
+						<textarea disabled="disabled" rows="3" style=" width: 290px" class="cnt-scope"><?=$val['scope'];?></textarea>
+						</div>
+						<div style="float:left;margin-left:3px;">
+						英文名称:<input type="text" style="width:210px;" value="<?=$val['prod_name_english'];?>" disabled="disabled"/>&nbsp;&nbsp;&nbsp;<br/>
+						英文型号:<br/>
+						<textarea disabled="disabled" rows="3" style=" width: 290px" class="cnt-scope"><?=$val['scope_e'];?></textarea>						
+						</div>
+						<div style="clear:both;"></div>									
+					</div>
+					<?php } } ?>					
+					<div style="clear:both;"></div>
+	</td>
+  </tr>
+  <!--受理之后的范围<tr>    
+    <td>规格型号</td>
+    <td colspan="3"><?=$cti_info[v_scope]?></td>
+  </tr>-->
+  <tr>
+    <td>认证标准</td>
+    <td><?=$cti_info[prod_ver_id]?></td>
+    <!--<td>母排材质</td>
+    <td><?//=read_cache('ccc_busbar_material',$cti_info['ccc_busbar_material']);?></td>-->
+	<td></td>
+	<td></td>
+  </tr>
+  <tr>
+    <td>生产者与生产企业关系</td>
+    <td><?=read_cache('ep_site_related',$cti_info['ep_site_related']);?></td>
+    <td>截止日期</td>
+    <td><?=$cti_info['ct_end_date'];?></td>
+  </tr>
+  <tr>
+    <td>是否需要ODM/OEM型式试验报告</td>
+    <td><?php if($cti_info['is_samp_report']==1){ echo '是';} else { echo '否';};?></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>希望送检的实验室</td>
+    <td colspan="3" class="test_name"><?=$cti_info['test_name'];?><input type="hidden" class="test_id" value="<?=$cti_info['test_org_id'];?>"/></td>
+  </tr>
+  <tr>
+    <td>否采取已获证企业的认证结果</td>
+    <td><?=$cti_info['cert_env']?></td>
+    <td>证书编号</td>
+    <td><?=$cti_info['certFrom'];?>1111</td>
+  </tr>
+  
+  <!-------------------------------------------有机和gap产品信息-------------------------------------->
+  <?php
+}else{?>
+  <?php
+if($cti_info['prod_id']!='03'){ //03是加工产品  ?>
+  <tr>
+    <td width="100">认证类型</td>
+    <td><?=load('set')->get_set_name_by_id('prod',$cti_info['prod_id'])?>
+      <?=$cycle?></td>
+    <td>证书类别</td>
+    <td><?php
+if($cti_info[oga_cert_type]=='1'){echo '有机'; }else if($cti_info[oga_cert_type]=='2'){echo ' 有机转换';}else{}?></td>
+  </tr>
+  <tr>
+    <td>认证标准</td>
+    <td><?= LongToBr($cti_info[prod_ver_id],array('；'))?></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <!------------------基地信息----------->
+  <tr>
+    <td colspan="4"><table class="grid-table">
+        <tr>
+          <td>基地名称</td>
+          <td>基地地址</td>
+          <td>基地面积(公顷)</td>
+          <td colspan="6" style="text-align: center">其他产品信息</td>
+        </tr>
+        <?php
+foreach($oga_infos as $v){ ?>
+        <tr>
+          <td><?=$v['oga_name'] ?></td>
+          <td><?=$v['oga_addr'] ?></td>
+          <td><?=$v['oga_area'] ?></td>
+          <td><table class="grid-table">
+              <tr>
+                <td>产品名称</td>
+                <td>产品描述</td>
+                <td>产品面积（公顷）</td>
+                <td>生产规模（头/尾/只）</td>
+                <td>预计产量（吨）</td>
+                <td>预计产值（万元）</td>
+              </tr>
+              <?php
+foreach($v['oga_info'] as $k){?>
+              <tr>
+                <td><?=$k['prod_id']?></td>
+                <td><?=$k['prod_note']?></td>
+                <td><?=$k['prod_area']?></td>
+                <td><?=$k['prod_scope']?></td>
+                <td><?=$k['prod_output_num']?></td>
+                <td><?=$k['prod_output_val']?></td>
+              </tr>
+              <?php
+}?>
+            </table></td>
+        </tr>
+        <?php
+}?>
+      </table></td>
+  </tr>
+  <!------------------------------------有机与GAP END ------------------------------------------------------>
+  <?php
+}  
+};  
+?>
+  <!--认证领域公共部分-->
+  <tr>
+    <th colspan="4"  >产品文档</th>
+  </tr>
+  <tr>
+    <TD colspan='4'><table class="grid-table">
+        <tr>
+        <th>选择</th>
+          <th>文档类型</th>
+          <th>文档名</th>
+          <th>备注</th>
+          <th>上传时间</th>
+          <th>上传人</th>
+          <th>操作</th>
+        </tr>
+               <form method="post" action="?app=com&m=attachment&a=batdown">
+        <input type="hidden" name="class" value="enterprise" />
+        
+        <?php 
+            foreach($cti_files as $cti_file){?>
+        <tr>
+        <td><input type="checkbox" name="aid[]" value="<?=$cti_file['id'];?>" /></td>
+          <td><?=$cti_file['file_type']?></td>
+          <td><?=$cti_file['name']?></td>
+          <td style="text-align: center" ><?php
+if(!empty($cti_file['description'])){ ?>
+            <a  title="<?=$cti_file['description']?>" class="icon-note"></a>
+            <?php
+} ?></td>
+          <td><?=$cti_file['postdate']?></td>
+          <td><?=$cti_file['upload_hr']?></td>
+          <td align="center"><a class="icon-down" href="?app=com&m=attachment&a=down&aid=<?=$cti_file['id'];?>&class=enterprise"></a>
+            <?php if ($cti_info['status'] == '0') {//新申请状态下可以删除附件 ?>
+            &nbsp;&nbsp; <a href="?app=com&m=attachment&a=del&aid=<?=$cti_file['id']?>" class="icon-del"></a>
+            <?php } ?></td>
+        </tr>
+        <?php } ?>
+           <tr>
+        <td></td>
+        <td colspan="7"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+      </tr>
+        </form>
+      </table></TD>
+  </tr>
+  <!-- 实验室检查报告-->
+  <tr> </tr>
+  
+  <!--判断是否安排实验室。安排则显示实验室信息，否则隐藏-->
+  <?php if($project_info['test_org_id']){?>
+  <tr>
+    <th colspan="4">实验室信息</th>
+  </tr>
+  <tr>
+    <td>实验室名称</td>
+    <td><?=$test_info['name']?></td>
+    <td>检验备注</td>
+    <td><?=$project_info['note']?></td>
+  </tr>
+  <tr>
+  	<td>送样要求</td>
+    <td><?=$project_info['send_require']?></td>
+    <td>委托备注</td>
+    <td><?=$project_info['samp_note']?></td>
+  </tr>
+  
+  <tr>
+    <td>到样时间</td>
+    <td><?=$project_info['sample_reach_date']?></td>
+    <td>报告出具时间</td>
+    <td><?=$project_info['report_chuju_date']?></td>
+  </tr>
+  <tr>
+    <td>报告编号</td>
+    <td><?=$project_info['report_no']?></td>
+    <td>检验费用</td>
+    <td><?=$project_info['check_cost']?></td>
+  </tr>
+  <tr>
+    <td>接收时间</td>
+    <td><?=$project_info['sample_receive_date']?>
+    <td>报告退回</td>
+    <td><?=$project_info['report_back_date']?>
+  </tr>
+  <tr>
+    <td>检验评价备注</td>
+    <td colspan="3"><?=$project_info['check_comment_note']?></td>
+  </tr>
+  <tr>
+    <th colspan="4" align="center"> 
+    
+    实验室文档</th>
+  </tr>
+  <tr>
+    <td colspan="4"><table class='grid-table'>
+        <tr>
+          <th>文档分类</th>
+          <th >文档名称</th>
+          <th>上传时间</th>
+          <th>操作 </th>
+        </tr>
+        <?php foreach($att_cti_test_report as $v){?>
+        <tr>
+          <td><?=read_cache('cti_test_report',$v['ftype'])?></td>
+          <td><?=$v['name']?></td>
+          <td><?=$v['postdate']?></td>
+          <td align="center"><a href="?app=com&m=attachment&a=down&class=cti_test_report&aid=<?=$v['id']?>" class="icon-down"></a></td>
+        </tr>
+        <?php } ?>
+        <?php
+} ?>
+  <!--实验室文档结束
+-->
+<!--变更信息-->
+<?php if($chang_info) { ?>
+<tr>
+	 <th colspan="4">变更信息 </th>
+</tr>
+<tr>
+	<td>变更编号</td>
+    <td><?=$cti_info['cti_code'].$chang_info['chang_code']?></td>
+    <td>变更类型</td>
+    <td><?=read_cache(strtolower($cti_info['audit_ver']).'_certchange',$chang_info['cg_type']);?></td>
+    <tr>
+	<td>变更明细</td>
+    <td colspan="3"><?=$chang_info['des']?></td>
+ 
+</tr>
+
+<?php } ?>
+
+      </table></td>
+  </tr>
+
+</table>

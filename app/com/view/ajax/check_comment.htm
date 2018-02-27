@@ -1,0 +1,101 @@
+<?php template('header')?>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript">
+            var self = null;
+    $(document).ready(function() {
+        $("#cert_print").tabs();
+        $(".input-date").datepicker();
+        //评价
+        $('.btn-submit').live('click', function() {
+            var form = $('#form');
+            var status_val = $(this).attr('status');
+            form.append($('<input type="hidden" name="project[samp_status]" value="' + status_val + '" />'));
+
+        })
+        $(".result").live('click', function() {
+            var is = $(this).val();
+            if (is == 1) {
+                $(this).parent().find('.note').hide();
+            } else {
+                $(this).parent().find('.note').show();
+            }
+        })
+        $("#baogao").live('click',function(){ $(this).val("13"); });
+    });
+
+</script>
+</head>
+<body>
+<div id="cert_print"  style="margin: 0 auto; width: 780px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">申请信息</a></li>
+  </ul>
+  <div id="tab-basic" >
+    <?php widget("a=ctiInfo&project_id=$project_info[id]&widht=730")?>
+  </div>
+</div>
+<br />
+<form method="post" id="form">
+<div style="margin:0 auto;width:780px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+  <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">检验评价</a></li>
+</ul>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+<ul class="main-form">
+<table width="100%" class='grid-table'>
+<?php if($_GET['test_private']=='1'){ ?>
+<tr>
+  <th colspan="4">实验室信息</th>
+</tr>
+<tr>
+  <td>到样时间</td>
+  <td><?=$project_info['sample_reach_date']?></td>
+  <td>报告出具时间</td>
+  <td><?=$project_info['report_chuju_date']?></td>
+</tr>
+<tr>
+  <td>报告编号</td>
+  <td><?=$project_info['report_no']?></td>
+  <td>检验费用</td>
+  <td><?=$project_info['check_cost']?></td>
+</tr>
+<form action="" method="post"  enctype="multipart/form-data">
+  <tr style="text-align: center">
+    <td  rowspan="2">报告传附件</td>
+    <td colspan="3"><input type="file" name="file" id="file" /></td>
+  </tr>
+  <tr >
+    <td  colspan="3"><input style="margin-left: 250px;" type="submit" name="submit" value="上传" /></td>
+  </tr>
+  </from>
+  <?php }?>
+
+  </table>
+  <br />
+  <li> 备注信息
+    </label>
+    <em></em><span>
+    <textarea cols="74" rows="3" name="project[check_comment_note]"><?=$project_info['check_comment_note'];?>
+	</textarea>
+  </li>
+  </ul>
+  <p class="button-panle tac">
+    <button class="btn <?php if($row['able1']){?> btn-button<?php }else{?> btn-submit<?php };?>  change_status" status='1' type="submit"<?=$row['able2'];?> >合格</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+	<button class="btn <?php if($row['able12']){?> btn-button<?php }else{?> btn-submit<?php };?>  change_status" status='12' type="submit"<?=$row['able12'];?> >认证已评</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="baogao" name="baogao" class="btn <?php if($row['able2']){?> btn-button<?php }else{?> btn-submit<?php };?> change_status" status='2' type="submit"<?=$row['able1'];?> >报告退回</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="btn <?php if($row['able3']){?> btn-button<?php }else{?> btn-submit<?php };?>  change_status" status='3' type="submit"<?=$row['able3'];?> >重新检验</button>
+  </p>
+  </div>
+  </div>
+</form>
+
+<?php  
+$org_log=$cti_info['eid'].'-'.$cti_info['ep_manu_id'].'-'.$cti_info['ep_prod_id'];
+
+widget(array('a'=>'oga_log_info','org_logs'=>array($org_log)))?>
+</body>
+</html>

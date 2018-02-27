@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>检验安排</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	
+$('#addT').live('click',function(){
+	$('#sy').append('<tr><td><input type="text" name="new[test_name][]"/></td><td><input type="text" name="new[test_scope][]"/></td><td><input type="text" name="new[test_num][]"/></td><td><input type="text" name="new[test_ver][]"/></td></tr>');
+});
+
+	$( ".input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$('.c-del').click(function(){
+		
+		confirm_dialog('确定删除吗？', $(this).attr( 'href' ), 'warning' );
+		return false;
+	}); 
+	$('#add-btn').click( addRecord );
+	addRecord();
+   // $(".must_one").click( get_cti_code );
+    //get_cti_code();
+
+	$('#test_org').live( 'click', function(e) {
+		var cti = new Array();
+		$(".must_one").each(function(){
+			
+			if($(this).attr("checked")){
+				cti.push($(this).attr("cti"));
+			}
+			})
+		s = cti.join("|");
+	   href = "?m=product&c=ajax&a=select_test_org&cti_id="+cti;
+		$('<iframe border="0" id="frame1" frameborder="no" src="' + href + '" />').dialog({
+			title: '选择检测机构',
+			autoOpen: true,
+			width: 900,
+			height: 500,
+			modal: true,
+			resizable: false,
+			autoResize: true,
+			overlay: {opacity: 0.5,background: "black"},
+			close: function(ev,ui){$(this).remove();}
+			}).width(880).height(480);
+	});
+	
+	
+	
+});
+function update_test_org(org_uid,org_name){
+    //清空标签
+     $("input[name='test_org_id']").val();
+     $("input[name='test_org_name']").val();
+	//写入标签值
+     $("input[name='test_org_id']").val(org_uid);
+     $("input[name='test_org_name']").val(org_name);
+	 
+	$('#frame1').dialog('close');
+	$('#frame1').dialog('destroy');
+	$('#frame1').remove();
+}
+
+function addRecord(){
+	tbody = $('#add-attachs');
+	tr = $('#add-attach');
+	new_tr = tr.clone();
+	new_tr.attr('id','');
+	new_tr.show();
+	tbody.append(new_tr);
+	    //get_cti_code();
+};
+</script>
+</head>
+
+<body>
+<?php echo prod_einfo("pid=$pid");?>
+<br/>
+
+	<form method="post" id="form_sub" action="" >
+		<input type="hidden" name="step" value="1" />
+        <input type="hidden" name="pid" value="<?=$pid?>" />
+		<input type="hidden" name="test_id" value="<?=$test_id;?>" />
+		
+<div style="margin:0 auto;width:750px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">产品检验登记</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+		
+	  <table class="grid-table">
+	     <!--<tr>
+		   <td style="padding-left:30px;padding-top:2px;padding-bottom:2px;" colspan="4">
+		   <a><img src="theme/images/word.gif" border=0 /></a>送样通知&nbsp;&nbsp;&nbsp;
+		   <a><img src="theme/images/word.gif" border=0 /></a>委托通知
+		   </td>
+		 </tr>-->
+	     <tr>
+		   <td align="center" width="100" >检测机构</td>
+		     <input type="hidden" name="test_org_id" value="<?=$test_org_id;?>" /><!--机构ID-->
+		   <td colspan="3" ><input type="text" class="input"  style="width:95%;float:left;border-width:1px 0 1px 1px" name="test_org_name" value="<?=$test_org_name;?>" readOnly /><i id="test_org" class="i-select select_eps" ></i><!-- <img id="test_org" style="margin-bottom:-5px;width:18px;height:18px" src="theme/images/b_edit.png" border=1 > --></td>
+		 </tr>
+		 <tr>
+		  <td align="center">计划时间</td>
+		   <td><input type="text" style="width:100%" name="plan_date" class="input input-date" value="<?=$plan_date?>" /></td>
+		   
+		  <td align="center">送样时间</td>
+		   <td><input type="text" style="width:100%" name="send_date" class="input input-date" value="<?=$send_date?>" /></td>
+		   </tr>
+			
+			<!-- 说明:停止使用 -->
+			<!-- @zys 2016-5-6 -->
+		    <!-- <td align="center" width="100">试验方案<button id='addT' type="button">点击添加</button></td>
+		 	<td colspan="3" >
+		   	<table id="sy" class="grid-table" >
+		   	<tr>
+			   	<td>样品名称</td>
+			   	<td>型号规格</td>
+			   	<td>数量</td>
+			   	<td>检测标准及项目</td>
+		   	</tr>
+		   	<?php foreach ($arr as $key => $row) {
+		   		
+		   	?>
+		   	<tr>
+		   	<td>
+		   		<input type="text" name="test_name[<?=$row['id']?>]"value="<?=$row['productname']?>"/></td><td><input type="text" name="test_scope[<?=$row['id']?>]"value="<?=$row['productmodel']?>"/>
+		   	</td>
+		          <td>
+		   	<input type="text" name="test_num[<?=$row['id']?>]"value="<?=$row['productnum']?>"/></td><td><input type="text" name="test_ver[<?=$row['id']?>]"value="<?=$row['note']?>"/>
+		          </td>
+
+		      </tr>
+                          <?php }?>
+		  	</table>
+			</td> -->
+                       
+		 </tr>
+		
+
+
+	     <tr>
+		   <td align="center" width="100">送样要求</td>
+		   <td colspan="3"><textarea name="send_require" style="width:99%"><?=$send_require;?></textarea></td>
+		 </tr>
+	     <tr>
+		   <td align="center" width="100">委托备注</td>
+		   <td colspan="3"><textarea name="entrust_note" style="width:99%"><?=$entrust_note;?></textarea></td>
+		 </tr>
+	  </table>
+	  <p align="center" style="margin-top:20px;">
+	     <a title="上传文档" href="?m=product&c=contract&a=upload&cti_id=<?=$cti_id;?>&test_id=<?=$test_id;?>&ftype=2001" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资料上传<img src="theme/images/up.gif" border=0 />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+          <button class="btn btn-submit save_check" type="submit">保存</button>
+	   </p>
+</div>
+	<!-- 说明:暂停使用 -->
+	<!-- @zys 2016-5-24 -->
+	<!-- </form>
+	  <?php if($files_list):?>
+			   <table class="grid-table" style="width:90%; margin:auto">
+			      <thead>
+				    <tr>
+				     <th>文件名</th>
+				     <th>上传时间</th>
+                     <th>上传人</th>
+				     <th>下载</th>
+				     <th>删除</th>
+					</tr>
+				  </thead>
+				  <tbody>
+				    <?php foreach($files_list as $v):?>
+				      <tr>
+					    <td><?=$v['name'];?></td>
+					    <td><?=$v['create_date'];?></td>
+                        <td><?=$v['create_user'];?></td>
+						<td align="center">
+							<a href="?c=attachment&a=down&aid=<?=$v['id'];?>&class=pro" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a>
+						</td>
+						<td align="center">
+						   <a href="?c=attachment&a=del&aid=<?=$v['id'];?>&class=pro" class="c-del" ><img src="theme/images/b_drop.png" border=0 /></a>
+						</td>
+					  </tr>
+					<?php endforeach;?>
+				  </tbody>
+			   </table>
+			   <?php  endif;?>
+               <br /> -->
+</div>
+</form>
+
+</body>
+</html>

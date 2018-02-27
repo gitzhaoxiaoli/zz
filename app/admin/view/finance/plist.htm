@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>财务收费</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.url.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('.c-del').click(function(){
+		confirm_dialog('此操作将删除合同信息以及隶属于该合同的所有项目信息！', $(this).attr( 'href' ), 'warning' );
+		return false;
+	});
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+ 	$('#export-xls-btn').click( do_export_xls );
+	$(".a_link").live("click",function(){
+		$(this).parent().find("span").toggle();
+		})
+	
+});
+
+function approval(){
+	iframe_dialog( '合同审批', $(this).attr( 'href' ), 500, 260 );
+	return false;
+}
+
+function do_export_xls(){
+	var form = $('#search-form');
+	form.append($('<input type="hidden" name="export" value="1" />'));
+	form.submit();
+	form.find('input[name=export]').remove();
+}
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+</script>
+</head>
+
+<body>
+<form method="get" id="search-form" action="" class="search-form tal" style='width:1050px;margin:0 auto;'>
+  <input type="hidden" name="m" value="<?=$m;?>" />
+  <input type="hidden" name="c" value="<?=$c;?>" />
+  <input type="hidden" name="a" value="<?=$a;?>" />
+  <input type="hidden" id="status" name="status" value="<?=$status;?>" />
+  <table>
+    <tr >
+          <td class="left" style="">企业名称：</td>
+          <td class='right'><input type="text" name="ep_name" value="<?=$ep_name;?>" class="input finput"/></td>
+          <td class="left">收费类型：</td>
+         <td class="right"><select name="cost_type" class='fselect'><option value=""></option><?=$cost_type_select;?></select></td>
+       
+        <td class="left">审批时间：</td>
+          <td class='right'><input type="text" name="s_date" class="input input-date" value="<?=$s_date;?>" /></td>
+          <td >至</td>
+          <td class='right'><input type="text" name="e_date" class="input input-date" value="<?=$e_date;?>" /></td>
+
+         </TR>
+  </table>
+  <p class="button-panel">
+    <button class="btn btn-submit" type="submit" style="margin-left:20px;"> 搜 索 </button>
+    &nbsp;
+    <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>
+    &nbsp;
+        <?php if(current_user('check_auth') == 1){ ?>
+    <button class="btn btn-button" id="export-xls-btn" type="button"> 批量导出 </button>
+    <?php }?>
+  </p>
+</form>
+<br/>
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" style='width:1300px;margin:0 auto;'>
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    
+      <li class="ui-state-default ui-corner-top <?=$tab_0;?>"><a href="?c=finance&a=plist&is_finance=0<?=gettourl();?>">收费登记<span class="cnt-total">&nbsp;&nbsp;
+      <?=$is_finance_count[0];?>
+      </span></a></li>
+      <li class="ui-state-default ui-corner-top <?=$tab_2;?>"><a href="?c=finance&a=plist&is_finance=2<?=gettourl();?>">已收完<span class="cnt-total">&nbsp;&nbsp;
+      <?=$is_finance_count[2];?>
+      </span></a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <div>
+      <table class="grid-table">
+        <thead>     
+          <tr>
+          	<th width="10">登记</th>
+            <th width="40">企业名称 </th>
+            <th width="30">合同号</th>
+            <th width="30">收费类型</th>
+            <th width="30">收费金额</th>
+            <th width="30">合同审批时间</th>
+            <th width="30">合同费用登记备注</th>
+            <th width="30">欠费金额</th>
+            <th width="30">合同来源</th>
+             
+          </tr>
+        </thead>
+        <tbody>
+<?php
+    if( $datas){
+        foreach($datas as $ct_id=>$row){  
+?>
+          <tr>
+          <td align="center"><a class="icon-edit" href="?c=finance&a=edit&eid=<?=$row['eid'];?>&cost_id=<?=$row['id']?>&ct_id=<?=$row['ct_id']?>"></a></td>
+		        <td align="center"><?=$row['ep_name'];?></td>
+            <td align="center"><?=$row['ct_code'];?></td>
+            <td align="center"><?=$row['cost_type'];?></td>
+            <td align="center"><?=$row['cost']?></td>	
+            <td align="center"><?=$row['approval_date'];?></td>
+             <td align="center"><?=$row['note'];?></td>
+             <td align="center"><?=$row['qf'];?></td>
+            <td align="center"><?=$row['ctfrom_V'];?></td>
+<?php            
+	}}else{
+?>
+          <tr>
+            <td align="center" colspan="18">未找到相关记录</td>
+          </tr>
+<?php
+	}
+?>
+        </tbody>
+      </table>
+      <p>
+        <?=$pages['pages'];?>
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

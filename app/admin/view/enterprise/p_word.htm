@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>企业列表</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.url.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script> 
+<script>
+    $(function() {
+		//var tooltips = $( "[title]" ).tooltip({position:{my:"left+6 center", at:"right center"}});
+        $( "#enterprise-tab" ).tabs({
+            collapsible: false
+        });
+        
+    });
+	$(function(){
+
+
+	$('#export-xls-btn').click( function(){
+		var form = $('.search-form');
+		form.append($('<input type="hidden" name="export" value="1" />'));
+		form.submit();
+		form.find('input[name=export]').remove();
+	} );
+})
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+
+
+    </script>
+</head>
+
+<body>
+<form method="get" action="?" class="search-form tal" style='width:1050px;margin:0 auto;'>
+<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+<input type="hidden" name="c" value="<?=$c;?>" />
+<input type="hidden" name="paged" value="<?=$paged;?>" />
+	<table>
+		<tr>
+			<td class="left">企业名称：</td>
+			<td class="right"><input type="text" name="ep_name" value="<?=$ep_name;?>" class="input finput"/></td>
+            <td class="left">用户名：</td>
+			<td class="right"><input type="text" name="en_username" value="<?=$en_username;?>" class="input finput"/></td>
+			<td class="left">企业编号：</td>
+			<td class="right"><input type="text" name="code" value="<?=$code;?>" class="input finput"/></td>
+		</tr>
+		<tr>
+			<td colspan="8" class="right">
+				<button type="submit" class="btn btn-submit"> 搜 索 </button>
+                <button  class="btn btn-button" onclick="clearForm(this.form);" >清 空</button>&nbsp;
+                
+			</td>
+		</tr>
+	</table>
+</form>
+
+
+<br/>
+<div style='width:1050px;margin:0 auto;' class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top <?=$status_n_tab;?>"><a href="javascript:;">企业密码分配<span class="cnt-total"><?=$total;?></span></a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	<table width='100%' class='grid-table'>
+		<thead>
+		<tr>
+			<th width="50">操作</th>
+			<th>企业名称</th>
+			<th>用户名</th>
+			<th>省份</th>
+            <th>联系人</th>
+			<th>电话</th>
+			<th>邮箱</th> 
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $users ){
+	foreach( $users as $row ){
+?>
+		<tr>
+			<td align="center"><a href="?c=enterprise&a=p_edit&eid=<?=$row['eid']?>"><img src="theme/images/b_edit.png" border=0 /></a></td>
+			<td align="center"><?=$row['ep_name'];?></a></td>
+			<td align="center"><?=$row['username'];?></a></td>
+			<td align="center"><?=$row['province'];?></td>
+            <td align="center"><?=$row['person'];?></td>
+			<td align="center"><?=$row['ep_phone'];?></td>
+			<td align="center"><?=$row['person_mail'];?></td> 
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td align="center" colspan="10">没有找到数据</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+<?=$pages['pages'];?>
+</div>
+</div>
+<br/><br/>
+
+</body>
+</html>

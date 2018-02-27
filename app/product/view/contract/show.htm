@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>产品信息</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<style type="text/css">
+.ctxm-table{border-collapse: collapse;border-spacing: 0;}
+.ctxm-table .td{padding:5px;border:1px solid #ccc;}
+
+.txxm-table{border-collapse: collapse;border-spacing: 0;}
+.txxm-table td{padding:.4em .6em;border:1px solid #f2f6fb;}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+
+});
+
+</script>
+</head>
+
+<body>
+<?php  echo prod_einfo("cti_id=$cti_id&width=900");?>
+<br/>
+
+<div style="margin:0 auto;width:900px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">合同审核项目</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+		<table width="100%" class="grid-table">
+			<tr>
+				<td colspan="4">产品详细信息&gt;&gt;</td>
+			</tr>
+			<tr>
+				<th width="150" align="right">认证申请编号：</th>
+				<td width=""align="left" colspan="3"><?=$cti['cti_code'];?></td>
+				
+			</tr>
+            <tr>
+				<th width="" align="right">委托人：</th>
+				<td width=""align="left" colspan="3"><?=$cti['ep_name'];?></td>
+				
+			</tr>
+            <tr>
+				<th width="" align="right">生产者：</th>
+				<td width=""align="left" colspan="3"><?=$cti['ep_manu'];?></td>
+				
+			</tr>
+            <tr>
+				<th width="" align="right">生产企业：</th>
+				<td width=""align="left" colspan="3"><?=$cti['ep_prod'];?></td>
+				
+			</tr>
+            <tr>
+				<th width="" align="right">产品名称（中文）：</th>
+				<td width=""align="left" colspan="3"><?=$cti['prod_name_chinese'];?></td>
+				
+			</tr>
+            <tr>
+				<th width="" align="right">产品名称（英文）：</th>
+				<td width=""align="left" colspan="3"><?=$cti['prod_name_english'];?></td>
+				
+			</tr>
+            <tr>
+				<th width="" align="right">产品型号：</th>
+				<td width=""align="left" colspan="3"><?=$cti['scope'];?></td>
+				
+			</tr>
+            
+			<tr>
+            	<th align="right" >产品标准：</th>
+				<td align="left" width="400"><?=$cti['prod_ver'];?></td>
+				<th align="right" width="150">产品小类：</th>
+				<td align="left" ><?=$cti['prod_id'];?></td>
+				
+			</tr>
+			<tr>
+				<th align="left" colspan="4">历次检查信息：</th>
+				
+			</tr>
+            <?php
+if( $projects ){
+	foreach( $projects as $row ){
+    	
+?>
+
+			<?php if($row[is_samp]){?>
+			<tr>
+				<th align="right">检测机构：</th>
+				<td align="left"><?=$row['test_org_name'];?></td>
+				<th align="right">检测状态：</th>
+				<td align="left"><?=$row['is_qualified'];?></td>
+			</tr>
+            <?php }?>
+           
+            <?php if($row[is_check]){?>
+			<tr>
+				<th align="right">检查任务号：</th>
+				<td align="left"><?=$row['task_code']?></td>
+				<th align="right">检查类型：</th>
+				<td align="left"><?=$row['audit_type'];?></td>
+			</tr>
+			<tr>
+				<th align="right">计划开始日期：</th>
+				<td align="left"><?=$row['tb_date'];?></td>
+				<th align="right">计划结束日期：</th>
+				<td align="left"><?=$row['te_date'];?></td>
+			</tr>
+            <tr>
+				<th align="right">检查组计划开始日期：</th>
+				<td align="left"><?=$row['auditor_tb_date'];?></td>
+				<th align="right">检查组计划结束日期：</th>
+				<td align="left"><?=$row['auditor_te_date'];?></td>
+			</tr>
+            <tr>
+				<th align="right">实际开始日期：</th>
+				<td align="left"><?=$row['tb_date'];?></td>
+				<th align="right">实际结束日期：</th>
+				<td align="left"><?=$row['te_date'];?></td>
+			</tr>
+			<tr>
+				<th align="right">检查结论：</th>
+				<td align="left" colspan="3"><?=$row['check_result'];?></td>
+            </tr>
+            <tr>
+				<th align="right">组长：</th>
+				<td align="left" colspan="3"><?=$row['leader'];?></td>
+			</tr>
+			<tr>
+				<th align="right">检查组信息：</th>
+				<td colspan="3"><?=$row['auditor'];?></td>
+			</tr>
+			<?php }?>
+             <?php if(!$row[is_samp] and !$row[is_check])continue; ?>
+			<tr>
+            	<th align="right">评定人员：</th>
+				<td align="left" colspan="3"><?=$row['comment_a_name'];?></td>
+            </tr>
+			<tr>
+				<th align="right">评定日期：</th>
+				<td align="left"><?=$row['sp_date'];?></td>
+                <th align="right">评定结果：</th>
+				<td align="left"><?=$row[pd_type];?></td>
+			</tr>
+			<tr>
+				<th align="right">证书编号：</th>
+				<td align="left"><?=$row['certno']?></td>
+				<th align="right">证书状态：</th>
+				<td align="left"><?=read_cache("certstate",$row['c_status']);?></td>
+			</tr>
+			<tr>
+				<th align="right">证书注册：</th>
+				<td align="left"><?=$row['s_date']?></td>
+				<th align="right">证书到期：</th>
+				<td align="left"><?=$row['e_date']?></td>
+			</tr>
+            <?php if($row[change]) {?>
+			<tr>
+				<th align="right" >证书变更</th>
+				<th colspan="3"></td>
+			</tr>
+			<?php foreach($row[change] as $val) {?>
+			<tr>
+			    <td align="right">变更类型</td>
+				<td colspan="3"><?=read_cache('certchange',$val['cg_type']);?></td>
+			</tr>
+			<tr>
+			    <td align="right"><?php if($val['cg_type'] == '97_01'){?>暂停开始时间<?php }else if($val['cg_type'] == '97_03'){?>撤销开始时间<?php }else{?>变更时间<?php }?></td>
+				<td><?=$val['cgs_date'];?></td>
+				<td align="right"><?php if($val['cg_type'] == '97_01'){?>暂停结束时间<?php }else if($val['cg_type'] == '97_03'){?>撤销结束时间<?php }?></td>
+				<td><?php if($val['cg_type'] == '97_01' || $val['cg_type'] == '97_03'){echo $val['cge_date'];};?></td>
+			</tr>
+			<?php if($val['cg_type'] == '97_01' || $val['cg_type'] == '97_03'){?>
+			 <tr>
+			    <td align="right"><?php if($val['cg_type'] == '97_01'){?>暂停原因<?php }if($val['cg_type'] == '97_03'){?>撤销原因<?php }?></td>
+				<td colspan="3"><?=read_cache('certpasue',$val['cg_reason']);?></td>
+			 </tr>
+			<?php } ?>
+			<tr>
+				<td align="right" >变更前</td>
+				<td colspan="3"><?=read_cache("certstate", $val['cg_af']). $val['cg_af'];?></td>
+			</tr>
+			<tr>
+				<td align="right" >变更后</td>
+				<td colspan="3"><?=read_cache("certstate", $val['cg_bf']). $val['cg_bf'];?></td>
+			</tr>
+			<tr>
+				<td align="right" >变更备注</td>
+				<td colspan="3"><?=$val[note];?></td>
+			</tr>
+			<?php } }?>
+			<tr>
+				<td colspan="4"></td>
+			</tr>
+            <?php
+	}
+}
+?>
+		</table>
+		<br/>
+
+	</div>
+</div>
+</body>
+</html>

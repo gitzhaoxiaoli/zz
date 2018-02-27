@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择检测机构</title>
+
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script>
+    $(function() {
+	  
+	     $("img[class='click']").click(function(){
+		    var org_uid = $(this).attr('i');
+			var org_name = $(this).parent().parent().find('.org_name').text();
+			window.parent.update_test_org(org_uid,org_name);
+		 });
+    });
+	function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+
+    </script>
+</head>
+
+<body>
+<form method="get" action="?">
+	<input type="hidden" name="m" value="product" />
+	<input type="hidden" name="c" value="<?=$c;?>" />
+	<input type="hidden" name="a" value="<?=$a;?>" />
+	<table>
+		<tr>
+			
+			<td>编号：</td>
+			<td ><input type="text" name="code" value="<?=$code;?>"  class="input input-search-basic" /></td>
+            <td>档案号：</td>
+			<td ><input type="text" name="ctc_code" value="<?=$ctc_code;?>"  class="input input-search-basic" /></td>
+            <td>机构名称：</td>
+			<td ><input type="text" name="name" value="<?=$name;?>"  class="input input-search-basic" /></td>
+		</tr>
+		<tr>
+			<td colspan="8" align="left">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+                 &nbsp;
+    <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>
+			</td>
+		</tr>
+	</table>
+</form>
+
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="40">编号</th>
+            <th width="30">档案号</th>
+			<th width="200">机构名称</th>
+			<th width="60">联系人</th>
+			<th width="60">联系电话</th>
+			<!--<th width="*">地址</th>-->
+            <th width="*">业务范围</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if($orgers){
+	foreach( $orgers as $id => $row ){
+?>
+		<tr align="cneter">
+			<td><img class="click" i='<?=$row['id'];?>' title="点击选择" src="theme/images/b_edit.png" width="18px" height="18px;"  border=0  style="cursor:pointer" /></td>
+			<td><?=$row['code'];?></td>
+            <td><?=$row['ctc_code'];?></td>
+			<td class="org_name"><?=$row['name'];?></td>
+			<td><?=$row['person'];?></td>
+			<td><?=$row['tel'];?></td>
+            <!--<td><?=$row['addr'];?></td>-->
+            <td><?=$row['scope'];?></td>
+            
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>信誉</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/region.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script>
+$(function() {
+	$( "#user-tab" ).tabs({ 
+            collapsible: false
+        }); 
+	$('.c-del').click(function(){ 
+		confirm_dialog('确认要删除该人员？', $(this).attr( 'href' ), 'warning' );
+		return false;
+	});
+	$( ".input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$("#area").change(function(){
+			$("input[name=position]").val($(this).find("option:selected").attr("i"));
+			
+			})
+});
+</script>
+</head>
+
+<body>
+<div id="user-tab" style="margin:0 auto;width:850px;" class="tal">
+  <ul>
+    <li><a href="#tab-credit"><?=$c_tip_msg?></a></li>
+  </ul>
+<div id="tab-credit">
+<table class="grid-table">
+  <thead>
+    <tr>
+      <th width="30">编辑</th>
+      <th width="*">时间</th>
+      <th width="*">失分项</th>
+      <th width="*">分数</th>
+      <th width="300">说明</th>
+      <th width="*">文档</th>
+      <th width="30">删除</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+if( $clist ){
+	$num=10;
+    $s_date=date("Y")."-01-01";
+    $e_date=date("Y")."-12-31";
+	foreach( $clist as $pid => $row ){
+?>
+    <tr>
+      <td align="center"><a href="?c=hr&a=credit_edit&uid=<?=$_GET['uid']?>&cid=<?=$row['id'];?>"><img src="theme/images/b_edit.png" border=0 /></a></td>
+      <td align="center"><?=$row[s_date]?></td>
+      <td align="center"><?=read_cache("credit",$row[area])?></td>
+      <td align="left"><?=$row[position]?></td>
+      <td align="center"><?=$row['note'];?></td>
+      <td align="center">
+        <?php if($row['aid']){?><a href="?c=attachment&a=down&aid=<?=$row['aid'];?>&class=hr">下载</a><?php }?></td>
+      <td align="center"><a title="删除" href="?c=hr&a=credit_edit&type=del&uid=<?=$_GET['uid']?>&cid=<?=$row['id'];?>" class="c-del"><img src="theme/images/b_drop.png" border=0 /></a></td>
+    </tr>
+    <?php
+    if($row[s_date]>=$s_date and $row[s_date]<=$e_date)
+    	$num-=$row[position];
+	}
+    $red="#000";
+    if($num<1)
+    $red="red";
+
+    ?>
+    <tr><td></td><td colspan="2" align="right"><span style='color:<?=$red?>'>本年度剩余总分:</span></td><td><span style='color:<?=$red?>'><?=$num?></span></td><td colspan="3"></td>  
+<?php } else {
+?>
+    <tr>
+      <td align="center" colspan="13">未找到相关记录</td>
+    </tr>
+    <?php
+}
+?>
+  </tbody>
+</table>
+<br />
+<br />
+
+<form method="post" action="?c=hr&a=credit_edit&expId=<?=$_GET['cid']?>&uid=<?=$_GET['uid']?>&anchor=tab-credit"  enctype="multipart/form-data">
+  <input type="hidden" name="type" value="c" />
+  <input type="hidden" name="add_hr_id" value="<?=$_GET['uid']?>" />
+  <ul class="main-form">
+    <li>
+      <label class="field">时间：</label>
+      <span>
+      <input name="s_date" value="<?=$cExpInfo[s_date];?>" style="width:180px"  class="input-date"  />
+      <em></em></span> </li>
+    <li>
+      <label class="field">失分项：</label>
+      <span>
+      <select name="area" style="width:180px" id='area'>
+      <option value="">--请选择--</option>
+      <?=$credit_select;?>
+      </select>
+      <em></em></span> </li>
+    <li>
+      <label class="field">分数：</label>
+      <span>
+      <input name="position" value="<?=$cExpInfo[position];?>" style="width:180px" />
+      <em></em></span> </li>
+    
+    <li>
+      <label class="field">说明：</label>
+      <span>
+      <textarea name="note" rows="2" cols="60"><?=$cExpInfo[note];?>
+</textarea>
+      <em></em></span> </li>
+      <li>
+      <label class="field">文档：</label>
+      <span>
+      <input type="file" name="archive" />
+      <em></em></span> </li>
+  </ul>
+  <p>
+    <center>
+      <button class="btn btn-submit" type="submit" id="submit"> 保存 </button>
+    </center>
+  </p>
+  <br/>
+  </div>
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>证书变更</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script> 
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$( "#certificate-tab" ).tabs();
+	
+	$(".change_ul li").css("width","240px");
+});
+
+</script>
+<style>
+.change_ul li{
+	width:240px;}
+</style>
+</head>
+
+<body>
+<br/>
+<form name="winput" method="post" action="" onsubmit="return checkForm()" >
+<input type="hidden" name="id" value="<?=$id?>" />
+<div id="certificate-tab" style="margin: 0 auto;width:800px;" class="tal" >
+	<ul>
+		<li><a href="#tab-content-basic">变更申请</a></li>
+	</ul>
+		<!--<div id="tab-content-basic">
+			<ul class="change_ul" style="min-height:140px;">
+				<?=$changeitem_li?>
+			</ul>
+		</div>-->
+
+<div class="list-table tal">
+<table style='width:760px;margin: 0 auto;margin-top:20px;' class='grid-table'>
+	<tr>
+		<td width='20%' align='right'>申请简要描述：</td>
+		<td width='80%' align='left'><input type='text' name='title' value='<?=$res[title]?>' class="input " style="width:200px;"/> 
+			</td>
+           
+	</tr>
+<!--	   <tr>
+		<td width='20%' align='right'>证书号：</td>
+		<td width='80%' align='left'><input type='text' name='certno' value='<?=$res[certno]?>' class="input" style="width:200px;"/> 
+			</td>
+           
+	</tr>
+-->	 <tr>
+		<td width='20%' align='right'>原测试报告编号：</td>
+		<td width='80%' align='left'><input type='text' name='reportno' value='<?=$res[reportno]?>' class="input" style="width:200px;"/> 
+			</td>
+           
+	</tr>
+
+	<tr>
+	
+		<td width='20%' align='right'>变更类别：</td>
+
+		<td> 
+		<ul class="change_ul" style="min-height:140px;">
+				<?=$changeitem_li?>
+			</ul>
+		
+		</td>
+           
+	</tr>
+ 
+    <tr>
+		<td width='20%' align='right'>申请时间：</td>
+		<td width='80%' align='left'><input type='text' name='sq_date' value='<?=$res[sq_date]?>' class="input input-date" style="width:200px;"/> 
+			</td>
+           
+	</tr>
+	
+		<td align='right'>变更前：</td>
+		<td align='left'><textarea name="cg_af" style="width:500px;height:60px;"><?=$res['cg_af']?></textarea></td>
+	</tr>
+    <tr >
+		<td align='right'>变更后：</td>
+		<td align='left'><textarea name="cg_bf" style="width:500px;height:60px;"><?=$res['cg_bf']?></textarea></td>
+	</tr>
+    <tr >
+		<td align='right'>备注：</td>
+		<td align='left'><textarea name="note" style="width:500px;height:60px;"><?=$res['note']?></textarea></td>
+	</tr>
+	<tr>
+		<td align='center' colspan='2'><p><center><!--<label><input type="radio" name="status" value="1" <?=$res['status'] == '1' ?'checked':''?> />通过</label>&nbsp;&nbsp;&nbsp;<label><input type="radio" name="status" value="2"  <?=$res['status'] == '2' ?'checked':''?> />不通过</label>-->&nbsp;&nbsp;&nbsp;<button class="btn btn-submit" type="submit"> 保 存 </button></center></p> </td>
+	</tr>
+</table><br />
+
+</div>
+</div>
+</form>
+
+</body>
+</html>

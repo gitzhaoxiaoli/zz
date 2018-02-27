@@ -1,0 +1,217 @@
+<?php tpl('header');?>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	$('#major_person').live( 'click', select_pduser );
+	$( "#certificate-tab" ).tabs();
+	
+	$( ".tab" ).tabs();
+	
+	$('.add-audit-code-btn').live('click', select_code );
+	$('.del-code').live( 'click', del_code );
+	//标准转换
+	$('#chang_audit_ver').click(function(){
+ 		if($(this).attr("checked")){
+			$('#new_audit_vers').show();
+ 		}else{
+			$('#new_audit_vers').hide();
+		} 
+	});
+	
+});
+function select_pduser(){  
+	var href = '?c=ajax&a=select_zy_name';
+ 	$this = $(this).parent().find("input"); 
+	$('<iframe border="0" id="frame1" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业管理人员',
+		autoOpen: true,
+		width: 600,
+		height: 380,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();}
+	}).width(600 - 30).height(380);
+}
+function update_user( uid, name ){
+	var val=$this.val();
+	if(val)
+	val+="；";
+	val+=name;
+	$this.val(val); 
+	$('#frame1').dialog('close');
+}
+//选择专业代码
+function select_code(){
+	var $this = $(this);
+	var iso = $this.attr( 'rel' );
+	var tbody = $this.parent().parent().find('.audit-codes'); 
+	var href = '?c=ajax&a=select_code&iso=' + iso;
+
+	$('<iframe border="0" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业代码',
+		autoOpen: true,
+		width: 800,
+		height: 420,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();},
+		buttons: {
+			'取消'	: function(){$(this).dialog('close');},
+			'确定'	: function(){
+				var audit_code_arr = new Array();
+				var use_code_arr = new Array();
+				var audit_input = $this.parent().parent().find('input.audit-code');
+				var use_input = $this.parent().parent().find('input.use-code');
+				var old_audit_code = audit_input.val();
+				var old_use_code = use_input.val();
+				$(this).contents().find('input[name="code[]"]:checked').each(function(index){
+					var _this = $(this);
+					var audit_code = _this.val();
+					var use_code = _this.parent().parent().find('.use-code').text();
+					var mark = _this.parent().parent().find('.mark').text();
+					var risk = _this.parent().parent().find('.risk').text();
+					var html = '<tr align="center"><td>';
+					html += use_code + '</td><td>';
+					html += audit_code + '</td><td>';
+					html += mark + '</td><td>'
+					html += risk + '</td><td><a href="javascript:;" class="del-code" rel="'+audit_code+'">'
+					html += '<img src="theme/images/b_drop.png" border=0 /></a></td></tr>';
+					$(html).appendTo( tbody );
+					audit_code_arr[index] = audit_code;
+					use_code_arr[index] = use_code;
+				});
+				audit_input.val( ( old_audit_code ? old_audit_code+'；' : '' ) + audit_code_arr.join('；') );
+				use_input.val( ( old_use_code ? old_use_code+'；' : '' ) + use_code_arr.join('；') );
+				$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(780);
+}
+
+
+function del_code(){
+	var $this = $(this);
+	var code = $this.attr( 'rel' );
+	var use_input = $this.parent().parent().parent().parent().parent().find('input.use-code');
+	var audit_input = $this.parent().parent().parent().parent().parent().find('input.audit-code');
+	var use_code_arr = use_input.val().split('；');
+	var audit_code_arr = audit_input.val().split('；');
+	var new_use_code_arr = [];
+	var new_audit_code_arr = [];
+	for( var i = 0; i < audit_code_arr.length; i++ ){
+		if( audit_code_arr[i] != code ){
+			new_audit_code_arr.push(audit_code_arr[i]);
+			new_use_code_arr.push(use_code_arr[i]);
+		}
+	}
+	use_input.val( new_use_code_arr.join( '；' ) );
+	audit_input.val( new_audit_code_arr.join( '；' ) );
+	$this.parent().parent().remove();
+}
+</script>
+</head>
+
+<body>
+<?php 
+ 
+echo einfo("ct_id=$ct_id&width=800");?>
+  <br>
+<form name="winput" method="post" >
+  <input type="hidden" name="pid" value="<?=$id;?>" />
+  <div id="certificate-tab" style="margin: 0 auto;width:800px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">变更范围</a></li>
+  </ul>
+  <div id="tab-basic">
+   
+  <table class="grid-table">
+    <tbody>
+      <tr>
+        <td>项目编号</td>
+        <td><?=$cti_code;?></td>
+        <td>标准版本</td>
+        <td>
+        	<select name="audit_ver">
+            	<option >==请选择==</option>
+        		<?=$audit_ver_V;?>
+            </select>
+         </td>
+      </tr>
+      <tr>
+        <td width="150"> 审核类型</td>
+        <td><?=read_cache("audit_type",$audit_type);?></td>
+        <td>体系人数</td>
+        <td><input type="text" name="total" value="<?=$p_info['total']?>" /></td>
+      </tr>
+      <tr>
+       
+        <td align="left">现场人日： </td>
+        <td ><input type="text" name="st_num" value="<?=$st_num;?>" /></td>
+      </tr>
+        <tr>
+        	<td>评定人员</td>
+            <td><input type="text" name="comment_a_name" value="<?=$comment_a_name;?>"></td>
+            <td>评定日期</td>
+            <td><input type="text" class="input-date"  name="sp_date" value="<?=$sp_date;?>"></td>
+        </tr>
+      
+      <tr>
+        <td  valign="top">专业代码：</td>
+        <td colspan="3"><table width="100%" class="grid-table">
+            <thead>
+              <tr>
+                <th width="20%">分组代码</th>
+                <th width="20%">专业代码</th>
+                <th width="*">认可标志</th>
+                <th width="20%">风险等级</th>
+                <th width="20%">操作</th>
+              </tr>
+            </thead>
+            <tbody class="audit-codes">
+              <?php if(is_array($audit_codes)): foreach( $audit_codes as $codes ):?>
+              <tr align="center">
+                <td><?=$codes['code'];?></td>
+                <td><?=$codes['shangbao'];?></td>
+                <td><?=$codes['mark_V'];?></td>
+                <td><?=$codes['risk_level_V'];?></td>
+                <td><a href="javascript:;" class="del-code" rel="<?=$codes['shangbao'];?>"><img src="theme/images/b_drop.png" border=0 /></a></td>
+              </tr>
+              <?php endforeach; endif;?>
+            </tbody>
+          </table>
+          <input type="hidden" class="audit-code" name="audit_code" value="<?=$p_info['audit_code']?>" />
+          <input type="hidden" class="use-code" name="use_code" value="<?=$p_info['use_code']?>" />
+          <p class="button-panel" style="margin-top:9px;">
+            <button type="button" class="btn btn-submit add-audit-code-btn" rel="<?=$p_info['iso'];?>"> 添加专业代码 </button>
+          </p></td>
+      </tr>
+        </tr>
+      
+      <tr>
+        <td>审核范围:</td>
+        <td colspan="2"><textarea name="scope"  style="width:400px; height:100px;"><?=$scope;?>
+</textarea></td>
+		<td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <br/>
+  <p class="button-panel tac" style="margin:12px 0 20px;">
+    
+    <button type="submit" class="btn btn-submit" > 保存 </button>
+  </p>
+ 
+  <br/>
+</form>
+</div>
+</div>
+</body>
+</html>

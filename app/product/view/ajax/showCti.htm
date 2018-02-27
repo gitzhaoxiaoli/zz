@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?=get_conf('charset');?>" />
+<title>项目信息</title>
+
+<link href="<?=get_conf('theme_url');?>css/style.css" type="text/css" rel="stylesheet" />
+<link href="<?=get_conf('theme_url');?>css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+    });
+    </script>
+</head>
+
+<body>  
+
+
+	<table width="100%" class="grid-table">
+			<tr>
+				<td >认证申请编号</td>
+				<td colspan="3" align="left"><span class="red"><?=$cti_code;?></span></td>
+			</tr>
+            <tr>
+				<td >委托人</td>
+				<td colspan="3" align="left"><?=$ep_name;?></td>
+			</tr>
+            <tr>
+				<td >生产者</td>
+				<td colspan="3" align="left"><?=$ep_manu;?></td>
+			</tr>
+            <tr>
+				<td >生产企业</td>
+				<td colspan="3" align="left"><?=$ep_prod;?></td>
+			</tr>
+			<tr>
+				<td  style="width:100px;">受理工程师</td>
+				<td align="left"><?=f_username($approval_user);?></td>
+				<td  >受理日期</td>
+				<td ><?=$approval_date;?></td>
+			</tr>
+			
+			<tr>
+				<td >实际生产地址</td>
+				<td colspan="3" align="left"><?=$ep_prod_addr;?></td>
+			</tr>
+			<tr>
+				<td >实际英文生产地址</td>
+				<td colspan="3" align="left"><?=$ep_prod_addr_e;?></td>
+			</tr>
+            <tr>
+				<td >是否ODM模式</td>
+				<td ><?=$ep_site_related == '1001'?'是':'否';?></td>
+				<td >证书编号</td>
+				<td ><?=$cert_form;?></td>
+			</tr>
+			<tr>
+				<td >与产品有关人数</td>
+				<td align="left"><?=$total;?></td>
+				<td >产品小类</td>
+				<td ><?=$prod_name;?></td>
+			</tr>
+            <tr>
+				<td >产品名称</td>
+				<td align="left" colspan="3"><?=$prod_name_chinese;?></td>
+            </tr>
+            <tr>
+				<td >产品型号</td>
+				<td align="left" colspan="3"><?=$scope;?></td>
+			</tr> 
+             <tr>
+				<td >产品标准</td>
+				<td align="left" colspan="3"><?=$prod_ver;?></td>
+				
+			</tr>
+           
+		</table>
+        <br/>
+        <?php if($archives){?>
+<div id="tab-archive">
+		<table width="100%" class="grid-table">
+			<tr>
+				<th>文档名</th>
+				<th>文档类型</th>
+				<th>备注</th>
+				<th>上传时间</th>
+				<th>上传人</th>
+				<th>下载</th>
+                <!--<th>删除</th>-->
+			</tr>
+<?php 
+	foreach($archives as $aid => $archive ){
+?>
+			<tr>
+				<td><?=$archive['name'];?></td>
+				<td><?=read_cache("arctype",$archive['ftype']);?></td>
+				<td>
+				<?php if($archive['description']){?><a href="javascript:;" title="<?=$archive['description'];?>"><img src="theme/images/other.png" border="0" /></a><?php } ?>
+				</td>
+				<td><?=$archive['create_date'];?></td>
+				<td><?=$archive['create_user'];?></td>
+				<td align="center"><a href="?c=attachment&a=down&aid=<?=$archive['id'];?>&class=pro" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a></td>
+                <!--<?php if(current_user("uid")==1 or current_user("uid")==$archive[create_uid]){ ?>
+                <td align="center"><a href="?c=enterprise&a=delattach&aid=<?=$archive['id'];?>" class="c-del"><img src="theme/images/b_drop.png" border=0 /></a></td>
+                <?php }else{ ?>
+                <td></td>
+                <?php }?>-->
+			</tr>
+<?php } ?>
+			
+		</table>
+        <p><?=$pages['pages'];?></p>
+	</div>
+<?php }?>
+
+</body>
+</html>

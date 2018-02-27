@@ -1,0 +1,12 @@
+<?php if($wordlist){?>
+<div style="position:fixed; top:200px; right:0px; width:200px; height:auto; z-index:1000; border:1px solid #CCC">
+<p style=" background:#317DFD">文件列表</p>
+<p style="text-align:left">
+<ul style="margin-left:10px;">
+	<?php foreach($wordlist as $k => $v){?>
+	<li style="height:20px; line-height:20px; text-align:left;"><a href="?m=product&c=word&a=<?=$v[url]?>" target="_blank"><?=$v[filename];?></a></li>
+    <?php }?>
+</ul>
+</p>
+</div>
+<?php }?>

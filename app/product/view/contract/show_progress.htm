@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>项目状态</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<style type="text/css">
+.ctxm-table{border-collapse: collapse;border-spacing: 0;}
+.ctxm-table .td{padding:5px;border:1px solid #ccc;}
+
+.txxm-table{border-collapse: collapse;border-spacing: 0;}
+.txxm-table td{padding:.4em .6em;border:1px solid #f2f6fb;}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+
+});
+
+</script>
+</head>
+
+<body>
+<?php  echo prod_einfo("cti_id=$cti_id&width=1300");?>
+<br/>
+
+<div style="margin:0 auto;width:1300px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">状态</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+		<table width="100%" class="grid-table">
+			<tr>
+				<th>申请号</th>
+				<td colspan="20"><?=$cti_code;?></td>
+            </tr>
+            <tr>
+				<th>申请时间 ——></th>
+				<th>历时</th>
+				<th>受理时间 ——></th>
+				<th>历时</th>
+                <th>检测安排时间 ——></th>
+                <th>历时</th>
+				<th>检测结果时间 ——></th>
+				<th>历时</th>
+                <th>检查安排时间 ——></th>
+                <th>历时</th>
+                <td></td>
+            </tr>
+            <tr>
+				<td><?=$step1;?></td>
+				<td><?=$t1;?></td>
+				<td><?=$step2;?></td>
+				<td><?=$t2;?></td>
+                <td><?=$step3;?></td>
+                <td><?=$t3;?></td>
+				<td><?=$step4;?></td>
+				<td><?=$t4;?></td>
+                <td><?=$step5;?></td>
+                <td><?=$t5;?></td>
+                <td></td>
+            </tr>
+            <tr>
+				<th>组长填实际检查时间 ——></th>
+				<th>历时</th>
+                <th>填写检查结论时间 ——></th>
+                <th>历时</th>
+                <th>整改完成时间 ——></th>
+                <th>历时</th>
+				<th>资料收回时间 ——></th>
+				<th>历时</th>
+                <th>认证决定时间 ——></th>
+                <th>历时</th>
+                <th>发证时间</th>
+			</tr>
+            <tr>
+				<td><?=$step6;?></td>
+				<td><?=$t6;?></td>
+                <td><?=$step7;?></td>
+                <td><?=$t7;?></td>
+                <td><?=$step8;?></td>
+                <td><?=$t8;?></td>
+				<td><?=$step9;?></td>
+				<td><?=$t9;?></td>
+                <td><?=$step10;?></td>
+                <td><?=$t10;?></td>
+                <td><?=$step11;?></td>
+			</tr>
+            </table>
+		<br/>
+
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>任务列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld {
+	border-collapse: collapse;
+	border: 1px solid #000;
+}
+TD {
+	font-size: 12px;
+	vertical-align: middle;
+vnd.ms-excel.numberformat:@;
+	border: 1px solid #000;
+}
+br {
+	mso-data-placement: same-cell;
+}
+</style>
+</head>
+
+<body>
+<table>
+  <tr>
+    <td width="60">检查员姓名</td>
+    <td width="*">受审核方全称</td>
+    <td width="110">检查开始时间</td>
+    <td width="110">检查结束时间</td>
+    <td width="60">组内职务</td>
+    <td width="80">核定人日数</td>
+    <td width="80">代扣税</td>
+    <td width="50">实付金额</td>
+    <td width="60">签字/备注</td>
+  </tr>
+  <tbody>
+    <?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $resdb ){
+	foreach( $resdb as $row ){
+?>
+    <tr>
+      <td align="center"><?=$row['name'];?></td>
+      <td><?=$row['ep_name'];?></td>
+      <td align="center"><?=$row['taskBeginDate'];?></td>
+      <td align="center"><?=$row['taskEndDate'];?></td>
+      <td>  <?=read_cache('audit_role',$row['role'])?> </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <?php
+ 
+	}
+}
+?>
+  </tbody>
+</table>
+</body>
+</html>

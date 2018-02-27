@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择人员</title>
+
+<link href="themecss/style.css" type="text/css" rel="stylesheet" />
+<link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="themejs/jquery.js"></script>
+<script type="text/javascript" src="themejs/jquery-ui.js"></script>
+<script type="text/javascript" src="themejs/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+		$( "input.input-date" ).datepicker();
+    });
+    </script>
+</head>
+
+<body>  
+
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="width:560px;">
+
+		
+    <table class="grid-table">
+        <tr>
+          <th>联系人姓名</th>
+          <th>联系人电话</th>
+          <th>工作职务</th>
+          <th>工作范围</th>
+        </tr>
+		<?php if($links){ foreach($links as $key=>$val){ ?>
+		<tr>
+			<td><?=$val['linkname'];?></td>
+			<td><?=$val['linktel'];?></td>
+			<td><?=$val['zhiwu'];?></td>
+			<td><?=$val['fanwei'];?></td>
+		</tr>
+        <?php } }?>  
+      </table>
+	<form id="linkform">
+		<input type="hidden" name="flag" value="1"/>
+		<input type="hidden" name="org_id" value="<?=$org_id;?>"/>
+		<table width="560px" class='grid-table2'>
+			
+			<tr>
+				<td>联系人姓名：</td>
+				<td align="left"><input type="text" name="linkname" style="width:240px;" /><em style='color:red'>*</em></td>
+			</tr>
+			<tr>
+				<td>联系人电话：</td>
+				<td align="left"><input type="text" name="linktel" style="width:240px;" /><em style='color:red'>*</em></td>
+			</tr>
+			<tr class="ep_manu">
+			  <td>工作职务：</td>
+			  <td align="left"><input class="input ep_name"  name="zhiwu" style="width:240px;" type="text"   float:left;border-width:1px 0 1px 1px' /></td>
+			  		 
+            </tr>
+			
+			<tr>
+				<td>工作范围：</td>
+				<td align="left"><input type="text" name="fanwei" style="width:240px;"/></td>
+			</tr>
+		</table><br/>
+		
+	</div>
+	<p><center><button class="btn btn-submit btn-link" type="button"> 保 存 </button></center></p> 
+	<br/>
+	</form>
+</div>
+	
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.btn-link').click(function(){
+			var url = "?app=com&m=enterprise&a=add_link";
+			$.ajax({
+				type : 'post',
+				url  : url,
+				data : $('#linkform').serialize(),
+				dataType : 'json',
+				success : function(data){
+					if(data.status){
+						window.parent.update_ep();						
+					}
+				}
+			});
+			
+		});
+	});
+</script>
+</html>

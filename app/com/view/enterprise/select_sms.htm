@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择人员</title>
+
+<link href="themecss/style.css" type="text/css" rel="stylesheet" />
+<link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="themejs/jquery.js"></script>
+<script type="text/javascript" src="themejs/jquery-ui.js"></script>
+<script type="text/javascript" src="themejs/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+		$( "input.input-date" ).datepicker();
+    });
+    </script>
+</head>
+
+<body>  
+<form method="get" action="">
+	<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="app" value="<?=$app;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" /> 
+        <input type="hidden" name="app" value="<?=$app;?>" /> 
+	<table>
+		<tr>  
+			<td>快递单号:</td>
+			<td ><input type="text" name="sms_no" value="<?=$_GET['sms_no'];?>"  class="input input-search-basic" /></td>
+			<td>快递公司：
+					<select name="sms_name" style="width:160px;">
+						<option value="">-请选择-</option>
+						<?=f_select('send_company',$sms_name);?>					
+					</select>
+			</td>
+			<td>接受时间：</td>
+			<td ><input type="text" name="accept_date" value="<?=$_GET['accept_date'];?>"  class="input input-date" /></td>
+ 			<td align="left">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</td>
+		</tr>
+	</table>
+</form>
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="130">快递单号</th>          
+			<th>快递公司</th>
+            <th>接受时间</th>             
+		</tr>
+		</thead>
+		<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $list_datas ){
+	foreach( $list_datas as $id => $row ){
+?>
+		<tr align="left">
+			<td><a href="javascript:window.parent.update_ep('<?=$row['id'];?>' , '<?=$tid;?>');"><img src="themeimages/b_edit.png" border="0" /></a></td>
+			<td><?=$row['sms_no'];?></td> 
+			<td align="center">
+				<?php
+					switch($row['sms_name']){
+						case "01":
+							echo "申通";
+							break;
+						case "02":
+							echo "圆通";
+							break;
+						case "03":
+							echo "中通";
+							break;
+						case "04":
+							echo "顺丰";
+							break;
+						case "05":
+							echo "EMS";
+							break;	
+						case "06":
+							echo "天天";
+							break;
+						default:
+							echo "";						
+					}
+				?>
+			</td> 
+            <td align="center"><?=$row['accept_date'];?></td>            
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

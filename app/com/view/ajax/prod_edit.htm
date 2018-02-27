@@ -1,0 +1,160 @@
+<?php template('header')?>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript"> 
+var self = null; 
+$(document).ready(function(){  
+	//请求实验室数据
+	$('.select_test_org').live('click',function(){
+		var href='?app=cqm&m=test&a=select_test&prod_id='+$(this).attr('prod_id');
+		self = this;
+		iframe_dialog('选择实验室',href,800,420);  
+	}); 
+	//表单验证
+	$('.submit-btn').click(function(){
+	 	 if (!Validator.Validate($('#check_arrange_form')[0], 2)) return false;
+  	});
+
+	$("input.input-date").datepicker();	
+	
+	//标签页面
+	$( "#cert_print" ).tabs();
+});
+//更新实验室数据 
+function update_test(test_id,test_name){    
+	$(self).parent().find('.test_org_name').val(test_name);  
+	$(self).parent().find('.test_org_id').val(test_id); 
+	close_iframe_dialog(); //关闭子窗口弹窗
+}
+</script>
+</head>
+<body>
+<!--合同项目/项目信息挂件-->
+<div id="cert_print" style="margin: 0 auto; width: 780px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">申请信息</a></li>
+  </ul>
+  <div id="tab-basic" style="100%">
+    <?php widget("a=ctiInfo&project_id=$proj_info[id]")?>
+  </div>
+</div>
+<br />
+<form method="post" id="check_arrange_form">
+  <div style="margin:0 auto;width:780px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">产品检验登记</a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+  <ul class="main-form">
+  <table width="100%" class='grid-table'>
+    <tr>
+      <?php if($proj_info['audit_ver']=='b02001') {?>
+      <td colspan="2"><a class="icon-doc" href="?app=com&m=doc&a=test_ep&project_id=<?=$proj_info[id]?>&type=<?=$proj_info['audit_ver']?>"></a>抽样单 &nbsp;&nbsp; <a class="icon-doc" href="?app=com&m=doc&a=test_adv_org&project_id=<?=$proj_info[id]?>&type=<?=$proj_info['audit_ver']?>"></a>发送委托单</td>
+    </tr>
+    <?php }else{ ?>
+    <tr>
+      <td colspan="2"><a class="icon-doc" href="?app=com&m=doc&a=test_ep&project_id=<?=$proj_info[id]?>&type=<?=$proj_info['audit_ver']?>"></a>送样通知 &nbsp;&nbsp; <a class="icon-doc" href="?app=com&m=doc&a=test_adv_org&project_id=<?=$proj_info[id]?>&type=<?=$proj_info['audit_ver']?>"></a>委托通知</td>
+    </tr>
+    <?php  } ?>
+	<tr>				
+		<td colspan="4">发出时间：<input type="text" name="sendtime" value="<?=$proj_info['sendtime'];?>" class="input input-date finput" />&nbsp;&nbsp;&nbsp; 返回时间：<input type="text" name="backtime" value="<?=$proj_info['backtime'];?>" class="input-date input"/> &nbsp;&nbsp;&nbsp;检测任务发出时间：<input type="text" name="tasktime" value="<?=$proj_info['tasktime'];?>" class="input-date "/></td>
+	</tr>
+    <tr>
+      <td>检测机构</td>
+      <td colspan="3"><input type="text" value="<?=$proj_info['test_org_name'];?>" class="input test_org_name" dataType="Require" msg="请选择检测机构！" readonly  style="width:445px; float:left;border-width:1px 0 1px 1px" />
+        <i class="i-select select_test_org" prod_id="<?=load('cti')->getCtiFieldById($proj_info[cti_id],'prod_id')?>"></i><span class="cRed">*</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="同上" onclick="javascript:getjigou();" style="cursor:pointer;"/>
+		<input type="hidden" name="test_org_id" class="test_org_id" value="<?=$proj_info['test_org_id'];?>" /></td>
+    </tr>
+    <tr>
+      <td>送样要求</td>
+      <td><textarea cols="74" rows="3" name="send_require"><?=$proj_info['send_require'];?>
+</textarea></td>
+    </tr>
+    <tr>
+      <td>委托备注</td>
+      <td><textarea cols="74" rows="3" name="samp_note"><?=$proj_info['samp_note'];?>
+</textarea></td>
+    </tr>
+  </table>
+  <?php if($proj_info['audit_ver']=='b02001'){?>
+ <!-- <table width="100%" class='grid-table'>
+    <tr>
+      <td>样品名称</td>
+      <td>规格型号</td>
+      <td>执行标准<br/>
+        (标准编号和<br/>
+        四位数年号)</td>
+      <td>检验项目</td>
+      <td>出厂日期<br/>
+        或生产批号 </td>
+      <td>抽样地点</td>
+      <td>存放环境</td>
+      <td>堆放形式</td>
+      <td>抽样数量</td>
+      <td>包装方式</td>
+      <td>封样时间</td>
+    </tr>
+    <?php foreach($oga_infos as $oga_info){?>
+    <tr>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][prod_note]" value="<?=$oga_info['prod_note']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][scope]" value="<?=$oga_info['scope']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][ver]" value="<?=$oga_info['ver']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][item]" value="<?=$oga_info['item']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][manu_date]" value="<?=$oga_info['manu_date']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][samp_area]" value="<?=$oga_info['samp_area']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][store_env]" value="<?=$oga_info['store_env']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][store_style]" value="<?=$oga_info['store_style']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][samp_num]" value="<?=$oga_info['samp_num']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][pack_method]" value="<?=$oga_info['pack_method']?>"></td>
+      <td><input type="text" size="5" name="oga_info[<?=$oga_info['oga_info_id']?>][samp_close_date]" value="<?=$oga_info['samp_close_date']?>"></td>
+    </tr>
+    <?php } ?>
+    <tr>
+      <td colspan="2">抽样依据</td>
+      <td  colspan="14"><input type="radio" name="oga_test_ver" value="1001" <?php if($proj_info['oga_test_ver']=='1001'){?> checked <?php } ?>>
+        按委托单填写的执行标准中方案抽样<br/>
+        <input type="radio" name="oga_test_ver" value="1002" <?php if($proj_info['oga_test_ver']=='1002'){?> checked <?php } ?>>
+        按方圆标志认证中心产品抽样管理规定抽样<br/>
+        <input type="radio" name="oga_test_ver" value="1003" <?php if($proj_info['oga_test_ver']=='1003'){?> checked <?php } ?>>
+        按产品认证实施规则/方案抽样；随机抽样 </td>
+    </tr>
+  </table>-->
+  <?php } ?>
+  <br>
+  <p class="button-panel tac"> 
+    <!--  是否通知<input type="checkbox" value="1" name="is_notice" <?php if($proj_info[is_notice]){?> checked="checked" <?php } ?>  />-->
+   <input type="radio" value="2" <?php if($proj_info['is_notice']==2){?> checked="checked" <?php } ?> name="is_notice" />定检&nbsp;&nbsp;
+   <input type="radio" value="1" <?php if($proj_info[is_notice]==1){?> checked="checked" <?php } ?> name="is_notice" />安排
+    <button type="submit" class="btn btn-submit submit-btn"<?=$save_disabled;?>> 保 存 </button>
+  </p>
+  </div>
+  </div>
+</form>
+<!--便签模块-->
+ 
+<?php  
+$org_log=$cti_info['eid'].'-'.$cti_info['ep_manu_id'].'-'.$cti_info['ep_prod_id'];
+
+widget(array('a'=>'oga_log_info','org_logs'=>array($org_log)))?>
+
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".btn").click(function(){
+			var item = $(":radio:checked"); 
+			var len=item.length; 
+			if(len<=0){ 
+			  alert("请选择安排类型!"); 
+			  return false;
+			} 
+		});
+	
+	});
+	function getjigou(){
+		var test_name = $.trim($(".test_name").text());
+		var test_org_id = $(".test_id").val();
+		$(".test_org_name").val(test_name);
+		$(".test_org_id").val(test_org_id);
+	}
+</script>
+</html>

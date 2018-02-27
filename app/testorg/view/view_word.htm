@@ -1,0 +1,35 @@
+<?php if($wordlist){?>
+<script type="text/javascript">
+$(function(){
+$("#word-title").click(function(){
+	$(this).hide();
+	$("#word-list").show();
+	
+	})
+$("#word-p").click(function(){
+	$("#word-list").hide();
+	$("#word-title").show();
+	
+	})
+})
+</script>
+<div style=" cursor:pointer;font-size:16px;color:#FFFFFF;background:#317DFD;position:fixed; top:50px; right:10px; width:auto; height:auto; z-index:1000; border:1px solid #CCC;" id="word-title">
+打<br />
+开<br />
+文<br />
+件<br />
+列<br />
+表
+</div>
+
+<div style="position:fixed; top:50px; right:0px; width:200px; height:auto; z-index:1000; border:1px solid #CCC;display:none;" id="word-list">
+<p style=" background:#317DFD;cursor:pointer;" id="word-p">关闭文件列表</p>
+<p style="text-align:left; ">
+<ul style="margin-left:10px;">
+	<?php foreach($wordlist as $k => $v){?>
+	<li style="height:20px; line-height:20px; text-align:left;"><a href="?m=product&c=word&a=<?=$v[url]?>" target="_blank"><?=$v[filename];?></a></li>
+    <?php }?>
+</ul>
+</p>
+</div>
+<?php }?>

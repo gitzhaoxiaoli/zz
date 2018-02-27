@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>检查派人</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+		<table class="grid-table">
+    <thead>
+    <tr>
+      <th width="100">任务号</th>
+            <th width="200">生产企业</th>
+			<th width="80">检查类型</th>
+			<th width="30">总人日</th>
+			<th width="70">计划开始时间</th>
+			<th width="70">计划结束时间</th>
+            <th width="80">组长</th>
+			<th width="160">组员</th>
+            <th width="*">备注</th>
+            <th width="*">自用备注</th>
+            <th width="30">合同来源</th>
+            <th width="*">制单人</th>
+			<th width="*">制单时间</th>
+            	<th width="*">审批人</th>
+			<th width="*">审批时间</th>
+            	<th width="*">修改人</th>
+			<th width="*">修改时间</th>
+     
+    </tr>
+    </thead>
+    <tbody>
+<?php
+if( $tasks ){
+  foreach( $tasks as $tid => $row ){
+?>
+    <tr>
+<td align="center"><?=$row[task_code];?></td>
+            <td class="ep_name"> <?=$row['ep_name'];?> </td>
+			<td align="center"><?=f_audit_type($row['audit_type']);?></td>
+			<td align="center"><?=$row['tk_num'];?></td>
+			<td align="center"><?=$row['tb_date'];?></td>
+			<td align="center"><?=$row['te_date'];?></td>
+			<td align="center"><?=$row['leader']?></td>
+			<td align="center"><?=$row['auditor']?></td>
+            <td align="center"><?php if($row['note']){ ?><a href="javascript:;" title="<?=$row['note'];?>" class="a_link"  ><img src="theme/images/other.png" border="0" /><span style="display:none"><?=$row['note'];?></span></a><?php }?></td>
+			<td align="center"><?php if($row['self_note']){ ?><a href="javascript:;" title="<?=$row['self_note'];?>" class="a_link"  ><img src="theme/images/other.png" border="0" /><span style="display:none"><?=$row['self_note'];?></span></a><?php }?></td>
+            <td align="center"><?=$row['ctfrom_V'];?></td>
+               	<td align="center"><?=$row['name'];?></td>
+			<td align="center"><?=$row['create_date'];?></td>
+            <td align="center"><?=$row['approval_user'];?></td>
+			<td align="center"><?=$row['approval_date'];?></td>
+            <td align="center"><?=$row['update_user'];?></td>
+			<td align="center"><?=$row['update_date'];?></td>    </tr>
+<?php
+  }
+} else {
+?>
+    <tr>
+      <td align="center" colspan="14">未找到相关记录</td>
+    </tr>
+<?php
+}
+?>
+    </tbody>
+  </table>
+</body>
+</html>

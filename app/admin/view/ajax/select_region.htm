@@ -1,0 +1,82 @@
+<?php tpl('header')?>
+
+<script>
+    $(function() {
+        $( "#enterprise-tab" ).tabs();
+	    //$("img[class='click']").mouseover(function(){
+	    //     $(this).attr('border','1');
+		// });
+	    //$("img[class='click']").mouseout(function(){
+		//     $(this).attr('border','0');
+		// });
+    });
+	function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+
+    </script>
+</head>
+
+<body> 
+<form method="get">  
+<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="c" value="<?=$c;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+			<table>
+				<tr>
+                <td>简码/名称：</td>
+					<td><input type="text" name="name" value="<?=$_GET['name'];?>" class="input input-search" /></td>
+					<td>编码：</td>
+					<td><input type="text" name="code" value="<?=$_GET['code'];?>" class="input input-search" /></td>
+				</tr>
+			</table>
+			<p class="button-panel tal">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>&nbsp;
+				<button  class="btn btn-button" onClick="clearForm(this.form);" >清空</button>
+			</p>
+		</form>
+		<?=$pages['pages'];?>
+		<br />
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="20">选择</th>
+			<th width="60">编号</th>
+			<th width="80">中文名称</th> 
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $list_datas ){
+	foreach( $list_datas as $id => $row ){
+?>
+		<tr align="cneter">
+			<td><a href="javascript:window.parent.update_region( '<?=$row['code'];?>', '<?=$row['full_name'];?>' );"><img src="theme/images/success.png" class="click" style="width:17px;" border="0" /></a></td>
+			<td><?=$row['code'];?></td>
+			<td><?=$row['full_name'];?></td> 
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+
+
+</body>
+</html>

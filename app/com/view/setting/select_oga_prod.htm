@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择有机产品</title>
+
+<link href="themecss/style.css" type="text/css" rel="stylesheet" />
+<link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="themejs/jquery.js"></script>
+<script type="text/javascript" src="themejs/jquery-ui.js"></script>
+<script type="text/javascript" src="themejs/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+    });
+    </script>
+</head>
+
+<body>  
+<form method="get" action="">
+<input type="hidden" name="app" value="<?=$app;?>" />
+	<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="app" value="<?=$app;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" /> 
+    <input type="hidden" name="prod_id" value="<?=$_GET['prod_id'];?>" /> 
+	<table>
+		<tr>  
+			<td>产品大类：</td>
+			<td ><input type="text" name="name" value="<?=$_GET['name'];?>"  class="input input-search-basic" /></td>
+            <td>产品小类：</td>
+			<td ><input type="text" name="note" value="<?=$_GET['note'];?>"  class="input input-search-basic" /></td>
+            
+ 			<td align="left">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</td>
+		</tr>
+	</table>
+</form>
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">产品大类</th>
+			<th width="60">产品小类</th> 
+		 
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $prods ){
+	foreach( $prods as  $row ){
+    	if(!$row['name']) continue;
+        $row['note']=str_replace(';','；',$row['note']);
+        $prods2=explode('；',$row['note']); 
+        
+?>
+		<tr align="left"> 
+			<td><?=$row['name'];?></td> 
+			<td> 
+             <?php foreach($prods2 as $v){?> 
+             <div style="float:left; width:110px;">
+            <?=$v?>
+            <a href="javascript:window.parent.update_oga_prod('<?=$v;?>');"><img src="themeimages/b_edit.png" border="0" /></a> 
+             </div>
+            <?php } ?> 
+            </td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

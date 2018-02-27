@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>添加证书</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script>
+$(function(){ 
+	$('.btn-submit').live("click",function(){
+		if( !Validator.Validate( $('#contract-form')[0], 2 ) ) return false; 
+		$('#contract-form').submit();
+ 	}); 
+	//日期
+    $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	}); 
+	$(".type").live("change",function(){
+		
+		if($(this).val()!='1'){
+			$(".class").html("授课教师");
+			$("#class").attr("msg","授课教师不能为空！");
+			
+			}else{
+				
+				$(".class").html("培训课程");
+				$("#class").attr("msg","培训课程不能为空！");
+				}
+		
+		})
+})
+</script>
+</head>
+<body>
+
+<form method="post" id="contract-form" action="" >
+<input type="hidden" name="data_for" value="4" />
+<input type="hidden" name="dealerId" value="<?=$_GET[dealerId]?>" />
+<div style="margin:0 auto;width:750px;"  class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">添加培训证书</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    	 <ul class="main-form">
+               <li>
+               <label class="field" >选择证书模版</label>
+                <em></em><span>
+              <select name="type" class="type" dataType="Require" msg="选择证书模版！" >
+              <option value="">---请选择---</option>
+              <option value="1" <?=$type_Y?>>结业证书</option>
+              <option value="2" <?=$type_N?>>内部审核员证书</option>
+              <!--<option value="3">华诚认证中心14000证书</option>
+              <option value="4">华诚认证中心18000证书</option>--></select></span> 
+              </li>
+              <li>
+               <label class="field">姓名<br>每行一个</label>
+                <em></em><span>
+              <textarea name="train_names" style=" width: 465px; height: 280px" class="cnt-scope"><?=$names?></textarea></span> 
+              </li>
+			  <li>
+               <label class="field">培训内容</label>
+                <em></em><span>
+              <textarea name="text" style=" width: 465px; height: 120px" class="cnt-scope"><?=$text?></textarea></span> 
+              </li>
+              <li>
+                <label class="field class">培训课程</label>
+                <em></em><span>
+                <input type="text" id="class" name="class"  value="<?=$class;?>" class="input" style="width:175px" dataType="Require" msg="培训课程不能为空！" />
+                </span>
+                
+                <label class="field2">发证时间</label>
+                <em></em><span>
+                <input type="text" id="cert_date" name="cert_date"  value="<?=$date;?>" class="input-date" style="width:175px" dataType="Require" msg="发证时间不能为空！" />
+                </span>
+                </li> 
+                <li>
+                 <label class="field">培训开始时间</label>
+                <em></em>
+                <span>
+                <input type="text" id="s_date" class="input-date" name="s_date" value="<?=$s_date;?>" style="width:175px"  dataType="Require" msg="培训开始时间不能为空！" />
+                </span>  
+                 <label class="field2">培训结束时间</label>
+                <em></em>
+                <span>
+                <input type="text" id="e_date" class="input-date" name="e_date" value="<?=$e_date;?>" style="width:175px"  dataType="Require" msg="培训结束时间不能为空！" />
+                </span>  
+                 </li> 
+                 
+              <li>  
+              <p class="button-panel tac"><button class="btn btn-submit" type="submit"> 提 交 </button></p>
+              </li>
+         </ul> 
+    </div>
+
+</div>
+
+
+</form>
+</body>
+</html>

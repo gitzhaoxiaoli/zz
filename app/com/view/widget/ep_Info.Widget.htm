@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        <link href="themecss/style.css" type="text/css" rel="stylesheet" />
+        <link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+        <script type="text/javascript" src="themejs/jquery.js"></script>
+        <script type="text/javascript" src="themejs/jquery-ui.js"></script>
+        <script type="text/javascript" src="themejs/core.js"></script>
+        <script>
+
+        </script>
+        </head>
+        <body>
+        <table style="width: <?=$widht?>px" class='grid-table'>		 		
+          <tr>
+            <th width="40" colspan="4">组织基本信息</th>
+          </tr>
+		  <tr>
+            <td width="100">委托人编号：</td>
+			 <td colspan="3"><?=$epInfo['wcode']?></td>
+          </tr>
+          <tr>
+            <td width="100">组织名称：</td>
+            <td ><?=$epInfo['ep_name']?></td>
+            <td width="100">组织英文名称： </td>
+            <td><?=$epInfo['ep_name_e']?></td>
+          </tr>
+          <tr>
+            <td>组织地址</td>
+            <td><?=$epInfo['ep_addr']?></td>
+            <td>组织英文地址</td>
+            <td  style=" word-break:break-all;"><?=$epInfo['ep_addr_e']?></td>
+          </tr>
+          <tr>
+            <td>组织机构代码：</td>
+            <td><?=$epInfo['work_code']?></td>
+            <td> 法人代表：</td>
+            <td><?=$epInfo['delegate']?></td>
+          </tr>
+          <tr>
+            <td>行政区划：</td>
+            <td><?=$epInfo['areaaddr']?></td>
+            <td>国家或地区：</td>
+            <td><?=read_cache('statecode',$epInfo['statecode'])?></td>
+          </tr>
+            </tr>
+          
+          <tr>
+            <td>邮政编码：</td>
+            <td><?=$epInfo['ep_addrcode']?></td>
+            <td> 企业人数：</td>
+            <td><?=$epInfo['ep_amount']?>
+              <br /></td>
+          </tr>
+          <tr>
+            <td>联系人：</td>
+            <td><?=$epInfo['person']?></td>
+            <td> 联系人职务：</td>
+            <td><?=$epInfo['person_job']?></td>
+          </tr>
+          <tr>
+            <td>联系人手机：</td>
+            <td><?=$epInfo['person_tel']?></td>
+            <td> 联系人传真：</td>
+            <td><?=$epInfo['ep_fax']?></td>
+          </tr>
+          <tr>
+            <td>联系人邮箱：</td>
+            <td><?=$epInfo['person_mail']?></td>
+            <td> 备注：</td>
+            <td><?=$epInfo['note']?></td>
+          </tr>
+          <tr>
+            <TD colspan='4'><table class="grid-table">
+                <tr>
+                <th width="30">选择</th>
+                <th>文档类型</th>
+                <th>文档名</th>
+                <th>备注</th>
+                <th>上传时间</th>
+                <th>上传人</th>
+                <th>操作</th>
+              </tr>
+               <form method="post" action="?app=com&m=attachment&a=batdown">  
+                <input type="hidden" name="class" value="enterprise" />
+                <?php foreach($ep_files as $ep_file){?>
+                <tr>
+                <td><input type="checkbox" name="aid[]" value="<?=$ep_file['id'];?>" /></td>
+                <td><?=read_cache($ep_file['audit_ver'].'_'.'arctype',$ep_file['ftype'])?></td>
+                <td><?=$ep_file['name']?></td>
+                <td style="text-align: center" ><?php
+ if(!empty($ep_file['description'])){?>
+                    <a  title="<?=$ep_file['description']?>" class="icon-note"></a>
+                    <?php
+ }?></td>
+                <td><?=$ep_file['postdate']?></td>
+                <td><?=$ep_file['upload_hr']?></td>
+                <td><a href="?app=com&m=attachment&a=down&aid=<?=$ep_file['id'];?>&class=enterprise">下载</a></td>
+              </tr>
+                <?php } ?>
+                <tr>
+                <td></td>
+                  <td colspan="7"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td> 
+              </tr>
+              </form>
+              </table></TD>
+          </tr>
+        </table>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>批次列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table>
+	<thead>
+		<tr>
+			<td>申请编码</td>
+			<td>申请编号</td>
+			<td>是否初次</td>
+			<td>委托人名称</td>
+			<td>专业代码</td>
+			<td>项目所属单位</td>
+			<td>检查类型</td>
+			<td>受理日期</td>
+			<td>受理人</td>
+			<td>批次备注</td>
+			<td>受理备注</td>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); if( $contracts ): foreach( $contracts as $row ):?>
+		<tr>
+			<td><?=$row['ct_code'];?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); echo implode('<br/>', $row['cti_codes']);?></td>
+			<td><?=$row['is_first'];?></td>
+			<td><?=$row['ep_name'];?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); echo implode('<br/>', $row['audit_codes']);?></td>
+			<td><?=$row['ctfrom'];?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); echo implode('<br/>', $row['audit_types']);?></td>
+			<td><?=$row['accept_date'];?></td>
+			<td><?=$row['accetp_user'];?></td>
+			<td><?=$row['note'];?></td>
+			<td><?=$row['review_note'];?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); endforeach; endif;?>
+	</tbody>
+</table>
+</body>
+</html>

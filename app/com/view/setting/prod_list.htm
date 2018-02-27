@@ -1,0 +1,151 @@
+<?php tpl('header')?>
+<script>
+$(function(){
+	$('.icon-del').click(function(){ 
+		confirm_dialog('确定删除配置信息？', $(this).attr( 'href' ), 'warning' );
+		return false;
+	});  
+	$('.select_prod_rule').live('click',select_prod_rule);
+	$('.select_prod_vers').live('click',select_prod_vers);
+	
+	
+})
+//选择实施规则
+function select_prod_rule(){
+	var type=$(this).attr('set_type'); 
+	var href="?m=com&c=ajax&a=select_prod_rule&type="+type;
+	self = this;
+	$('<iframe class="frame2" src='+href+'></iframe>').dialog({
+		title: '选择规则',
+		width: 800,
+		height:420,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		 
+	}).width(780);
+	
+}
+function update_prod_rule(test_id,test_name){  
+ 	self.value=test_name;
+	$(self).parent().find('.test_id').val(test_id);
+ 
+	$('.frame2').dialog('close');
+	$('.frame2').dialog('destroy');
+	$('.frame2').remove();
+}
+ 
+</script>
+</head>
+
+<body>
+<div style="margin:0 auto;width:1300px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">系统设置&gt;&gt;产品小类</a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <form method="get">
+      <input type="hidden" name="m" value="<?=$m;?>" />
+      <input type="hidden" name="a" value="<?=$a;?>" /> 
+      <input type="hidden" name="c" value="<?=$_GET['c'];?>" />
+      <input type="hidden" name="type" value="<?=$_GET['type'];?>" />
+      <table>
+        <tr>
+          <td>编号：</td>
+          <td><input type="text" name="code" value="<?=$_GET['code'];?>" class="input input-search" /></td>
+          <td>产品名称：</td>
+          <td><input type="text" name="name" value="<?=$_GET['name'];?>" class="input input-search" /></td>
+          <td>规则：</td>
+          <td><input type="text" name="prod_rule_name" value="<?=$_GET['prod_rule_name'];?>" class="input input-search" /></td>
+        </tr>
+      </table>
+      <p class="button-panel tal">
+        <button type="submit" class="btn btn-submit"> 搜索 </button>
+      </p>
+    </form>
+    <?=$pages['pages'];?>
+    <p style="font-size:0;height:9px;overflow:hidden;"></p>
+    <form method="post">
+      <table class="form-table tal">
+        <tr>
+          <th width="40">排序</th>
+          <th width="80">编号</th>
+          <th width="*">产品名称</th>
+          <th>产品英文名称</th>
+          <th>规则名称</th>
+          <th>细则名称</th>
+          <th>人员代码</th>
+          <th>认证模式</th>
+          <th width="120">状态</th>
+          <th width="40">删除</th>
+        </tr>
+        <?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $resdb ){
+	foreach( $resdb as $id => $row ){
+		$row['stop_Y'] = $row['is_stop'] ? 'checked' : '';
+		$row['stop_N'] = $row['is_stop'] ? '' : 'checked';
+?>
+        <tr align="center">
+          <td><input type="text" name="old[<?=$id;?>][vieworder]" value="<?=$row['vieworder'];?>" size="2" class="input" /></td>
+          <td><input type="text" name="old[<?=$id;?>][code]" value="<?=$row['code'];?>" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][name] " value="<?=$row['name'];?>" size="20" class="input" /></td>
+            <td align="left"><input type="text" name="old[<?=$id;?>][name_e] " value="<?=$row['name_e'];?>" size="20" class="input" /></td>
+          <td align="left"><input type="text" class="select_prod_rule" set_type="<?php
+!defined('IN_SUPU') && exit('Forbidden'); echo $_GET['type'].'_index'; ?>"  value="<?=$row['prod_rule_name'];?>" size="30" class="input" />
+            <input type="hidden" class="test_id" name="old[<?=$id;?>][prod_rule_id]" value="<?=$row['prod_rule_id'];?>" /></td>
+          <td align="left"><input type="text" class="select_prod_rule" set_type="<?php
+!defined('IN_SUPU') && exit('Forbidden'); echo $_GET['type'].'_detail'; ?>"  value="<?=$row['prod_rule_detail_name'];?>" size="30" class="input" />
+            <input type="hidden" class="test_id" name="old[<?=$id;?>][prod_rule_detail_id]" value="<?=$row['prod_rule_detail_id'];?>" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][use_code]" value="<?=$row['use_code'];?>" title="<?=$row['use_code'];?>" size="10" class="input" /></td>
+          <td align="left">
+				<select style="width:100px;" name="old[<?=$id;?>][prod_cate]" >
+						<option value=''>==请选择==</option>
+						<?=f_select('b01001_audit_tpl',$row['prod_cate']);?>
+				</select>
+		  </td>
+          <td><input type="radio" id="stop-{$id}-N" name="old[<?=$id;?>][is_stop]" value="0" <?=$row['stop_N'];?>/>
+            <label for="stop-{$id}-N"> 启用</label>
+            <input type="radio" id="stop-{$id}-Y" name="old[<?=$id;?>][is_stop]" value="1" <?=$row['stop_Y'];?>/>
+            <label for="stop-{$id}-Y"> 停用</label></td>
+          <td align="center"><a href="?m=com&c=<?=$c;?>&a=<?=$a?>&del=<?=$row['id'];?>&type=<?=$_GET[type]?>" class="icon-del"></a></td>
+        </tr>
+        <?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+}
+?>
+        <tr align="center">
+          <td><input type="text" name="new[vieworder]" value="" size="2" class="input" /></td>
+          <td><input type="text" name="new[code]" value="" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[name]" value="" size="20" class="input" /></td>
+           <td align="left"><input type="text" name="new[name_e]" value="" size="20" class="input" /></td>
+          <td align="left"><input type="text" class="select_prod_rule" set_type=<?php
+!defined('IN_SUPU') && exit('Forbidden'); echo $_GET['type'].'_index'; ?> size="30" class="input" />
+            <input type="hidden" class="test_id" name="new[prod_rule_id]"/></td>
+          <td align="left"><input type="text" class="select_prod_rule" set_type=<?php
+!defined('IN_SUPU') && exit('Forbidden'); echo $_GET['type'].'_detail'; ?>  size="30" class="input" />
+            <input type="hidden" class="test_id" name="new[prod_rule_detail_id]" value="<?=$row['prod_rule_id'];?>" /></td>
+          <td align="left"><input type="text" name="new[use_code]" value="" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[prod_cate]" value="" size="10" class="input" /></td>
+          <td><label>
+              <input type="radio" name="new[is_stop]" value="0" />
+              启用</label>
+            <label>
+              <input type="radio" name="new[is_stop]" value="1" />
+              停用</label></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5"><center>
+              <button class="btn btn-submit" type="submit"> 保 存 </button>
+            </center></td>
+        </tr>
+      </table>
+      <input type="hidden" name="new[prod_type]" value="<?=$_GET['type'];?>"/>
+    </form>
+  </div>
+</div>
+</body>
+</html>

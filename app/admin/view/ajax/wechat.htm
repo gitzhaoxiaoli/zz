@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>发送微信通知</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script>
+$(function(){
+		$(".c-del").live("click",function(){
+		$(this).parent().remove();
+		
+		})
+
+	$("#add-user").click(function(){
+		$('<iframe src=?c=ajax&a=select_we_user></iframe>').dialog({
+		title	: '添加人员',
+		width: 300,
+		height: 300,
+		cache:false,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var uid = $("input[name=uid]").val();
+				var html = $("#new-user").html();
+				$(this).contents().find(".add-uid:checked").each(function(){
+					if($(this).val()){
+						html += '<span>';
+						html += '<input type="hidden" name="uid[]" value="'+$(this).val()+'">';
+						html += ' ' + $(this).attr('i');
+						html += '<img src="theme/images/b_drop.png" border=0 class="c-del" style="cursor:pointer" />';
+						html += '</span>';
+						}
+				
+					});
+					$("input[name=uid]").val(uid);
+					$("#new-user").html(html);
+					$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(300).height(220);
+		
+		})
+	})
+
+</script>
+</head>
+
+<body>
+	<form action="" method="post">
+    <?php foreach($openid as $k){ ?>
+    <input type="hidden" name="uid[]" value='<?=$k;?>'>
+    <?php }?>
+    <div style="border:0px red solid; width:600px; margin:auto; padding:0; margin:0;">
+    	<span>将会发送给 <?=$name;?></span><span id="new-user"></span><img src="theme/images/b_add.gif" border=0 id="add-user" style="cursor:pointer" /><span style="color:red">(灰色代表没有绑定微信，将无法收到消息) ：</span>
+        <textarea name="content" rows="10" cols="60">组织名称：<?=$ep_name."\r\n";?>开始时间：<?=$tb_date."\r\n";?>结束时间：<?=$te_date."\r\n";?></textarea>
+        <br/>
+        <button class="btn btn-button" type="submit">发送</button>
+        </div>
+    </form>
+</body>
+</html>

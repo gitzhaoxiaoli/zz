@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+		<table class="grid-table tal">
+    <thead>
+    <tr>
+      
+      <th width="80">委托人</th>
+
+<!--      <th width="30">子</th> -->
+      <th width="80">生产者</th>
+      <th width="100">生产企业</th>
+      <th width="90">产品小类</th>
+      <th width="130">产品名称</th>
+      <th width="130">产品型号</th>
+    </tr>
+    </thead>
+    <tbody>
+<?php
+if( $array ){
+  foreach( $array as $k=>$v ){
+      
+?>
+    <tr>
+      
+      <td align="center"><?=$v['ep_name']?></td>
+      <td><?=$v['ep_manu_name'];?></td>
+      <td align="center"><?=$v['ep_prod_name'];?></td>
+      <td align="center"><?=$v['prod_id'];?></td>
+      <td align="center"><?=$v['name']?></td>
+      <td align="center"><?=$v['scope']?></td>
+    </tr>
+<?php
+  }
+} else {
+?>
+    <tr>
+      <td align="center" colspan="10">没有找到名称</td>
+    </tr>
+<?php
+}
+?>
+    </tbody>
+  </table>
+  </table>
+</body>
+</html>

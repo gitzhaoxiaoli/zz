@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>选择人员</title> 
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script>
+//日期格式
+$(function() { 
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$(".btn-submit").click(function(){
+		
+		var s=$(":input[type=checkbox]:checked");
+		if(s.length<1){
+			message_dialog( '请选择的项目！', 'error' );
+			return false;
+			
+			}
+		
+		
+		})
+}); 
+//全选
+function select_all(){
+	$('input[type=checkbox][name="uid[]"]').each(function(){
+		$(this).attr("checked",true);})
+} 
+
+</script>
+</head>
+
+<body>
+	<table class="grid-table" style="width:200px; margin:auto">
+		<thead>
+		<tr>
+			<th width="30"><a href="javascript:select_all();">全选</a></th>
+			<th width="*">姓名</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $users ){
+	foreach( $users as $row ){
+?>
+		<tr>
+			<td align="center"><input type="checkbox" name="uid[]" value="<?=$row['id'];?>" i='<?=$row['name'];?>' class="add-uid" /></td>
+			<td><?=$row['name'];?></td>
+			
+		</tr>
+
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="7">没有找到相关文档</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+</body>
+</html>

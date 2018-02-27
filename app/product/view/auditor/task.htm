@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>审核项目</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(function() {
+	//var tooltips = $( "[title]" ).tooltip({position:{my:"left+6 center", at:"right center"}});
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+	$('#export-xls-btn').click( function(){
+		var form = $('.search-form');
+		form.append($('<input type="hidden" name="export" value="1" />'));
+		form.submit();
+		form.find('input[name=export]').remove();
+	} );
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+
+});
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+</script>
+</head>
+
+<body>
+
+
+<form method="get" action="?" class="search-form tal" style='width:1150px;margin:0 auto;'>
+<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="c" value="<?=$c;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" /> 
+<input type="hidden" name="audit_finish" value="<?=$audit_finish;?>" /> 
+	<table>
+		<tr>
+			<!--<td class="left">委托人：</td>
+			<td class="right"><input type="text" name="ep_name" value="<?=$ep_name;?>" class="input finput" /></td>
+            <td class="left">生产者：</td>
+			<td class="right"><input type="text" name="ep_manu_name" value="<?=$ep_manu_name;?>" class="input finput" /></td>-->
+            <td class="left">生产企业：</td>
+			<td class="right"><input type="text" name="ep_prod_name" value="<?=$ep_prod_name;?>" class="input finput" /></td>
+            <td class="left">检查类型：</td>
+			<td class="right"><select name="audit_type">
+            					<option value="">--请选择--</option>
+                                <option value="1001" <?=$audit_type == '1001'?'selected':'';?> >初始工厂检查</option>
+                                <option value="1004" <?=$audit_type == '1004'?'selected':'';?> >监督工厂检查</option>
+                                </select></td>
+			
+            </tr>
+            <tr>
+           <!-- <td class="left">认证申请编号：</td>
+			<td class="right"><input type="text" name="cti_code" value="<?=$cti_code;?>" class="input finput" /></td>-->
+             <td class="left">检查任务号：</td>
+			<td class="right"><input type="text" name="task_code" value="<?=$task_code;?>" class="input finput" /></td>
+			<td class="left">计划时间</td>
+			<td class="right"><input type="text" name="sh_date_s" value="<?=$sh_date_s?>" class="input input-date finput" /></td>
+			<td class="left">至</td>
+			<td class="right"><input type="text" name="sh_date_e" value="<?=$sh_date_e?>" class="input input-date finput"/></td>
+			<td class="left">工厂编号</td>
+			<td class="right"><input type="text" name="fac_code" value="<?=$fac_code;?>" class="input finput" /></td>
+
+		</tr>
+         <!--</tr>
+         <td class="left">代码：</td>
+			<td class="right"><input type="text" name="use_code" value="<?=$use_code;?>" class="input finput" /></td>
+            <tr>-->
+	</table>
+    <br/>
+	<p class="button-panel">
+		<button class="btn btn-submit" type="submit"> 搜 索 </button>
+        <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>&nbsp;
+		 <button id="export-xls-btn" class="btn btn-button" type="button"> 批量导出</button>
+		 
+	</p>
+</form>
+<br/>
+<div style='width:1150px;margin:0 auto;' class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top <?=$audit_finish_0_tab;?>"><a href="?m=product&c=auditor&a=task&audit_finish=0<?php gettourl();?>">未完成 <span class="cnt-total"><?=$finish_total[0];?></span></a></li>
+		<li class="ui-state-default ui-corner-top <?=$audit_finish_1_tab;?>"><a href="?m=product&c=auditor&a=task&audit_finish=1<?php gettourl();?>">已完成 <span class="cnt-total"><?=$finish_total[1];?></span></a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+
+<table width='100%' class='grid-table'>
+		<thead>
+		<tr>
+			<th width="30">操作</th>
+            <?php if(current_user("uid")==1){ ?>
+            <th width="40">审核员</th>
+            <?php }?>
+			<th width="*">检查任务号</th>
+			<!--<th width="200">委托人</th>
+            <th width="200">生产者</th>-->
+            <th width="200">生产企业</th>
+			<th width="*">合同来源</th>
+			<th width="*">检查类型</th>
+            <th width="*">审厂类型</th>
+			<th width="*">组内身份</th>
+			<th width="*">计划开始时间</th>
+			<th width="*">计划结束时间</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $projects ){
+	foreach( $projects as $row ){
+?>
+		<tr align='center'>
+			<td><a href="?m=product&c=auditor&a=task_edit&tid=<?=$row['tid'];?>"><img src="theme/images/b_edit.png" border=0 /></a></td>
+            <?php if(current_user("uid")==1){ ?>
+            <td><?=$row['name']?></td>
+            <?php }?>
+			<td><?=$row['task_code'];?></td>
+			<!--<td ><?=$row['ep_name']?></td>
+            <td ><?=$row['ep_manu_name']?></td>-->
+            <td ><?=$row['ep_prod_name']?></td>
+			<td><?=$row['ctfrom'];?></td>
+			
+			<td><?=$project['audit_type_V'];?></td>
+
+            <td><?=$row['is_verify'];?></td>
+			<td><?=read_cache("audit_role",$row[role]);?></td>
+			<td><?=$row['tb_date']?></td>
+			<td><?=$row['te_date']?></td>
+		</tr>
+       
+<?php
+	}?>
+    <?php if(!$audit_finish){?>
+<!--     <tr>
+			<td align="right" colspan="13"><span class="red">注：红色表示如果没有不符合审核结束时间距当前时间超过25天，有不符合超过40天</span></td>
+		</tr>
+-->        <?php }?>
+        <?php
+} else {
+?>
+		<tr>
+			<td align="center" colspan="13">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+	<p><?=$pages['pages'];?></p>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>编辑</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script>
+$(document).ready(function(){
+
+	$('#add-btn').click( addRecord );
+	addRecord();
+	$('#upload-btn').click(check_upload);
+	
+});
+
+function addRecord(){
+	tbody = $('#add-attachs');
+	tr = $('#add-attach');
+	new_tr = tr.clone();
+	new_tr.attr('id','');
+	new_tr.show();
+	tbody.append(new_tr);
+}
+
+
+function check_upload(){
+	var r = 1;
+	$('input[type=file][name="archive[]"]').each(function(){
+		var $this = $(this);
+		var tr = $this.parent().parent();
+		if( '' == tr.attr('id') ){
+			if( $this.val() != '' ){
+				var o_ftype = tr.find('select');
+				if( '' == o_ftype.val() ){
+					alert( '请选择文档：'+$this.val()+' 的类型！' );
+					r = 0;
+				}
+			}
+		}
+	});
+	if( r ){
+		$('#upload-form').submit();
+	}
+	
+}
+
+$(function(){ 
+	$("#einfo-tab").tabs({
+		collapsible: false
+	});
+	$('button.btn-submit').click(function(){
+		if( !Validator.Validate( $('#contract-form')[0], 2 ) ) return false; 
+		$('#contract-form').submit();
+ 	}); 
+	//日期
+    $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	}); 
+})
+
+</script>
+</head>
+<body>
+
+<form method="post" id="contract-form" action="" enctype="multipart/form-data">
+<input type="hidden" name="data_for" value="4" />
+<div style="margin:0 auto;width:750px;"  class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" id="einfo-tab">
+	<ul>
+        <li><a href="#tab-basic">企业信息</a></li>
+	</ul>
+    <div id="tab-basic">
+    	<table class="grid-table">
+      
+            <tr>
+              <td align="right">客户名称</td><td width="*"><?=$dealerInfo['name'];?></td>
+            </tr>
+            <tr>
+              <td align="right">客户简称</td><td width="*"><?=$dealerInfo['short_name'];?></td>
+            </tr>
+            <tr>
+              <td align="right">联系地址</td><td width="*"><?=$dealerInfo['contract_addr'];?></td>
+            </tr>
+            <tr>
+              <td align="right">联系人姓名</td><td width="*"><?=$dealerInfo['contact_name'];?></td>
+            </tr>
+            <tr>
+              <td align="right">联系人电话</td><td width="*"><?=$dealerInfo['contact_phone'];?></td>
+            </tr>
+            <tr>
+              <td align="right">联系人传真</td><td width="*"><?=$dealerInfo['contact_fax'];?></td>
+            </tr>
+            <tr>
+              <td align="right">联系人邮件</td><td width="*"><?=$dealerInfo['contact_mail'];?></td>
+            </tr>
+            <tr>
+              <td align="right">教材联系人</td><td width="*"><?=$dealerInfo['delegate'];?></td>
+            </tr>
+            <tr>
+              <td align="right">教材联系电话</td><td width="*"><?=$dealerInfo['manager'];?></td>
+            <tr>
+              <td align="right">备注</td><td width="*"><?=$dealerInfo['note'];?></td>
+            </tr>
+        	</table>
+	</div>
+</div><br/><br/>
+<div style="margin:0 auto;width:750px;"  class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+      <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">编辑合同</a></li>
+      </ul>
+	
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    
+	
+    	 <ul class="main-form">
+         
+              <li>
+                <label class="field">编号</label>
+                <em></em>
+                <input type="text" id="contract_no" name="contract_no" dataType="Require" msg="请填写编号！" value="<?=$contractInfo['contract_no'];?>"  style="width:175px" />
+                 <label class="field2">日期</label>
+                <em></em><span>
+                <input type="text" id="accept_date" class="input-date" name="accept_date" value="<?=$contractInfo['accept_date'];?>"  style="width:175px" />
+                </span> 
+                
+                </li>   
+                <li>
+                    <label class="field">总费用</label>
+                    <em>*</em><span>
+                     <input type="text" id="contract_money" name="contract_money" value="<?=$contractInfo['contract_money'];?>"  style="width:160px" />
+                    元</span>
+                </li>
+                <li>
+                 <label class="field">培训费</label>
+                <em></em><span><input name="train_money" type="text" style="width:175px" value="<?=$contractInfo[train_money]?>"/>
+                </span>
+                <label class="field2">证书费</label>
+                    <em></em><span><input name="ct_money" type="text" style="width:173px" value="<?=$contractInfo[ct_money]?>"/>
+                </span>
+                </li>
+                
+                 <li>
+                <label class="field">教材费</label>
+                <em></em><span><input name="jc_money" type="text" style="width:175px" value="<?=$contractInfo[jc_money]?>"/>
+                </span>
+                <label class="field2">差旅费</label>
+                <em></em><span><input name="cl_money" type="text" style="width:175px" value="<?=$contractInfo[cl_money]?>" />
+                </span>
+                
+                </li>
+                <li>
+                 <label class="field">差旅费负担方</label>
+                <em></em><span><input name="clffdf" type="text" style="width:175px" value="<?=$contractInfo[clffdf]?>"/>
+                </span>
+                 <label class="field2">培训教师</label>
+                <em></em><span>
+                <input type="text"  name="teacher" value="<?=$contractInfo['teacher'];?>" class="input" style="width:145px" />
+                </span>
+                
+                
+                </li>
+                
+                <!--<li>
+                <label class="field">是否到款：</label>
+                <em></em><span><input type="text" value="<?=$contractInfo['is_finance']?"是":"否";?>" style="border:0px" readonly="readonly"/></span> 
+              </li>-->
+               <li>
+              <label class="field">企业特殊需求</label>
+                <em></em><span>
+              <textarea name="tsyq"  style=" width: 465px" class="cnt-scope"><?=$contractInfo['tsyq'];?></textarea></span> 
+              </li>
+               <li>
+                <label class="field">课程</label>
+                <em></em><span>
+              <textarea name="course"  style=" width: 465px" class="cnt-scope"><?=$contractInfo['course'];?></textarea></span> 
+              </li>
+               <li>
+                <label class="field">备注</label>
+                <em></em><span>
+              <textarea name="note"  style=" width: 465px" class="cnt-scope"><?=$contractInfo['note'];?></textarea></span> 
+              </li>
+              <li>
+               <label class="field">附件</label>
+                <em></em><span>
+                <table width="100%" class="form-table">
+			<tr>
+				
+				<td width="">文档名字</td>
+				
+                <td width="">下载</td>
+			</tr>
+			
+			<?php if($archives) 
+            	foreach($archives as $row) {?>
+                <tr>
+                
+				<td width="230"><?=$row[name]?></td>
+				
+               <td width="*"><a href="?c=attachment&a=down&aid=<?=$row['id'];?>">下载</a></td>
+               </tr>
+                <?php }?>
+                
+                </table>
+                <table width="100%" class="form-table">
+			
+			<tbody id="add-attachs">
+			
+			<tr id="add-attach" style="display:none;">
+			
+				<td><input type="file" name="archive" /></td>
+				
+			</tr>
+            </tbody>
+		</table>
+        <br/>         <span>
+           <!--<label><input type="checkbox" name="completes" id="completes" value="1" <?=$contractInfo['completes']?"checked":""?>/>已完成</label>-->
+        </span> 
+        <br/><br/>      
+		<p class="note-msg">提示：最大支持10MB</p>
+		<p>
+			<center><!--<button class="btn btn-button" type="button" id="add-btn"> 添 加 </button>--> &nbsp; <button class="btn btn-submit" id="upload-btn" type="button"> 提 交 </button></center>
+		</p>
+                </span></li>
+                 
+              
+         </ul> 
+         </form>
+         </div>
+     
+        </div>
+    </div>
+
+</body>
+</html>

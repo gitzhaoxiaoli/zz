@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>企业列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table>
+	<thead>
+		<tr>
+			<td>工厂编码</td>
+			<td>企业注册名称</td>
+			<td>省份</td>
+			<td>项目所属单位</td>
+			<td>联系人</td>
+			<td>联系电话</td>
+			<td>联系手机</td>
+			<td>企业电话</td>
+			<td>组织传真</td>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); if( $enterprises ): foreach( $enterprises as $row ):?>
+		<tr>
+			<td><?=$row['code'];?></td>
+			<td><?=$row['ep_name'];?></td>
+			<td><?=$row['province'];?></td>
+			<td><?=$row['ctfrom'];?></td>
+			<td><?=$row['person'];?></td>
+			<td><?=$row['person_phone'];?></td>
+			<td><?=$row['person_tel'];?></td>
+			<td><?=$row['ep_tel'];?></td>
+			<td><?=$row['ep_fax'];?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); endforeach; endif;?>
+	</tbody>
+</table>
+</body>
+</html>

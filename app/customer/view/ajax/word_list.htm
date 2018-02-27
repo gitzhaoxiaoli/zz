@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>word列表</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+</head>
+<body>
+
+  <ul style="margin-left:10px;">
+  <li style="height:20px; line-height:20px; text-align:left;"><a href="?m=doc&c=app-sqs&cti_id=<?=$cti_id;?>" target="_blank">申请书</a></li>
+  <li style="height:20px; line-height:20px; text-align:left;"><a href="?m=doc&c=rws&tid=<?=$tid;?>" target="_blank">任务书</a></li>
+	<?php foreach($wordlist as $k => $v){?>
+	<li style="height:20px; line-height:20px; text-align:left;"><a href="?m=product&c=word&a=<?=$v[url]?>" target="_blank"><?=$v[filename];?></a></li>
+    <?php }?>
+</ul>
+
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?php tpl('header')?>
+</head>
+<body>
+<?php echo prod_einfo("pid=$pid");?>
+<br/>
+<form method="post" id="form">
+<input type="hidden" name="test_id" value="<?=$test_id;?>"/>
+<div style="margin:0 auto;width:750px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+  <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">检验评价</a></li>
+</ul>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+<ul class="main-form">
+<table width="100%" class='grid-table'>
+<tr>
+  <th colspan="4">实验室信息(<?=$project_info[test_org_name];?>)</th>
+</tr>
+<tr>
+  <td >计划时间</td>
+  <td><?=$project_info['plan_date']?></td>
+  <td>送样时间</td>
+  <td><?=$project_info['send_date']?></td>
+</tr>
+
+<tr>
+  <td width="80">到样时间</td>
+  <td width="200"><?=$project_info['sample_reach_date']?></td>
+  <td width="100">报告出具时间</td>
+  <td><?=$project_info['report_chuju_date']?></td>
+</tr>
+
+  <tr>
+  <td>文件列表</td>
+    <td colspan="3">
+    <?php if($files_list):?>
+			   <table class="grid-table">
+			      <thead>
+				    <tr>
+				     <th>文件名称</th>
+				     <th>上传时间</th>
+                     <th>上传人</th>
+				     <th>下载</th>
+				     <!--<th>删除</th>-->
+					</tr>
+				  </thead>
+				  <tbody>
+				    <?php foreach($files_list as $v):?>
+				      <tr>
+					    <td><?=$v['name'];?></td>
+					    <td><?=$v['create_date'];?></td>
+                        <td><?=$v['create_user'];?></td>
+						<td align="center">
+							<a href="?c=attachment&a=down&aid=<?=$v['id'];?>&class=pro" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a>
+						</td>
+						<!--<td align="center">
+						   <a href="?c=attachment&a=del&aid=<?=$v['id'];?>&class=pro" class="c-del" ><img src="theme/images/b_drop.png" border=0 /></a>
+						</td>-->
+					  </tr>
+					<?php endforeach;?>
+				  </tbody>
+			   </table>
+               <?php endif;?>
+      </td>
+  </tr>
+  </table>
+  <br />
+  <li> 备注信息
+    </label>
+    <em></em><span>
+    <textarea cols="74" rows="3" name="test_review_note"><?=$project_info[test_review_note];?>
+</textarea>
+  </li>
+  
+  </ul>
+  <p class="button-panle tac">
+   <label><input type="checkbox" name="test_review_status" value="1" <?=$test_review_status == '1'?'checked':'';?>>完成</label>&nbsp;&nbsp;&nbsp;<button class="btn  btn-submit"  type="submit" >提交</button>
+   
+  </p>
+  </div>
+  </div>
+</form>
+
+
+</body>
+</html>

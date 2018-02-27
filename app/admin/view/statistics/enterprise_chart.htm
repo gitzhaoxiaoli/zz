@@ -1,0 +1,83 @@
+<link href="theme/js/flot/examples.css" rel="stylesheet" type="text/css">
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="theme/js/w2ui-1.2/w2ui-1.2.min.css" />
+<script type="text/javascript" src="theme/js/w2ui-1.2/w2ui-1.2.min.js"></script>
+
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="theme/js/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="theme/js/flot/jquery.flot.js"></script>
+  
+<script language="javascript" type="text/javascript" src="theme/js/flot/jquery.flot.pie.js"></script>
+	<script type="text/javascript">
+
+	$(function() {
+
+		// Example Data
+
+		var data = <?=$data;?>;
+
+		
+		var placeholder = $("#placeholder");
+		// placeholder.unbind();
+
+		$.plot(placeholder, data, {
+			series: {
+				pie: { 
+					show: true,
+					radius: 1,
+					label: {
+						show: true,
+						radius: 1,
+						formatter: labelFormatter,
+						background: {
+							opacity: 0.8
+						}
+					}
+				}
+			},
+			legend: {
+				show: false
+			}
+		});
+	
+
+		
+
+		
+
+
+
+	});
+
+	// A custom label formatter used by several of the plots
+
+	function labelFormatter(label, series) {
+		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+	}
+
+	//
+
+
+	</script>
+</head>
+<body>
+
+	<div id="header">
+		<h2>企业</h2>
+	</div>
+
+	<div id="content">
+
+		<h3 id="title"></h3>
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+			
+		</div>
+
+</body>
+</html>
+
+ 

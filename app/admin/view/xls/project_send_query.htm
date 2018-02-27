@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>59</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table class="grid-table">
+		<thead>
+		<tr>
+			
+			<th width="60">认证申请编号</th>
+			<th width="" style="width:200px;">组织名称</th>
+			<th width="60">姓名</th>
+			<th width="30">组内身份</th>
+			<th width="70">资格</th>
+            <th width="80">组长</th>
+			<th width="80">标准</th>
+			<th width="70">审核类型</th>
+            <th width="70">分组代码</th>
+			
+			<th width="110">审核开始时间</th>
+			<th width="110">审核结束时间</th>
+            <th width="30">天数</th>
+			<th width="70">见证类型</th>
+			<th width="50">状态</th>
+			 
+            <th width="70">联系人</th>
+            <th width="70">电话</th>
+            <th width="80">合同来源</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $resdb ){
+	foreach( $resdb as $row ){
+?>
+		<tr>
+			
+			<td align="center"><?=$row['cti_code']?></td>
+			<td><?=$row['ep_name'];?></td>
+			<td align="center"><a href="?c=hr&a=edit&uid=<?=$row[uid]?>&type=view" target="_blank" title="查看基础信息"><?=$row['name'];?></a></td>
+			<td align="center"><?=$row['role']?></td>
+			<td align="center"><?=$row['qua_type']?></td>
+            <td><?=$row['leader']?></td>
+			<td align="center"><?php if(!(int)$row['iso_prod_type']){echo $row['audit_ver'];}else{echo $row['prod_ver'];}?></td>
+			<td align="center"><?=$row['audit_type'];?></td>
+            <td align="center"><?=$row['code'];?></td>
+			
+			<td align="center"><?=$row['taskBeginDate'];?></td>
+			<td align="center"><?=$row['taskEndDate'];?></td>
+            <td align="center"><?=$row['dates'];?></td>
+			<td align="center"><?=$row['witness'];?></td>
+			
+			<td align="center"><?=$row['status_V'];?></td>
+		 
+            <td align="center"><?=$row['person'];?></td>
+            <td align="center"><?=$row['person_tel'];?></td>
+            <td align="center"><?=$row['ctfrom_V'];?></td>
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td align="center" colspan="14">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+</body>
+</html>

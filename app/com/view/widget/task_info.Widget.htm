@@ -1,0 +1,748 @@
+<?php template('header')?>
+<script>
+    $(function(){
+        $( "#audit-down-tab" ).tabs(); 
+       
+       $('.task_info_iframe').live('click',function(){
+           var project_id=$(this).attr('project_id'); 
+          iframe_dialog('项目详细','?app=com&m=widget&a=ctiInfo.Widget&project_id='+project_id+'&wh=700','750',600); 
+       }); 
+ 
+    }) 
+</script>
+
+<div id="audit-down-tab" style="margin:0 auto;width:<?=$args['width'];?>px;" class="tal">
+<ul>
+  <li><a href="#tab-audit">任务信息</a></li>
+</ul>
+<div id="tab-task" style="padding:10px;">
+<table class="grid-table" width='700' >
+<tr>
+  <td>认证领域</td>
+  <td><?=read_cache('audit_ver',$task_info['task_type'])?></td>
+  <td>预计计费人日数</td>
+  <td><?=$task_info['tk_num']?></td>
+</tr>
+<tr>
+  <td>计划任务开始日期</td>
+  <td><?=$task_info['plan_tb_date']?></td>
+  <td>计划截止日期</td>
+  <td><?=$task_info['plan_te_date']?></td>
+</tr>
+<tr>
+  <td>实际任务开始日期</td>
+  <td><?=$task_info['tb_date']?></td>
+  <td>实际任务截止日期</td>
+  <td><?=$task_info['te_date']?></td>
+</tr>
+<tr>
+  <td> 是否抽样 </td>
+  <tD colspan="3"><?php if($task_info['isCy']=='1'){?>
+    是<?php echo $task_info['cyNote']?>
+    <?php } else {?>
+    否
+    <?php } ?></td>
+</tr>
+<tr>
+  <td >任务备注</td>
+  <td colspan="3"><?php  echo $task_info['note']; ?></td>
+</tr>
+<tr>
+  <th colspan="4">生产企业信息</th>
+</tr>
+<tr>
+  <td>生产企业名称</td>
+  <td><?=$task_info['prod_ep']['ep_name'];?></td>
+  <td>生产企业地址</td>
+  <td><?=$task_info['prod_ep']['prod_addr'];?></td>
+</tr>
+<tr>
+  <td>工厂编码</td>
+  <td><?=$task_info['prod_ep']['code'];?></td>
+  <td>联系人</td>
+  <td><?=$task_info['prod_ep']['person'];?></td>
+</tr>
+<tr>
+  <td>电话</td>
+  <td><?=$task_info['prod_ep']['person_tel'];?></td>
+  <td>传真</td>
+  <td><?=$task_info['prod_ep']['ep_fax'];?></td>
+</tr>
+<tr>
+  <td>邮箱</td>
+  <td><?=$task_info['prod_ep']['person_mail'];?></td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <th colspan="4">项目清单</th>
+</tr>
+<tr>
+  <td colspan="4"><table class="grid-table">
+      <tr>
+        <th>序号</th>
+        <th>申请编号</th>
+        <th>产品名称</th>
+        <th>规格型号</th>
+        <th>认证实施规则</th>
+        <th>认证实施细则</th>
+        <th>依据标准</th>
+      </tr>
+      <?php    
+                        foreach($task_info['project'] as  $info){
+                        $order++;
+                        ?>
+      <tr>
+        <td><?=$order?></td>
+        <td><?=$info['cti_code']?>
+          <div project_id=<?=$info[id]?> class='icon-note task_info_iframe' ></div></td>
+        <td><?=$info['unitName']?></td>
+        <td><?php echo load('cti')->getCtiFieldById($info['cti_id'],'scope');?></td>
+        <td><?=load('set')->get_set_name_by_id('prod',$info['prod_id'],'prod_rule_id')?></td>
+        <td><?=load('set')->get_set_name_by_id('prod',$info['prod_id'],'prod_rule_detail_id')?></td>
+        <td><?=load('cti')->getCtiFieldById($info['cti_id'],'prod_ver_id'); ?></td>
+      </tr>
+      <?php }
+                        unset($order);
+                        ?>
+    </table></td>
+</tr>
+<?php if($task_info['eid']>0){?>
+
+<tr>
+  <th colspan="4">检查组成员与联系电话</th>
+</tr>
+<tr>
+  <td colspan="4"><table class="grid-table">
+      <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>组内职务</th>
+        <th>注册级别</th>
+        <!--      <th>专业代码</th>-->
+        <th>联系电话</th>
+      </tr>
+      <?php foreach($task_info[auditor] as $val){ 
+                        $order++; 
+                        $hr_info=load('hr')->get($val['uid']); 
+                        ?>
+      <tr>
+        <td align="center"><?=$order?></td>
+        <td align="center"><?=$val['name']?></td>
+        <td align="center"><?=$hr_info['sex_v']?></td>
+        <td align="center"><?=read_cache('audit_role',$val['role'])?></td>
+        <td align="center"><?=$val['qua_type']?></td>
+        <!--  <td align="center"></td>-->
+        <td align="center"><?=$hr_info['tel']?></td>
+      </tr>
+      <?php }
+                        unset($order);
+                        ?>
+    </table></td>
+</tr>
+<?php } ?>
+<!-- 有机+GAP文审信息  -->
+<?php if($task_info[task_type]=='b02001'){ ?>
+<table class="grid-table"  width='700'>
+  <tr>
+    <th colspan="2">4.	文件审核:</th>
+  </tr>
+  <tr>
+    <td>(1)	手册 :</td>
+    <td> 编号/版本
+      <input type="text" name="meta[wenshen2001]" value="<?php echo $task_info['wenshen2001']; ?>"></td>
+  </tr>
+  <tr>
+    <td>(2)	操作规程: </td>
+    <td>编号/版本
+      <input type="text" name="meta[wenshen2002]" value="<?php echo $task_info['wenshen2002']; ?>"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th colspan="2">5.	问题清单:</th>
+  </tr>
+  <tr>
+    <td colspan="2"><table class="grid-table">
+        <tr>
+          <th>序号</th>
+          <th>文件资料名称</th>
+          <th>章节/条款</th>
+          <th>问题描述</th>
+          <th>整改要求</th>
+          <th>整改确认</th>
+          <th><span class="icon-add add_task_item"></span></th>
+        </tr>
+        <?php for($i=1;$i<=20;$i++){?>
+        <tr class="task_item" style="<?php if(!$task_info['wenshen_item_ico_name'.$i]){ ?>display:none;<?php } ?>">
+          <td><?=$i.'、'?></td>
+          <td><input type="text" size="15px" name="meta[wenshen_item_ico_name<?php echo $i;?>]" value="<?=$task_info['wenshen_item_ico_name'.$i] ?>"/></td>
+          <td><input type="text" size="15px" name="meta[wenshen_item_ico_item<?php echo $i;?>]" value="<?=$task_info['wenshen_item_ico_item'.$i] ?>"/></td>
+          <td><input type="text" size="15px" name="meta[wenshen_item_ico_qution<?php echo $i;?>]" value="<?=$task_info['wenshen_item_ico_qution'.$i] ?>"/></td>
+          <td><input type="text" size="15px" name="meta[wenshen_item_ico_request<?php echo $i;?>]" value="<?=$task_info['wenshen_item_ico_request'.$i] ?>"/></td>
+          <td><input type="text" size="15px" name="meta[wenshen_item_ico_ok<?php echo $i;?>]" value="<?=$task_info['wenshen_item_ico_ok'.$i] ?>"/></td>
+          <td><span class="icon-add add_task_item"></span></td>
+        </tr>
+        <?php } ?>
+      </table>
+  </tr>
+  <tr>
+    <th colspan="2">7.文审结论:</th>
+  </tr>
+  <tr>
+    <td colspan="2"><input type="checkbox" value="1" name="meta[wenshen_2003]" <?php if($task_info[wenshen_2003]){ ?>  checked <?php } ?> />
+      认证委托人提交的文件基本符合             标准的要求，可以进行现场审核/检查</td>
+  </tr>
+  <tr>
+    <td colspan="2"><input type="checkbox" value="1" name="meta[wenshen_2004]" <?php if($task_info[wenshen_2004]){ ?>  checked <?php } ?> />
+      文件审核中发现不符合，请予以纠正，由审核/检查组长确认纠正有效后再进行现场</td>
+  </tr>
+    </talbe>
+  
+  <?php } ?>
+  
+  <!--        任务状态已安排-->
+  <?php if($task_info['task_status']>='1' and  $task_info['eid']!=0){ ?>
+  <tr>
+    <th colspan="4">计划内容</th>
+  </tr>
+  <tr>
+    <th>日期</th>
+    <th colspan="3">详细内容</th>
+  </tr>
+  <?php   foreach($task_plan as $day=>$hours){ ?>
+  <tr>
+    <td style="width:70px;"><?=$day?></td>
+    <td colspan='3'><table class="grid-table">
+        <tr>
+          <th style="width:80px;">时间段</th>
+          <th style="width:200px;">检查部门/场所/人员/活动</th>
+          <th>条款/要求</th>
+          <th style="width:60px">检查员</th>
+        </tr>
+        <?php foreach($hours as $k=>$v){?>
+        <tr >
+          <td><?php $hour_arr=explode('/',$v[plan_hour]);
+                            if(count($hour_arr)==4){
+                            echo $hour_arr[0].':'.$hour_arr[1].'到'.$hour_arr[2].':'.$hour_arr[3];
+                            }else{
+                            	echo $v[plan_hour];
+                            }
+                            ?></td>
+          <td><?=$v[item_note]?></td>
+          <td><?=$v[item_ver]?></td>
+          <td><?=trim($v['hrs_v'],'/')?></td>
+        </tr>
+        <?php } ?>
+        <tr>
+          <td>备注</td>
+          <td colspan="3"><?=$task_info['t_plan_note'];?></td>
+        </tr>
+      </table></td>
+  </tr>
+  <?php } ?>
+  <!--     任务状态：已上传-->
+  <?php };  if($task_files and   $task_info['eid']>0){?>
+  <tr>
+    <th colspan="4">检查组长上传文档<!--暂时不使用  <div class="icon-note"></div>近一年文档--></th>
+  </tr>
+  <tr>
+    <td colspan='4'><table class="grid-table">
+        <tr>
+          <th width="30">选择</th>
+          <th>文档类型</th>
+          <th>文档名</th>
+          <th>备注</th>
+          <th>上传时间</th>
+          <th>上传人</th>
+          <th>操作</th>
+        </tr>
+        <form method="post" action="?app=com&m=attachment&a=batdown">
+          <input type="hidden" name="class" value="audit" />
+          <?php if($task_files)foreach($task_files as  $task_file){?>
+          <tr>
+            <td><input type="checkbox" name="aid[]" value="<?=$task_file['id'];?>" /></td>
+            <td><?=read_cache($task_file['audit_ver'].'_result_file',$task_file['ftype'])?></td>
+            <td><?=$task_file['name']?></td>
+            <td align="center"><?php
+if( $task_file['description'] ){
+?>
+              <a href="javascript:;" class="icon-note" title="<?=$task_file['description'];?>"></a>
+              <?php
+}
+?></td>
+            <td><?=$task_file['postdate'];?></td>
+            <td><?=$task_file['upload_hr']?></td>
+            <td align="center"><a href="?app=com&m=attachment&a=down&aid=<?=$task_file['id'];?>&class=audit" class="icon-down"></a></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td></td>
+            <td colspan="7"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+          </tr>
+        </form>
+      </table></td>
+  </tr>
+  <?php }?>
+  
+  <!--第二组开始-->
+   <?php if($task_files2 and   $task_info['eid']>0){?>
+  <tr>
+    <th colspan="4">检查企业上传文档<!--暂时不使用  <div class="icon-note"></div>近一年文档--></th>
+  </tr>
+  <tr>
+    <td colspan='4'><table class="grid-table">
+        <tr>
+          <th width="30">选择</th>
+          <th>文档类型</th>
+          <th>文档名</th>
+          <th>备注</th>
+          <th>上传时间</th>
+          <th>上传人</th>
+          <th>操作</th>
+        </tr>
+        <form method="post" action="?app=com&m=attachment&a=batdown">
+          <input type="hidden" name="class" value="audit" />
+          <?php if($task_files2)foreach($task_files2 as  $task_file){?>
+          <tr>
+            <td><input type="checkbox" name="aid[]" value="<?=$task_file['id'];?>" /></td>
+            <td><?=read_cache($task_file['audit_ver'].'_result_file',$task_file['ftype'])?></td>
+            <td><?=$task_file['name']?></td>
+            <td align="center"><?php
+if( $task_file['description'] ){
+?>
+              <a href="javascript:;" class="icon-note" title="<?=$task_file['description'];?>"></a>
+              <?php
+}
+?></td>
+            <td><?=$task_file['postdate'];?></td>
+            <td><?=$task_file['upload_hr']?></td>
+            <td align="center"><a href="?app=com&m=attachment&a=down&aid=<?=$task_file['id'];?>&class=audit" class="icon-down"></a></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td></td>
+            <td colspan="7"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+          </tr>
+        </form>
+      </table></td>
+  </tr>
+  <?php }?>
+  
+   <!--第三组开始-->
+   <?php if($task_files3 and   $task_info['eid']>0){?>
+  <tr>
+    <th colspan="4">检查合同项目上传文档<!--暂时不使用  <div class="icon-note"></div>近一年文档--></th>
+  </tr>
+  <tr>
+    <td colspan='4'><table class="grid-table">
+        <tr>
+          <th width="30">选择</th>
+          <th>文档类型</th>
+          <th>文档名</th>
+          <th>备注</th>
+          <th>上传时间</th>
+          <th>上传人</th>
+          <th>操作</th>
+        </tr>
+        <form method="post" action="?app=com&m=attachment&a=batdown">
+          <input type="hidden" name="class" value="audit" />
+          <?php if($task_files3)foreach($task_files3 as  $task_file){?>
+          <tr>
+            <td><input type="checkbox" name="aid[]" value="<?=$task_file['id'];?>" /></td>
+            <td><?=read_cache($task_file['audit_ver'].'_result_file',$task_file['ftype'])?></td>
+            <td><?=$task_file['name']?></td>
+            <td align="center"><?php
+if( $task_file['description'] ){
+?>
+              <a href="javascript:;" class="icon-note" title="<?=$task_file['description'];?>"></a>
+              <?php
+}
+?></td>
+            <td><?=$task_file['postdate'];?></td>
+            <td><?=$task_file['upload_hr']?></td>
+            <td align="center"><a href="?app=com&m=attachment&a=down&aid=<?=$task_file['id'];?>&class=audit" class="icon-down"></a></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td></td>
+            <td colspan="7"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+          </tr>
+        </form>
+      </table></td>
+  </tr>
+  <?php }?>
+  
+   <!--第四组开始-->
+   <?php if($task_files4 and   $task_info['eid']>0){?>
+  <tr>
+    <th colspan="4">检查图片上传<!--暂时不使用  <div class="icon-note"></div>近一年文档--></th>
+  </tr>
+  <tr>
+    <td colspan='4'><table class="grid-table">
+        <tr>
+          <th width="30">选择</th>
+          <th>文档类型</th>
+          <th>文档名</th>
+          <th>备注</th>
+          <th>上传时间</th>
+          <th>上传人</th>
+          <th>操作</th>
+        </tr>
+        <form method="post" action="?app=com&m=attachment&a=batdown">
+          <input type="hidden" name="class" value="audit" />
+          <?php if($task_files4)foreach($task_files4 as  $task_file){?>
+          <tr>
+            <td><input type="checkbox" name="aid[]" value="<?=$task_file['id'];?>" /></td>
+            <td><?=read_cache($task_file['audit_ver'].'_result_file',$task_file['ftype'])?></td>
+            <td><?=$task_file['name']?></td>
+            <td align="center"><?php
+if( $task_file['description'] ){
+?>
+              <a href="javascript:;" class="icon-note" title="<?=$task_file['description'];?>"></a>
+              <?php
+}
+?></td>
+            <td><?=$task_file['postdate'];?></td>
+            <td><?=$task_file['upload_hr']?></td>
+            <td align="center"><a href="?app=com&m=attachment&a=down&aid=<?=$task_file['id'];?>&class=audit" class="icon-down"></a></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td></td>
+            <td colspan="7"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+          </tr>
+        </form>
+      </table></td>
+  </tr>
+  <?php }?>
+  
+</table>
+抽样情况：<br />
+受检查方意见：<br />
+请您接受任务后，及时与受检查方取得联系，在到工厂检查前至少5日通知工厂，并与项目管理人员上传至认监委信息管理系统：<br />
+检查结束后，请与不符合关闭后5日内将材料上报检查管理部门：<br />
+检查期间食宿费自理。交通费用由认证委托人负担：<br />
+如对上述安排有异议，请在2天内反馈至认证部：<br />
+<?php $isCy='1';?>
+
+<!--检查组长检查评价内容     -->
+<?php  //审批页面不显示, 检验评价不显示 
+ 
+  if($_GET['a']!=='edit_approval' and $_GET['op']!=='result' and $_GET['op']!=='plan' and $task_info['eid']!=0 and $_GET['a']!='archive_edit' ){
+  
+ 
+   ?>
+<table class="grid-table">
+  <tr>
+    <th colspan="2">项目管理员评价</th>
+  </tr>
+  <tr>
+    <th width="120" align="left">现场检查结论</th>
+    <td> 通过
+      <input type="radio" class="hide" hide='is_pass'  name="meta[is_pass]" value="1" <?if($task_info['is_pass']=='1'){?> checked="checked"<?php } ?> />
+      不通过
+      <input type="radio" name="meta[is_pass]" class="show" show="is_pass" value="0" <?if(!$task_info['is_pass']){?> checked="checked"<?php } ?> />
+      <input type="text" class="is_pass" value="<?=$task_info['is_pass_note']?>" name="meta[is_pass_note]" style="<?if($task_info['is_pass']=='1'){?> display:none <?php }?>" />
+  </tr>
+  <tr>
+    <th>是否有国抽</th>
+    <td>是
+      <input type="radio" class="show" show='is_gc' name="meta[is_gc]" value="1" <?if($task_info['is_gc']=='1'){?> checked="checked"<?php } ?> />
+      否
+      <input type="radio" name="meta[is_gc]" class="hide" hide='is_gc' value="0" <?if(!$task_info['is_gc']){?> checked="checked"<?php } ?> />
+      <div class="is_gc" style="<?if($task_info['is_gc']){?> display:none <?php }?>"> 国抽是否合格
+        是
+        <input type="radio" name="meta[is_gc_hg]" value="1" <?if($task_info['is_gc_hg']=='1'){?> checked="checked"<?php } ?> />
+        否
+        <input type="radio" name="meta[is_gc_hg]" value="0" <?if(!$task_info['is_gc_hg']){?> checked="checked"<?php } ?> />
+      </div></td>
+  </tr>
+  <tr>
+    <th>是否有省抽</th>
+    <td>是
+      <input type="radio" name="meta[is_sc]" class="show" show='is_sc' value="1" <?if($task_info['is_sc']=='1'){?> checked="checked"<?php } ?> />
+      否
+      <input type="radio" name="meta[is_sc]" class="hide" hide='is_sc' value="0" <?if(!$task_info['is_sc']){?> checked="checked"<?php } ?> />
+      <div class="is_sc" style="<?if($task_info['is_sc']){?> display:none <?php }?>"> 省抽是否合格
+        是
+        <input type="radio" name="meta[is_sc_hg]" value="1" <?if($task_info['is_sc_hg']=='1'){?> checked="checked"<?php } ?> />
+        否
+        <input type="radio" name="meta[is_sc_hg]" value="0" <?if(!$task_info['is_sc_hg']){?> checked="checked"<?php } ?> />
+      </div></td>
+  </tr>
+  <tr>
+    <th>是否有地方抽查</th>
+    <td>是
+      <input type="radio" name="meta[is_dc]" class="show" show='is_dc' value="1" <?if($task_info['is_dc']=='1'){?> checked="checked"<?php } ?> />
+      否
+      <input type="radio" name="meta[is_dc]" class="hide" hide='is_dc' value="0" <?if(!$task_info['is_dc']){?> checked="checked"<?php } ?> />
+      <div class="is_dc" style="<?if($task_info['is_dc']){?> display:none <?php }?>"> 地方抽查是否合格
+        是
+        <input type="radio" name="meta[is_dc_hg]" value="1" <?if($task_info['is_dc_hg']=='1'){?> checked="checked"<?php } ?>  />
+        否
+        <input type="radio" name="meta[is_dc_hg]" value="0" <?if(!$task_info['is_dc_hg']){?> checked="checked"<?php } ?>/>
+      </div></td>
+  </tr>
+  <tr>
+    <th>是否开具了不符合条款</th>
+    <td>是
+      <input type="radio" name="meta[is_bfhtk]" class="show" show='tk' value="1" <?if($task_info['is_bfhtk']=='1'){?> checked="checked"<?php } ?> />
+      否
+      <input type="radio" name="meta[is_bfhtk]" value="0" class="hide" hide='tk' <?if($task_info['is_bfhtk']=='0'){?> checked="checked"<?php } ?> />
+      <br />
+      <table class="form-table tk" style="<?if($task_info['is_bfhtk']=='0'){?> display:none <?php }?>">
+        <tr>
+          <td>不符合内容</td>
+          <td>判定条款</td>
+          <td><span class="icon-add add_task_item"></span></td>
+        </tr>
+        <?php for($i=1;$i<=20;$i++){?>
+        <tr class="task_item" style="<?php if(!$task_info['task_item_con'.$i]){ ?>display:none;<?php } ?>">
+          <td><input type="text" name="meta[task_item_con<?=$i?>]" value="<?=$task_info['task_item_con'.$i]?>"  /></td>
+          <td><input type="text" name="meta[task_item_tk<?=$i?>]" value="<?=$task_info['task_item_tk'.$i]?>" /></td>
+          <td><span class="icon-add add_task_item"></span></td>
+        </tr>
+        <?php } ?>
+      </table></td>
+  </tr>
+  <!-- <tr>
+    <th width="120" align="left">生产企业分类建议</th>
+    <td><input type="radio" value="A"  name="meta[ep_type]" <?if($task_info['ep_type']=='A'){?> checked="checked"<?php } ?> />
+      A类&nbsp;&nbsp;
+      <input type="radio" value="B" name="meta[ep_type]" <?if($task_info['ep_type']=='B'){?> checked="checked"<?php } ?> />
+      B类&nbsp;&nbsp;
+      <input type="radio" value="C" name="meta[ep_type]" <?if($task_info['ep_type']=='C'){?> checked="checked"<?php } ?> />
+      C类&nbsp;&nbsp;
+      <input type="radio" value="D" name="meta[ep_type]" <?if($task_info['ep_type']=='D'){?> checked="checked"<?php } ?> />
+      D类&nbsp;&nbsp;</td>
+  </tr>-->
+</table>
+<?php }  
+  //复核意见显示条件
+  //审批页面不显示,复核页面不显示-----检验评价页面不显示
+//  if($_GET['a']!='edit_approval' and $_GET['a']!='archive_edit' and $_GET['op']!=='result'  and $_GET['op']!=='plan'){
+   ?>
+<!--<table class="grid-table">
+  <tr>
+    <th colspan="6">复核意见：</th>
+  </tr>
+  <?php if($task_info['task_type']=='b02001'){?>
+  <tr>
+    <td colspan="3">1.基本信息变化/认证范围变化</td>
+    <td><input type="radio" name="meta[oga_review_001]" class="decide" value="1" <?php if($task_info['oga_review_001']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_001]" class="decide" value="0" <?php if($task_info['oga_review_001']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_001']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_001_note]"  value="<?=$task_info['oga_review_001_note']?>" />
+      不涉及
+      <input type="radio" name="meta[oga_review_001]" class="decide" value="-1" <?php if($task_info['oga_review_001']=='-1'){?> checked="checked" <?php } ?>  />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">2.	资料上报是否完整、清晰和可读 </td>
+    <td><input type="radio" name="meta[oga_review_002]" class="decide" value="1" <?php if($task_info['oga_review_002']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_002]" class="decide" value="0" <?php if($task_info['oga_review_002']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_002']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_002_note]"  value="<?=$task_info['oga_review_002_note']?>" />
+      </span> 不涉及
+      <input type="radio" name="meta[oga_review_002]" class="decide" value="-1" <?php if($task_info['oga_review_002']=='-1'){?> checked="checked" <?php } ?>  /></td>
+  </tr>
+  <tr>
+    <td colspan="3">3.	检查报告告和记录中的检查条款和检查时间是否与检查计划一致</td>
+    <td><input type="radio" name="meta[oga_review_003]" class="decide" value="1" <?php if($task_info['oga_review_003']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_003]" class="decide" value="0" <?php if($task_info['oga_review_003']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_003']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_003_note]"  value="<?=$task_info['oga_review_003_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">4.	检查组成员与批准派出的是否一致</td>
+    <td><input type="radio" name="meta[oga_review_004]" class="decide" value="1" <?php if($task_info['oga_review_004']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_004]" class="decide" value="0" <?php if($task_info['oga_review_004']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_004']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_004_note]"  value="<?=$task_info['oga_review_004_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">5.	不符合报告及关闭材料是否完整并经检查组确认</td>
+    <td><input type="radio" name="meta[oga_review_005]" class="decide" value="1" <?php if($task_info['oga_review_005']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_005]" class="decide" value="0" <?php if($task_info['oga_review_005']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_005']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_005_note]"  value="<?=$task_info['oga_review_005_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">6.	样品抽样是否符合实施规则要求</td>
+    <td><input type="radio" name="meta[oga_review_006]" class="decide" value="1" <?php if($task_info['oga_review_006']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_006]" class="decide" value="0" <?php if($task_info['oga_review_006']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_006']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_006_note]"  value="<?=$task_info['oga_review_006_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">7.	检测项目是否与产品认证委托单一致</td>
+    <td><input type="radio" name="meta[oga_review_007]" class="decide" value="1" <?php if($task_info['oga_review_007']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_007]" class="decide" value="0" <?php if($task_info['oga_review_007']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_007']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_007_note]"  value="<?=$task_info['oga_review_007_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">8.	检测报告的检验依据、检验项目符合要求</td>
+    <td><input type="radio" name="meta[oga_review_008]" class="decide" value="1" <?php if($task_info['oga_review_008']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_008]" class="decide" value="0" <?php if($task_info['oga_review_008']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_008']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_008_note]"  value="<?=$task_info['oga_review_008_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">9.	检测结果满足认证要求。</td>
+    <td><input type="radio" name="meta[oga_review_009]" class="decide" value="1" <?php if($task_info['oga_review_009']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_009]" class="decide" value="0" <?php if($task_info['oga_review_009']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_009']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_009_note]"  value="<?=$task_info['oga_review_009_note']?>" />
+      </span></td>
+  </tr>
+  <tr>
+    <td colspan="3">10.	其他</td>
+    <td><input type="radio" name="meta[oga_review_0010]" class="decide" value="1" <?php if($task_info['oga_review_0010']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[oga_review_0010]" class="decide" value="0" <?php if($task_info['oga_review_0010']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['oga_review_0010']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[oga_review_0010_note]"  value="<?=$task_info['oga_review_0010_note']?>" />
+      </span></td>
+  </tr>
+  <?php }else{?>
+  <tr>
+    <td colspan="3">1.	企业寄送的样品是否符合实施规则要求</td>
+    <td><input type="radio" name="meta[ccc_review_001]" class="decide" value="1" <?php if($task_info['ccc_review_001']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_001]" class="decide" value="0" <?php if($task_info['ccc_review_001']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_001']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_001_note]"  value="<?=$task_info['ccc_review_001_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_001]" class="decide" value="-1" <?php if($task_info['ccc_review_001']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">2.	检测报告的检验依据、检验项目符合要求；</td>
+    <td><input type="radio" name="meta[ccc_review_002]" class="decide" value="1" <?php if($task_info['ccc_review_002']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_002]" class="decide" value="0" <?php if($task_info['ccc_review_002']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_002']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_002_note]"  value="<?=$task_info['ccc_review_002_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_002]" class="decide" value="-1" <?php if($task_info['ccc_review_002']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">3.	检测结果满足认证要求。</td>
+    <td><input type="radio" name="meta[ccc_review_003]" class="decide" value="1" <?php if($task_info['ccc_review_003']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_003]" class="decide" value="0" <?php if($task_info['ccc_review_003']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_003']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_003_note]"  value="<?=$task_info['ccc_review_003_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_003]" class="decide" value="-1" <?php if($task_info['ccc_review_003']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">4.	检测费用符合检验收费规定；</td>
+    <td><input type="radio" name="meta[ccc_review_004]" class="decide" value="1" <?php if($task_info['ccc_review_004']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_004]" class="decide" value="0" <?php if($task_info['ccc_review_004']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_004']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_004_note]"  value="<?=$task_info['ccc_review_004_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_004]" class="decide" value="-1" <?php if($task_info['ccc_review_004']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">5.	检查时限符合实施规则要求；</td>
+    <td><input type="radio" name="meta[ccc_review_005]" class="decide" value="1" <?php if($task_info['ccc_review_005']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_005]" class="decide" value="0" <?php if($task_info['ccc_review_005']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_005']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_005_note]"  value="<?=$task_info['ccc_review_005_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_005]" class="decide" value="-1" <?php if($task_info['ccc_review_005']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">1.	资料是否完整，检查记录是否清晰、可读； </td>
+    <td><input type="radio" name="meta[ccc_review_007]" class="decide" value="1" <?php if($task_info['ccc_review_007']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_007]" class="decide" value="0" <?php if($task_info['ccc_review_007']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_007']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_007_note]"  value="<?=$task_info['ccc_review_007_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_007]" class="decide" value="-1" <?php if($task_info['ccc_review_007']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">2.	检查报告和记录中的检查条款和检查时间是否与检查计划一致；</td>
+    <td><input type="radio" name="meta[ccc_review_008]" class="decide" value="1" <?php if($task_info['ccc_review_008']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_008]" class="decide" value="0" <?php if($task_info['ccc_review_008']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_008']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_008_note]"  value="<?=$task_info['ccc_review_008_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_008]" class="decide" value="-1" <?php if($task_info['ccc_review_008']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及 </td>
+  </tr>
+  <tr>
+    <td colspan="3">3.	检查组成员与批准派出的是否一致，检查员资格是否符合此次检查要求；</td>
+    <td><input type="radio" name="meta[ccc_review_009]" class="decide" value="1" <?php if($task_info['ccc_review_009']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_009]" class="decide" value="0" <?php if($task_info['ccc_review_009']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_009']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_009_note]"  value="<?=$task_info['ccc_review_009_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_009]" class="decide" value="-1" <?php if($task_info['ccc_review_009']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及</td>
+  </tr>
+  <tr>
+    <td colspan="3">4.	检查人日数核算是否符合规定</td>
+    <td><input type="radio" name="meta[ccc_review_010]" class="decide" value="1" <?php if($task_info['ccc_review_010']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_010]" class="decide" value="0" <?php if($task_info['ccc_review_010']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_010']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_010_note]"  value="<?=$task_info['ccc_review_010_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_010]" class="decide" value="-1" <?php if($task_info['ccc_review_010']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及</td>
+  </tr>
+  <tr>
+    <td colspan="3">5.	不符合报告及关闭材料是否完整并经检查组确认 </td>
+    <td><input type="radio" name="meta[ccc_review_011]" class="decide" value="1" <?php if($task_info['ccc_review_011']=='1'){?> checked="checked" <?php } ?>  />
+      是
+      <input type="radio" name="meta[ccc_review_011]" class="decide" value="0" <?php if($task_info['ccc_review_011']=='0'){?> checked="checked" <?php } ?>  />
+      否 <span style="<?php if($task_info['ccc_review_011']=='1'){?>display:none; <?php } ?>" class="note">
+      <input type="text" name="meta[ccc_review_011_note]"  value="<?=$task_info['ccc_review_011_note']?>" />
+      </span>
+      <input type="radio" name="meta[ccc_review_011]" class="decide" value="-1" <?php if($task_info['ccc_review_011']=='-1'){?> checked="checked" <?php } ?>  />
+      不涉及</td>
+  </tr>
+  <?php } ?>
+ <tr>
+    <td valign="top">复核备注</td>
+    <td colspan="3"><textarea name="redata_note[]" cols="60" rows="3"><?=$row['redata_note'];?>
+</textarea></td>
+  </tr>
+</table>-->
+
+</div>
+</div>
+<br/>

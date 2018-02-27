@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>合同列表</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.url.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script> 
+<script>
+$(function(){
+	$('#debug').click(function(){
+		 $('#mydebug').toggle(); 
+         $('#debug_nav a').click(function(e) {
+            e.preventDefault();//阻止a链接的跳转行为 
+            $(this).tab('show');//显示当前选中的链接及关联的content 
+        })
+ 	}) 
+})
+
+/*
+*函数名 ：download()
+*功  能 ：批量下载，选择验证
+*
+*/
+
+function download(data){
+      var r = 0;
+      $("#"+data).find('input[type="checkbox"]').each(function(index,element){
+	    if($(this).attr('checked') == "checked"){
+		   r++;
+		};
+	  });
+	  if(r==0){
+	     alert("至少选择一个！！");
+		 return false;
+	  }
+}
+</script>  
+<!--开启debug按钮--> 
+<?php if(DEBUG){?>
+<div id="debug" style="position:fixed; top:50%; right:10px; width:50px; height:50px; color:red; border:1px solid #000; z-index:2001;">调试</div> 
+<?php } ?>
+<div id="mydebug" style="position:fixed; background:#fff; display:none; z-index: 2000;left: 0px;right: 0px;bottom: 0px; height: 235px; overflow:scroll;">
+       <table border="1" width="100%">
+      <?php foreach($db->query_arr as $v){?>
+        <tr>
+          <td><?=$v;?></td> 
+        </tr>
+        <?php } ?>
+      </table>
+    
+  </div> 
+</div>
+ 

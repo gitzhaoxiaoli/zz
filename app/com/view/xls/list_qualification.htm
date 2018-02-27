@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资格列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table class="grid-table tal">
+	<thead>
+		<tr>
+			<th align='center'>姓名</th>
+			<th align='center'>年龄</th>
+			<th align='center'>编号</th>
+			<th align='center'>项目所属单位</th>
+			<th align='center'>专兼职</th>
+			
+			<th align='center'>资格</th>
+			<th align='center'>资格证编号</th>
+			<th align='center'>组长与否</th>
+			<th align='center'>开始时间</th>
+			<th align='center'>结束时间</th>
+			<th align='center'>备注</th>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $qualis ){
+	foreach( $qualis as $row ){
+?>
+		<tr>
+			<td align="center"><?=$row['name'];?></td>
+			<td align="center"><?=$row['age'];?></td>
+			<td align="center"><?=$row['code'];?></td>
+			<td align="center"><?=$row['ctfrom'];?></td>
+			<td align="center"><?=$row['audit_job'];?></td>
+			
+			<td align="center"><?=$row['qua_type'];?></td>
+			<td align="center"><?=$row['qua_no'];?></td>
+			<td align="center"><?=$is_leader_arr[$row['is_leader']];?></td>
+			<td align="center"><?=$row['s_date'];?></td>
+			<td align="center"><?=$row['e_date'];?></td>
+			<td align="center"><?=$row['note'];?>
+			</td>
+		</tr>
+		<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+}
+?>
+	</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>证书查询</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script></head>
+<body><br>
+
+	<div class="container">
+    <?php if($cert_data){?>
+    <table class="table table-striped">
+    <?php foreach($cert_data as $v){?>
+    <tr>
+  		<td class="col-xs-4 col-sm-4 col-md-2">证书号：</td>
+  		<td class="col-xs-8 col-sm-8 col-md-10"><?=$v[certno];?></td>
+  	</tr>
+    <tr>
+  		<td>证书状态：</td>
+  		<td><?=$v[status];?></td>
+  	</tr>
+    <tr>
+  		<td>注册日期：</td>
+  		<td><?=$v[s_date];?></td>
+  	</tr>
+    <tr>
+  		<td>注册截止日期：</td>
+  		<td><?=$v[e_date];?></td>
+  	</tr>
+  	<tr>
+  		<td>企业名称：</td>
+  		<td><?=$v[cert_name];?></td>
+  	</tr>
+    <tr>
+  		<td>企业名称(英)：</td>
+  		<td><?=$v[cert_name_e];?></td>
+  	</tr>
+    <tr>
+      <td>注册地址：</td>
+      <td><?=$v[ep_addr];?></td>
+    </tr>
+    <tr>
+      <td>注册地址(英)：</td>
+      <td><?=$v[ep_addr_e];?></td>
+    </tr>
+    <tr>
+      <td>生产地址：</td>
+      <td><?=$v[prod_addr];?></td>
+    </tr>
+    <tr>
+      <td>生产地址(英)：</td>
+      <td><?=$v[prod_addr_e];?></td>
+    </tr>
+  	<tr>
+  		<td>经营地址：</td>
+  		<td><?=$v[buss_addr];?></td>
+  	</tr>
+    <tr>
+  		<td>经营地址(英)：</td>
+  		<td><?=$v[buss_addr_e];?></td>
+  	</tr>
+      	<tr>
+  		<td>证书范围：</td>
+  		<td><?=$v[cert_scope];?></td>
+  	</tr>
+    <tr>
+  		<td>证书范围(英)：</td>
+  		<td><?=$v[cert_scope_e];?></td>
+  	</tr>
+	<?php }?>
+</table>
+	<?php }else{?>
+    <span class="text-danger">没有查询到结果！！</span>
+    
+    <?php }?>
+    <a href="search.html">点击返回</a>
+</div>
+</body>
+</html>

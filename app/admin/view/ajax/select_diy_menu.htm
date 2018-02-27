@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>OA-选择内网链接</title>
+
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<style type="text/css">
+body{margin:0;padding:0;}
+</style>
+<script>
+    $(function() {
+	  $("img[class='click']").mouseover(function(){
+		   // $(this).attr('border','1');
+		 });
+	     $("img[class='click']").mouseout(function(){
+		    //$(this).attr('border','0');
+		 });
+
+	     $("img[class='click']").click(function(){
+
+		    var diy_name= $(this).attr('x');
+			var diy_url	= $(this).attr('i');
+			window.parent.update_url(diy_name,diy_url);
+
+		 });
+        $( "#enterprise-tab" ).tabs({
+            collapsible: false
+        });
+
+    });
+
+
+</script>
+</head>
+
+<body style="padding-bottom:0px;">
+
+<?php
+//标签样式，点击后，下面出现小三角
+$ {'status_' . $op} = ' ui-tabs-active ui-state-active"';
+?>
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" style='width:580px; margin:0 auto;'>
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+
+<?php
+//@2016-04-27 是否开启右上角菜单, 0=不显示
+if (get_option('is_main')		==0){$style_is_main		='style="display:none"';}
+if (get_option('is_product')	==0){$style_is_product	='style="display:none"';}
+if (get_option('is_oasys')		==0){$style_is_oasys	="style='display:none'";}
+?>
+
+	<li class="ui-state-default ui-corner-top <?=$status_main;?>"><a href="?c=ajax&a=select_diy_menu&op=main" <?=$style_is_main;?>>体系认证</a></li>
+	<li class="ui-state-default ui-corner-top <?=$status_product;?>"><a href="?c=ajax&a=select_diy_menu&op=product" <?=$style_is_product;?>>产品认证</a></li>
+	<li class="ui-state-default ui-corner-top <?=$status_oasys;?>"><a href="?c=ajax&a=select_diy_menu&op=oasys" <?=$style_is_oasys;?>>OA业务</a></li>
+
+</ul>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+
+<div style='margin:0 auto;'>
+	<table class="grid-table">
+		<thead>
+		<tr>
+		    <th width="40">选择</th>
+			<th width="160">菜单名称</th>
+			<th width="240">链接地址</th>
+
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $diy_menu ){
+	foreach( $diy_menu['name'] as $key => $name ){
+?>
+		<tr class="view">
+		    <td><img class="click" i='<?=$diy_menu['url'][$key];?>' x='<?=$diy_menu['name'][$key];?>' title="点击选择" src="theme/images/b_edit.png" /></td>
+			<td><?=$diy_menu['father'][$key];?>-><?=$diy_menu['name'][$key];?></td>
+			<td><?=$diy_menu['url'][$key];?></td>
+		</tr>
+<?php 	}
+}
+?>
+
+
+		</tbody>
+	</table>
+
+</div>
+</div>
+</div>
+
+</body>
+</html>

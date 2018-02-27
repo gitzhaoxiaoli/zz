@@ -1,0 +1,268 @@
+<?php tpl('header')?>
+<script type="text/javascript">
+$(function() { 
+    $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+	$( "#audit-down-tab" ).tabs({
+		collapsible: false
+	});
+	$('#add-btn').click( addRecord );
+	addRecord();
+	$( ".input-date" ).datepicker( ); 
+	
+	$('.upload_file_date').click(function(){
+		//alert('ok');
+		var i = $('.upload_file_date').is(":checked");	
+		if(i){
+			$.get("?c=ajax&a=upload_ajax&upload_file_date=1&tid=<?=$tid;?>",function(data){
+				if(data == 'ok'){
+					alert("操作成功");	
+				}else{
+					alert("操作失败");
+				}
+			})
+		}else{
+			$.get("?c=ajax&a=upload_ajax&upload_file_date=0&tid=<?=$tid;?>",function(data){
+				if(data == 'ok'){
+					alert("撤销成功");	
+				}else{
+					alert("撤销失败");
+				}
+			})	
+		}
+	});
+});
+
+function addRecord(){
+	tbody = $('#add-attachs');
+	tr = $('#add-attach');
+	new_tr = tr.clone();
+	new_tr.attr('id','');
+	new_tr.show();
+	tbody.append(new_tr);
+}
+function check_form(){ 
+	if(!$(".iso").val()){
+		alert("请选择体系！！");
+		return false;
+	}  
+}
+
+</script>
+<style>
+li {
+	overflow: hidden;
+}
+</style>
+</head>
+<body>
+<?php echo einfo("tid=$tid");?> <br/>
+<!--<div id="audit-down-tab" style="margin:0 auto;width:750px;" class="tal">
+  <ul>
+    <li><a href="#tab-audit">审核员需要提交的资料模版</a></li>
+  </ul>
+  <div id="tab-audit" >
+    <dl class="doc-down">
+      <dd>
+        <ul class="doc-list2 clearfix">
+          <?=$a_link;?>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+  <div id="tab-task">
+    <dd>
+      <ul class="doc-list2 clearfix">
+        <?php if( $task_docs ): foreach( $task_docs as $doc ):?>
+          
+        <li><a href="?c=attachment&a=down&aid=<?=$doc['id'];?>">
+          <?=$doc['name'];?>
+          </a></li>
+        <?php endforeach; endif;?>
+      </ul>
+    </dd>
+  </div>
+</div>
+<br/>-->
+
+<div style="margin:0 auto;width:750px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">退回原因</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	<?=$back_note;?>
+
+	</div>
+</div><br/>
+
+<div id="enterprise-tab" style="margin:0 auto;width:750px;margin-bottom:100px" class="tal">
+  <?php if($auditor_role) {?>
+  <ul>
+    <li><a href="#tab-basic">文档上传</a></li>
+    <li><a href="#tab-contract">档案完成确认及审核员信息沟通</a></li>
+    <li><a href="#tab-assess">评定问题</a></li>
+    <!-- <li><a href="#tab-result">评分</a></li>-->
+  </ul>
+  <div id="tab-basic">
+    <table class="grid-table" width='700'>
+      <tr>
+        <th width='40'>序号</th>
+        <th>文档名</th>
+        <th width='140'>上传时间</th>
+        <th width='60'>上传人</th>
+        <th width='140'>文档类型</th>
+        <th width='40'>下载</th>
+        <th width='40'>删除</th>
+      </tr>
+      <tbody id="attach-list">
+        <?php
+if( $enterprises_archives ){
+	foreach( $enterprises_archives as $row ){
+?>
+        <tr>
+          <td align="center"><?=$row['sort'];?></td>
+          <td align="center"><?=$row['name'];?></td> 
+          <td align="center"><?=$row['create_date'];?></td>
+          <td align="center"><?=$row['create_user'];?></td>
+          <td align="center"><?=read_cache("arctype",$row[ftype]);?></td> 
+         
+          
+          <td align="center"><a href="?c=attachment&a=down&aid=<?=$row['id'];?>" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a></td>
+          
+          <td align="center"> 
+          <?php if(in_array(current_user("uid"),array(1,$row[create_uid]))){?>
+            <a href="?c=auditor&a=delfile&tid=<?=$tid?>&id=<?=$row['id'];?>&ct_id=<?=$ct_id;?>" ><img src="theme/images/b_drop.png" border=0 /></a><?php }?></td>
+        </tr>
+        
+        <?php
+	}
+}
+?>
+      </tbody>
+    </table><br>
+
+    <form method="post" action="?c=auditor&a=upfile" enctype="multipart/form-data">
+      <input type="hidden" id="tid" name="tid" value="<?=$tid;?>" />
+      <input type="hidden" id="eid" name="eid" value="<?=$eid;?>" />
+      <input type="hidden" id="ct_id" name="ct_id" value="<?=$ct_id;?>" />
+      计划上传：<input type="file" name="archive[]">
+      <input type="hidden" name="ftype[]" value="3003"><br><br><br>
+
+      文档上传：<input type="file" name="archive[]">
+      <input type="hidden" name="ftype[]" value="3000">
+      <br>
+      <p>
+        <center>
+          <button class="btn btn-submit" type="submit"> 上传 </button>
+
+        </center>
+      </p>
+      <br>
+      <center><table>
+          <tr>
+              <td width="180" align='right'  height="40">资料是否上传完成：</td>
+              <td width=""><label><input type="checkbox" value="1" name="upload_file_date" <?=$file_check;?>  class="upload_file_date" />所有资料上传完成&nbsp;&nbsp;&nbsp;</label></td>
+          </tr>
+       </table>
+          </form>
+	   </center>
+      
+  </div>
+  <div id="tab-assess">
+    <form name="winput" method="post" action="?c=auditor&a=task_finish&">
+      <input type="hidden" name='tid' value='<?=$tid?>'/>
+      <table class="grid-table">
+        <tr >
+          <th width="50" >等级</th>
+          <th width="120" >标题</th>
+		  <th>判断规则</th>
+          <th width="*">内容</th>
+          <th width="*">问题回复</th>
+          <th width="30">状态</th>
+        </tr>
+        <?php if( $assess_notes ){foreach( $assess_notes as $k => $val ):?>
+        <tr >
+          <td  align="center"><?=$val[level]?></td>
+          <td  align="center"><?=$fl_question_array[$val['fl_question']]['name'];?></td>
+          <td><?=$val['sure_rule'];?></td>
+		  <td ><?=$val[note];?></td>
+          <td>
+		  <?php if($val['status']): echo $val[re_note];?>
+		  <?php else:?>
+		  <textarea name="re_note[<?=$val[id]?>]" style="width:95%"><?=$val[re_note];?>
+</textarea>
+           <?php endif;?>
+</td>
+          <td><?=$val[status]?"通过":"否"?></td>
+        </tr>
+        <?php endforeach;?>
+        <tr>
+          <td align='right'></td>
+          <td colspan="5"><label>
+              已整改<input type="radio" name="pd_type" value="5"<?=$pd_type=='5'?'checked':'';?>/>
+
+              </label>
+            &nbsp; &nbsp;
+            <label>
+              待整改<input type="radio" name="pd_type" value="4" <?=$pd_type=='4'?'checked':'';?> />
+              </label>
+        </tr> 
+        <tr>
+          <td colspan='5' align='center'><button class="btn btn-submit" type="submit"> 提 交 </button></td>
+        </tr>
+        <?php  }else{ ?>
+        <tr>
+          <td colspan='5' align='center'>没有记录</td>
+        </tr>
+        <?php }?>
+         
+      </table>
+    </form>
+  </div>
+  <div id="tab-contract" style="display:none;">
+    <form name="winput" method="post" action="?c=auditor&a=task_save&">
+      <input type="hidden" name='tid' value='<?=$tid?>'/>
+      <table width="100%">
+        <tr>
+          <td width="180" align='right'  height="20">是否有不符合：</td>
+          <td width=""><label><input type="radio" value="0" name="bufuhe" <?=$task_info[bufuhe]?"":"checked";?> />否&nbsp;&nbsp;&nbsp;</label><label><input type="radio" value="1" name="bufuhe" <?=$task_info[bufuhe]?"checked":"";?> />是&nbsp;&nbsp;&nbsp;</label></td>
+        </tr>
+		<tr>
+			<td width="180" align='right' valign="top">最晚整改日期：</td>
+			<td><input type="text" name="last_rect_date" value="<?=$task[last_rect_date]== '0000-00-00'?'':$task[last_rect_date];?>" class="input input-date finput"/></td>
+		</tr>
+		<tr>
+			<td width="180" align='right' valign="top">计划审批信息：</td>
+			<td width="">
+
+				<textarea name="jh_sp_note" style="width: 540px; height: 72px;" readonly><?=$task[jh_sp_note]?></textarea>
+			</td>
+		</tr>
+
+		<tr>
+			<td width="180" align='right' valign="top">信息回复：</td>
+			<td width="">
+				<textarea name="jh_re_note" style="width: 540px; height: 72px;"><?=$task[jh_re_note]?></textarea>
+			</td>
+		</tr>
+        <tr>
+          <td colspan='2' align='center'>
+		  <button class="btn btn-submit" type="submit"> 提 交 </button></td>
+        </tr>
+      </table>
+    </form>
+  </div> 
+ <!-- 评分-->
+   <div id="tab-result" style="display:none;">
+  	<?php tpl('task/task_result')?>  
+    </div> 
+  <?php } ?>
+</div>
+</body>
+</html>

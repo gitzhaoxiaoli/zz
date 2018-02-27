@@ -1,0 +1,718 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>企业申请</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/region.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript">
+
+
+$('#bt').live('click',function(){
+$('#manu_ep_name').val($('#ep_name').val());
+$('#manu_ep_name_e').val($('#ep_name_e').val());
+$('#manu_work_code').val($('#work_code').val());
+$('#manu_nature').val($('#nature').val());
+$('#manu_statecode').val($('#statecode').val());
+$('#manu_delegate').val($('#delegate').val());
+$('#manu_ep_amount').val($('#ep_amount').val());
+$('#manu_person').val($('#person').val());
+$('#manu_person_tel').val($('#person_tel').val());
+$('#manu_ep_phone').val($('#ep_phone').val());
+$('#manu_ep_fax').val($('#ep_fax').val());
+$('#manu_person_email').val($('#person_email').val());
+$('#manu_areaaddr').val($('#areaaddr').val());
+$('#manu_cta_addr').val($('#cta_addr').val());
+$('#manu_cta_addr_e').val($('#cta_addr_e').val());
+$('#manu_cta_addrcode').val($('#cta_addrcode').val());
+})
+
+
+$('#bt2').live('click',function(){
+$('#prod_ep_name').val($('#ep_name').val());
+$('#prod_ep_name_e').val($('#ep_name_e').val());
+$('#prod_work_code').val($('#work_code').val());
+$('#prod_nature').val($('#nature').val());
+$('#prod_statecode').val($('#statecode').val());
+$('#prod_delegate').val($('#delegate').val());
+$('#prod_ep_amount').val($('#ep_amount').val());
+$('#prod_person').val($('#person').val());
+$('#prod_person_tel').val($('#person_tel').val());
+$('#prod_ep_phone').val($('#ep_phone').val());
+$('#prod_ep_fax').val($('#ep_fax').val());
+$('#prod_person_email').val($('#person_email').val());
+$('#prod_areaaddr').val($('#areaaddr').val());
+$('#prod_cta_addr').val($('#cta_addr').val());
+$('#prod_cta_addr_e').val($('#cta_addr_e').val());
+$('#prod_cta_addrcode').val($('#cta_addrcode').val());
+})
+
+
+$('#bt3').live('click',function(){
+$('#prod_ep_name').val($('#manu_ep_name').val());
+$('#prod_ep_name_e').val($('#manu_ep_name_e').val());
+$('#prod_work_code').val($('#manu_work_code').val());
+$('#prod_nature').val($('#manu_nature').val());
+$('#prod_statecode').val($('#manu_statecode').val());
+$('#prod_delegate').val($('#manu_delegate').val());
+$('#prod_ep_amount').val($('#manu_ep_amount').val());
+$('#prod_person').val($('#manu_person').val());
+$('#prod_person_tel').val($('#manu_person_tel').val());
+$('#prod_ep_phone').val($('#manu_ep_phone').val());
+$('#prod_ep_fax').val($('#manu_ep_fax').val());
+$('#prod_person_email').val($('#manu_person_email').val());
+$('#prod_areaaddr').val($('#manu_areaaddr').val());
+$('#prod_cta_addr').val($('#manu_cta_addr').val());
+$('#prod_cta_addr_e').val($('#manu_cta_addr_e').val());
+$('#prod_cta_addrcode').val($('#manu_cta_addrcode').val());
+})
+
+
+$('#work_code').live('blur',function(){
+$.getJSON("?m=customer&c=ajax&a=get_info&work_code="+$(this).val(),function(data){
+   //alert(data.ep_name);
+$('#ep_name').val(data.ep_name);
+$('#ep_name_e').val(data.ep_name_e);
+
+$('#nature').val(data.nature);
+$('#statecode').val(data.statecode);
+$('#delegate').val(data.delegate);
+$('#ep_amount').val(data.ep_amount);
+$('#person').val(data.person);
+$('#person_tel').val(data.person_tel);
+$('#ep_phone').val(data.ep_phone);
+$('#ep_fax').val(data.ep_fax);
+$('#person_email').val(data.person_email);
+$('#areaaddr').val(data.areaaddr);
+$('#cta_addr').val(data.cta_addr);
+$('#cta_addr_e').val(data.cta_addr_e);
+$('#cta_addrcode').val(data.cta_addrcode);
+  })
+  
+
+})
+
+$('#manu_work_code').live('blur',function(){
+$.getJSON("?m=customer&c=ajax&a=get_info&work_code="+$(this).val(),function(data){
+   //alert(data.ep_name);
+$('#manu_ep_name').val(data.ep_name);
+$('#manu_ep_name_e').val(data.ep_name_e);
+
+$('#manu_nature').val(data.nature);
+$('#manu_statecode').val(data.statecode);
+$('#manu_delegate').val(data.delegate);
+$('#manu_ep_amount').val(data.ep_amount);
+$('#manu_person').val(data.person);
+$('#manu_person_tel').val(data.person_tel);
+$('#manu_ep_phone').val(data.ep_phone);
+$('#manu_ep_fax').val(data.ep_fax);
+$('#manu_person_email').val(data.person_email);
+$('#manu_areaaddr').val(data.areaaddr);
+$('#manu_cta_addr').val(data.cta_addr);
+$('#manu_cta_addr_e').val(data.cta_addr_e);
+$('#manu_cta_addrcode').val(data.cta_addrcode);
+  })
+  
+
+})
+
+
+
+
+$('#prod_work_code').live('blur',function(){
+$.getJSON("?m=customer&c=ajax&a=get_info&work_code="+$(this).val(),function(data){
+   //alert(data.ep_name);
+$('#prod_ep_name').val(data.ep_name);
+$('#prod_ep_name_e').val(data.ep_name_e);
+
+$('#prod_nature').val(data.nature);
+$('#prod_statecode').val(data.statecode);
+$('#prod_delegate').val(data.delegate);
+$('#prod_ep_amount').val(data.ep_amount);
+$('#prod_person').val(data.person);
+$('#prod_person_tel').val(data.person_tel);
+$('#prod_ep_phone').val(data.ep_phone);
+$('#prod_ep_fax').val(data.ep_fax);
+$('#prod_person_email').val(data.person_email);
+$('#prod_areaaddr').val(data.areaaddr);
+$('#prod_cta_addr').val(data.prod_addr);
+$('#prod_cta_addr_e').val(data.prod_addr_e);
+$('#prod_cta_addrcode').val(data.prod_addrcode);
+  })
+  
+
+})
+
+   $('.select_prod').live('click', select_prod);
+  function select_prod() {
+        var href = '?m=com&c=ajax&a=select_prod&type=b01001';
+        self = this; 
+    iframe_dialog('添加产品',href,800,420); 
+    }
+  function update_prod(prod_id,fac_code, prod_name) {
+        $(self).parent().find('.prod_name').val(prod_name);
+        $(self).parent().find('.prod_id').val(prod_id);
+    $(self).parent().find('.fac_code').val(fac_code);
+    close_iframe_dialog(); 
+    }
+
+
+
+$(function() { 
+var tooltips = $( "[title]" ).tooltip({position:{my:"left bottom+37", at:"left bottom"}});
+  $( "#enterprise-tab" ).tabs({
+    collapsible: false
+  });
+  
+  
+  
+$('button.submit-btn').click(function(){
+    if( !Validator.Validate( $('#entry-form')[0], 2 ) ) return;
+    var r2 = check_ep_name(); 
+    if( r2 )
+      $('#entry-form').submit();
+  });
+var region = Region.init('data/cache/region.json');
+window.region = region; 
+//self = $('#select-region');
+//$('#select-region').click( region_dlg() );
+
+
+
+});
+
+function region_dlg(obj){
+  $('#select-region-dialog').dialog({
+    title : '选择行政区',
+    width : 500,
+    height  : 150,
+    modal: true,
+    resizable: false,
+    autoResize: true,
+    buttons :{
+      '取消'  : function(){
+         $(this).dialog("close");
+      },
+      '确定'  : function(){
+        var r = false;
+        var country = parseInt($('#statecode').val());
+        
+        var code_city = $('#city-select').val();
+        var code_district = $('#district-select').val();
+        
+        var code = $('#district-select').val();
+        if( !code )
+          code = $('#city-select').val();
+
+        //if( (code && code.substring(4,6) != '00') || 156 != country ){
+        if( (DistrictNum==0 && code_city) || (DistrictNum!=0 && code_district) ){
+          var text = $('#province-select').find('option:selected').text() + $('#city-select').find('option:selected').text() + $('#district-select').find('option:selected').text();
+          text = text.replace('市辖区','');
+          text = text.replace('--县','');
+          text = text.replace('请选择市','');
+          text = text.replace('请选择区/县','');
+          $(obj).prev().val(text);
+          $(obj).prev().prev().val(code);
+          $(this).dialog('close');
+        } else {
+          alert( '请选择行政区！' );
+        }
+      }
+    },
+    open  : function(){
+      var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+      btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+    }
+  });
+}
+
+
+  
+//检测组织名称是否重复
+function check_ep_name() {
+  name = $('#ep_name').val();
+  var r = 1;
+  //@HBJ 2013-09-26 修复修改时不检测的问题
+  if( name != '<?=$ep_name;?>' && name != '' ){
+    $.post(
+      '?m=ajax&a=check_name',
+      {ep_name:name},
+      function(result) {
+        var state = parseInt( result );
+        if( state > 0 ) {
+          alert('组织名称系统中已存在');
+          r = 0;
+        }
+      }
+    );
+  }
+  return r;
+}
+
+
+</script>
+</head>
+
+<body>
+<div id="select-region-dialog" class="tal" style="display:none;">
+  <p style="margin-bottom:8px;">请选择行政区(到区/县)，完成后点确定。</p>
+  <p> <span id="prov-span">
+    <select name="province" id="province-select" style="width:130px;">
+      <option value="">选择省</option>
+    </select>
+    </span> <span id="city-span">
+    <select name="city" id="city-select" style="width:160px;">
+      <option value="">请选择市</option>
+    </select>
+    </span> <span id="dist-span">
+    <select name="district" id="district-select" style="width:150px;">
+      <option value="">请选择区/县</option>
+    </select>
+    </span> </p>
+</div>
+<form method="post" id="entry-form" action="?m=customer&c=contract&a=save">
+  <div id="enterprise-tab" style="margin:0 auto;width:750px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">企业申请</a></li> 
+  </ul>
+    <ul class="main-form" style="padding-top:5px;">
+    <li><br/>
+      </li>
+
+
+     <li>
+       <label class="field">委托人组织机构代码</label>
+        <em>*</em><span>
+        <input type="text" id="work_code" dataType="Require" msg="请输入委托人组织组织代码！"  name="work_code" value="<?php echo $ep_name['work_code']?>" class="input" style="width:120px" />
+        </span> 
+        </li>
+     
+    <li>
+        <label class="field">委托人(申请人)名称</label>
+        <em>*</em><span>
+        <input type="text" id="ep_name" dataType="Require" msg="请输入委托人(申请人)名称！" name="ep_name" value="<?php echo $ep_name['ep_name']?>" class="input"  title="填写营业执照上企业名称"  style="width:465px" />
+        </span> </li>
+      <li>
+        <label class="field">委托人(申请人)英文名称</label>
+        <em></em><span>
+        <input type="text"  id="ep_name_e" name="ep_name_e" value="<?php echo $ep_name['ep_name_e']?>" class="input"   style="width:465px" />
+        </span> </li>
+
+      
+    <?php include "data/cache/nature.cache.php";?>
+      <li>
+        <label class="field">组织性质</label>
+        <em>*</em><span>
+    <select id="nature" name="nature" dataType="Require" msg="请选择组织性质！" style="width:250px">
+          <option value="">请选择</option>
+       <?php foreach($nature_array as $k=>$v){?>
+       <option value="<?php echo $k?>"  <?php echo $k==$ep_nature?'selected':'' ?>><?php echo $v['name'];?></option>
+     <?php }?>
+        </select>
+        </span>
+         </li>
+     <?php include "data/cache/statecode.cache.php";?>
+      <li>
+        <label class="field">国家 </label>
+        <em>*</em><span>
+        <select id="statecode" name="statecode" dataType="Require" msg="请选择国家/地区代码！" style="width:250px;">
+          <option value="">请选择</option>
+          <?php foreach($statecode_array as $k => $v){  ?>
+           <option value="<?php echo $k;?>" <?=$k==$ep_statecode?'selected':''?>><?php echo $v['name'];?></option>
+     <?php  }?>
+        </select>
+    </span>
+    
+    </li>
+      <li>
+        <label class="field">法人代表</label>
+        <em>*</em><span>
+        <input type="text" id="delegate" dataType="Require" msg="请输入法人代表！" name="delegate" value="<?=$ep_name['delegate']?>" class="input" style="width:120px" />
+        </span>
+    </li>
+    <li>
+        <label class="field">人数</label>
+        <em>*</em><span>
+        <input type="text" id="ep_amount" dataType="Require" msg="请输入企业人数！" name="ep_amount" value="<?=$ep_name['ep_amount']?>" class="input" style="width:120px" />
+        </span> 
+    </li>
+    <li>
+        <label class="field">联系人</label>
+        <em>*</em><span>
+        <input type="text" id="person" dataType="Require" msg="请输入联系人！" name="person" value="<?=$ep_name['person']?>" class="input" style="width:120px" />
+        </span>
+        <label class="field3">手机</label>
+        <em></em><span>
+        <input type="text"  id="person_tel"  msg="请输入联系人手机！" name="person_tel" value="<?=$ep_name['person_tel']?>" class="input" style="width:120px" />
+        </span>
+        
+      </li>
+      <li>
+        <label class="field">电话</label>
+        <em>*</em><span>
+        <input type="text" id="ep_phone" dataType="Require" msg="请输入企业联系电话！" name="ep_phone" value="<?=$ep_name['ep_phone']?>" class="input" style="width:330px" />(请写明区号，例如：010-xxxxxxx)
+        </span>
+    </li>
+    <li>
+        <label class="field">传真</label>
+        <em>*</em><span>
+        <input type="text" id="ep_fax"  dataType="Require" msg="请输入企业传真！" name="ep_fax" value="<?=$ep_name['ep_fax']?>" class="input" style="width:120px" />(请写明区号，例如：010-xxxxxxxx)
+        </span>
+    </li>
+    <li>
+        <label class="field">联系邮箱 </label>
+        <em></em><span>
+        <input type="text" id="person_email"  name="person_email" value="<?=$ep_name['person_email']?>" class="input" style="width:120px" />
+        </span> </li>
+      
+      <li>
+        <label class="field" style="float:left;">行政区划</label>
+        <em >*</em><span>
+        <input type="hidden" name="areacode" value="<?=$ep_name['areacode']?>"/>
+        <input type="text" id="areaaddr" readonly="readonly" dataType="Require" msg="请选择企业据在行政区!" name="areaaddr" value="<?=$ep_name['areaaddr']?>" title="组织认证地址所在行政区" style="height:18px;width:305px;border-style:solid;border-width:1px 0 1px 1px;border-color:#ccc;float:left;" />
+        <i class="i-select"  onclick="region_dlg(this)"></i></span>
+        
+         </li>
+      
+    <li>
+        <label class="field">委托人(申请人)地址</label>
+        <em>*</em><span>
+        <input type="text" id="cta_addr" dataType="Require" msg="请输入委托人(申请人)地址！" name="cta_addr" value="<?=$ep_name['cta_addr']?>" class="input" style="width:500px" />
+         </span> </li>
+      <li>
+        <label class="field">委托人(申请人)英文地址</label>
+        <em></em><span>
+        <input type="text" id="cta_addr_e" name="cta_addr_e" value="<?=$ep_name['cta_addr_e']?>" class="input" style="width:368px" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="cta_addrcode" dataType="Require" msg="请输入企业通讯地址邮编！" name="cta_addrcode" value="<?=$ep_name['cta_addrcode']?>" class="input" size="6" />
+        </span> </li>
+        <li>
+        <label class="field">付款人名称</label>
+        <span>
+        <input type="text" id="payment_name" name="payment_name" value="" class="input" style="width:500px" />
+         </span> </li>
+         <li>
+        <label class="field">付款人地址</label>
+        <span>
+        <input type="text" id="payment_addr"  name="payment_addr" value="" class="input" style="width:500px" />
+         </span> </li>
+         <hr />
+      <button id="bt" type="button">同申请人</button>
+         <li>
+       <label class="field">生产者组织机构代码</label>
+        <em>*</em><span>
+        <input type="text" id="manu_work_code" dataType="Require" msg="生产者组织机构代码！"  name="manu_work_code" value="<?=$ep_manu['work_code']?>" class="input" style="width:120px" />
+        </span> 
+        </li>
+          <li>
+        <label class="field">生产者(制造商)名称</label>
+        <em>*</em><span>
+        <input type="text" id="manu_ep_name" dataType="Require" msg="生产者(制造商)名称！" name="manu_ep_name" value="<?=$ep_manu['ep_name']?>" class="input"  title="填写营业执照上企业名称"  style="width:465px" />
+        </span> </li>
+      <li>
+        <label class="field">生产者(制造商)英文名称</label>
+        <em></em><span>
+        <input type="text" id="manu_ep_name_e" name="manu_ep_name_e" value="<?=$ep_manu['ep_name_e']?>" class="input"  style="width:465px" />
+        </span> </li>
+
+      
+    <?php include "data/cache/nature.cache.php";?>
+      <li>
+        <label class="field">组织性质</label>
+        <em>*</em><span>
+    <select id="manu_nature" name="manu_nature" dataType="Require" msg="请选择组织性质！" style="width:250px">
+          <option value="">请选择</option>
+       <?php foreach($nature_array as $k=>$v){?>
+       <option value="<?php echo $k?>"<?=$k==$ep_manu_nature?'selected':''?>><?php echo $v['name'];?></option>
+     <?php }?>
+        </select>
+        </span>
+         </li>
+     <?php include "data/cache/statecode.cache.php";?>
+      <li>
+        <label class="field">国家 </label>
+        <em>*</em><span>
+        <select id="manu_statecode" name="manu_statecode" dataType="Require" msg="请选择国家/地区代码！" style="width:250px;">
+          <option value="">请选择</option>
+          <?php foreach($statecode_array as $k => $v){  ?>
+           <option value="<?php echo $k;?>" <?=$k==$ep_manu_statecode?'selected':''?>><?php echo $v['name'];?></option>
+     <?php  }?>
+        </select>
+    </span>
+    
+    </li>
+      <li>
+        <label class="field">法人代表</label>
+        <em>*</em><span>
+        <input type="text" id="manu_delegate" dataType="Require" msg="请输入法人代表！" name="manu_delegate" value="<?=$ep_manu['delegate']?>" class="input" style="width:120px" />
+        </span>
+    </li>
+    <li>
+        <label class="field">人数</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" id="manu_ep_amount" msg="请输入企业人数！" name="manu_ep_amount" value="<?=$ep_manu['ep_amount']?>" class="input" style="width:120px" />
+        </span> 
+    </li>
+    <li>
+        <label class="field">联系人</label>
+        <em>*</em><span>
+        <input type="text" id="manu_person" dataType="Require" msg="请输入联系人！" name="manu_person" value="<?=$ep_manu['person']?>" class="input" style="width:120px" />
+        </span>
+        <label class="field3">手机</label>
+        <em></em><span>
+        <input type="text"  id="manu_person_tel" msg="请输入联系人手机！" name="manu_person_tel" value="<?=$ep_manu['person_tel']?>" class="input" style="width:120px" />
+        </span>
+        
+      </li>
+      <li>
+        <label class="field">电话</label>
+        <em>*</em><span>
+        <input type="text" id="manu_ep_phone" dataType="Require" msg="请输入企业联系电话！" name="manu_ep_phone" value="<?=$ep_manu['ep_phone']?>" class="input" style="width:330px" />(请写明区号，例如：010-xxxxxxx)
+        </span>
+    </li>
+    <li>
+        <label class="field">传真</label>
+        <em>*</em><span>
+        <input type="text" id="manu_ep_fax" dataType="Require" msg="请输入企业传真！" name="manu_ep_fax" value="<?=$ep_manu['ep_fax']?>" class="input" style="width:120px" />(请写明区号，例如：010-xxxxxxxx)
+        </span>
+    </li>
+    <li>
+        <label class="field">联系邮箱 </label>
+        <em></em><span>
+        <input type="text" id="manu_person_email" name="manu_person_email" value="<?=$ep_manu['person_email']?>" class="input" style="width:120px" />
+        </span> </li>
+      
+      <li>
+        <label class="field" style="float:left;">行政区划</label>
+        <em >*</em><span>
+        <input type="hidden" name="manu_areacode" value="<?=$ep_manu['areacode']?>"/>
+        <input type="text" readonly="readonly" id="manu_areaaddr" dataType="Require" msg="请选择企业据在行政区!" name="manu_areaaddr" value="<?=$ep_manu['areaaddr']?>" title="组织认证地址所在行政区" style="height:18px;width:305px;border-style:solid;border-width:1px 0 1px 1px;border-color:#ccc;float:left;" />
+        <i class="i-select"  onclick="region_dlg(this)"></i></span>
+        
+         </li>
+      
+    <li>
+        <label class="field">生产者(制造商)地址</label>
+        <em>*</em><span>
+        <input type="text" id="manu_cta_addr" dataType="Require" msg="请输入生产者(制造商)地址！" name="manu_cta_addr" value="<?=$ep_manu['cta_addr']?>" class="input" style="width:500px" />
+         </span> </li>
+      <li>
+        <label class="field">生产者(制造商)英文地址</label>
+        <em></em><span>
+        <input type="text" id="manu_cta_addr_e" name="manu_cta_addr_e" value="<?=$ep_manu['cta_addr_e']?>" class="input" style="width:368px" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="manu_cta_addrcode" dataType="Require" msg="请输入企业通讯地址邮编！" name="manu_cta_addrcode" value="<?=$ep_manu['cta_addrcode']?>" class="input" size="6" />
+        </span> </li>
+        <hr />
+         <button id="bt2" type="button">同申请人</button>
+          <button id="bt3" type="button">同制造商</button>
+           <li>
+       <label class="field">生产企业组织机构代码</label>
+        <em>*</em><span>
+        <input type="text" id="prod_work_code" dataType="Require" msg="请输入生产企业组织机构代码！"  name="prod_work_code" value="<?=$ep_prod['work_code']?>" class="input" style="width:120px" />
+        </span> 
+        </li>
+            <li>
+        <label class="field">生产企业名称</label>
+        <em>*</em><span>
+        <input type="text" id="prod_ep_name" dataType="Require" msg="请输入生产企业名称！" name="prod_ep_name" value="<?=$ep_prod['ep_name']?>" class="input"  title="填写营业执照上企业名称"  style="width:465px" />
+        </span> </li>
+      <li>
+        <label class="field">生产企业英文名称</label>
+        <em></em><span>
+        <input type="text" id="prod_ep_name_e" name="prod_ep_name_e" value="<?=$ep_prod['ep_name_e']?>" class="input" style="width:465px" />
+        </span> </li>
+  
+      
+    <?php include "data/cache/nature.cache.php";?>
+      <li>
+        <label class="field">组织性质</label>
+        <em>*</em><span>
+    <select id="prod_nature" name="prod_nature" dataType="Require" msg="请选择组织性质！" style="width:250px">
+          <option value="">请选择</option>
+       <?php foreach($nature_array as $k=>$v){?>
+       <option value="<?php echo $k?>"<?=$k==$ep_prod_nature?'selected':''?>><?php echo $v['name'];?></option>
+     <?php }?>
+        </select>
+        </span>
+         </li>
+     <?php include "data/cache/statecode.cache.php";?>
+      <li>
+        <label class="field">国家 </label>
+        <em>*</em><span>
+        <select id="prod_statecode" name="prod_statecode" dataType="Require" msg="请选择国家/地区代码！" style="width:250px;">
+          <option value="">请选择</option>
+          <?php foreach($statecode_array as $k => $v){  ?>
+           <option value="<?php echo $k;?>" <?=$k==$ep_prod_statecode?'selected':''?>><?php echo $v['name'];?></option>
+     <?php  }?>
+        </select>
+    </span>
+    
+    </li>
+      <li>
+        <label class="field">法人代表</label>
+        <em>*</em><span>
+        <input type="text" id="prod_delegate" dataType="Require" msg="请输入法人代表！" name="prod_delegate" value="<?=$ep_prod['delegate']?>" class="input" style="width:120px" />
+        </span>
+    </li>
+    <li>
+        <label class="field">人数</label>
+        <em>*</em><span>
+        <input type="text" id="prod_ep_amount" dataType="Require" msg="请输入企业人数！" name="prod_ep_amount" value="<?=$ep_prod['ep_amount']?>" class="input" style="width:120px" />
+        </span> 
+    </li>
+    <li>
+        <label class="field">联系人</label>
+        <em>*</em><span>
+        <input type="text" id="prod_person" dataType="Require" msg="请输入联系人！" name="prod_person" value="<?=$ep_prod['person']?>" class="input" style="width:120px" />
+        </span>
+        <label class="field3">手机</label>
+        <em></em><span>
+        <input type="text" id="prod_person_tel" msg="请输入联系人手机！" name="prod_person_tel" value="<?=$ep_prod['person_tel']?>" class="input" style="width:120px" />
+        </span>
+        
+      </li>
+      <li>
+        <label class="field">电话</label>
+        <em>*</em><span>
+        <input type="text" id="prod_ep_phone" dataType="Require" msg="请输入企业联系电话！" name="prod_ep_phone" value="<?=$ep_prod['ep_phone']?>" class="input" style="width:330px" />(请写明区号，例如：010-xxxxxxx)
+        </span>
+    </li>
+    <li>
+        <label class="field">传真</label>
+        <em>*</em><span>
+        <input type="text" id="prod_ep_fax"dataType="Require" msg="请输入企业传真！" name="prod_ep_fax" value="<?=$ep_prod['ep_fax']?>" class="input" style="width:120px" />(请写明区号，例如：010-xxxxxxxx)
+        </span>
+    </li>
+    <li>
+        <label class="field">联系邮箱 </label>
+        <em></em><span>
+        <input type="text" id="prod_person_email" name="prod_person_email" value="<?=$ep_prod['person_email']?>" class="input" style="width:120px" />
+        </span> </li>
+      
+      <li>
+        <label class="field" style="float:left;">行政区划</label>
+        <em >*</em><span>
+        <input type="hidden" name="prod_areacode" value="<?=$ep_prod['areacode']?>"/>
+        <input type="text" readonly="readonly" id="prod_areaaddr" dataType="Require" msg="请选择企业据在行政区!" name="prod_areaaddr" value="<?=$ep_prod['areaaddr']?>" title="组织认证地址所在行政区" style="height:18px;width:305px;border-style:solid;border-width:1px 0 1px 1px;border-color:#ccc;float:left;" />
+        <i class="i-select"  onclick="region_dlg(this)"></i></span>
+        
+         </li>
+      
+    <li>
+        <label class="field">生产企业地址</label>
+        <em>*</em><span>
+        <input type="text" id="prod_cta_addr" dataType="Require" msg="请输入生产企业地址！" name="prod_cta_addr" value="<?=$ep_prod['prod_addr']?>" class="input" style="width:500px" />
+         </span> </li>
+      <li>
+        <label class="field">生产企业英文地址</label>
+        <em></em><span>
+        <input type="text" id="prod_cta_addr_e" name="prod_cta_addr_e" value="<?=$ep_prod['prod_addr_e']?>" class="input" style="width:368px" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="prod_cta_addrcode" dataType="Require" msg="请输入企业通讯地址邮编！" name="prod_cta_addrcode" value="<?=$ep_prod['prod_addrcode']?>" class="input" size="6" />
+        </span> </li>
+        <hr />
+        <li>
+        <label class="field">产品名称(中文)</label>
+        <em>*</em><span>
+        <input type="text" id="pro_name" dataType="Require" msg="请输入产品名称(中文)！" name="pro_name" value="<?=$prod['prod_name_chinese']?>" class="input" style="width:500px" />
+         </span> </li>
+         <li>
+        <label class="field">产品名称(英文)</label>
+        <em>*</em><span>
+        <input type="text" id="pro_name_e" dataType="Require" msg="请输入产品名称(英文)！" name="pro_name_e" value="<?=$prod['prod_name_english']?>" class="input" style="width:500px" />
+         </span> </li>
+         <!--
+         <li>
+        <label class="field">型号规格(中文)</label>
+        <em>*</em><span>
+        <input type="text" id="pro_model" dataType="Require" msg="请输入企业通讯地址！" name="pro_model" value="" class="input" style="width:500px" />
+         </span> </li>
+       -->
+                                    <li>
+<label class="field" style="float:left;">型号规格(中文)<em >*</em></label>
+
+  <textarea name="pro_model" rows="3" dataType="Require" msg="请输入型号规格(中文)！" style=" width:55%"><?=$prod['scope']?></textarea>
+</li>
+<!--
+         <li>
+        <label class="field">型号规格(英文)</label>
+        <em>*</em><span>
+        <input type="text" id="pro_model_e" dataType="Require" msg="请输入型号规格(英文)！" name="pro_model_e" value="" class="input" style="width:500px" />
+         </span> </li>
+
+       -->
+          <li>
+         <label class="field" style="float:left;">产品小类</label>
+         <em >*</em><span class="cRed">
+                              <input class="input prod_name" type="text" style='width:450px; float:left;border-width:1px 0 1px 1px'  dataType="Require" msg="请选择产品小类！" value="<?=$xiaolei['name'];?>" readonly="readonly" />
+                                  <input type="hidden" name="prod_id" class="prod_id" value="<?=$prod['prod_id'];?>" />
+                                  <input type="hidden" name="fac_code" class="fac_code" value="<?=$prod['fac_code'];?>" />
+                                <i class="i-select select_prod" ></i>
+                                </span>
+                              </li>
+                              <!--
+                              <li>
+<label class="field" style="float:left;">产品标准<em >*</em></label>
+
+  <textarea name="prod_sta" rows="3" dataType="Require" msg="请输入产品标准！" style=" width:55%"></textarea>
+</li>
+-->
+
+<li>
+        <label class="field">产品标准</label>
+        <em>*</em><span>
+        <input type="text" id="prod_sta" dataType="Require" msg="请输入产品标准！" name="prod_sta" value="<?=$prod['prod_ver']?>" class="input" style="width:500px" />
+         </span> </li>
+
+      <li>
+        <label class="field">企业使用认证机构ERP系统操作指南</label>
+        <em>*</em><span>
+        <a href="./企业使用认证机构ERP系统操作指南.docx"><span style="color:blue"><u>点击下载</u></span></a>
+        </span></li>
+     </ul>
+    <p>
+      <center>
+        <button class="btn btn-submit submit-btn" type="button">提交申请</button>
+      </center>
+    </p>
+    </form>
+    <br/>
+  </div>
+
+
+</div>
+<script>
+  /*
+document.getElementById('username').onblur=function(){
+  var check=document.getElementById('check');
+
+  var XHR=new XMLHttpRequest();
+
+  XHR.onreadystatechange=function(){
+    if(this.readyState==4){
+      if(this.responseText==1){
+        check.innerHTML='<font color="red">用户名已经被占用</font>'; 
+      }else{ 
+                  check.innerHTML='<font color="green">用户名可以用</font>';
+                }
+    }
+  }
+   var url='save.php?username='+this.value; 
+                  XHR.open('get',url,true); 
+                  XHR.send(null); 
+}
+*/
+</script>
+</body>
+</html>

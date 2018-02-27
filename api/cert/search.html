@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>证书查询</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+</head>
+<body><br>
+
+	<div class="container">
+    <form  role="form" action="search.php" method="post" >
+  <div class="form-group">
+    <label for="ep_name">企业名称：</label>
+    <input type="text" class="form-control" id="ep_name" name="ep_name" placeholder="请输入企业名称">
+  </div>
+  <div class="form-group">
+    <label for="certno">证书号：</label>
+    <input type="text" class="form-control" id="certno"  name="certno" placeholder="请输入证书号">
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg">提 交</button>
+</form>
+
+    </div>
+    <script>
+    $(function(){
+		
+		$("button.btn").click(function(e) {
+            if(!$("#ep_name").val()){
+			alert("请输入企业名称");
+			$("#ep_name").focus();
+			return false;
+			
+			}
+			if(!$("#certno").val()){
+			alert("请输入证书号");
+			$("#certno").focus();
+			return false;
+			
+			}
+        });
+		
+		})</script>
+</body>
+</html>

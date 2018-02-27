@@ -1,0 +1,73 @@
+<?php tpl('header')?>
+</head>
+
+<body style="margin:0 auto;width:750px;">
+
+<!--产品-->
+<br/>
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">系统设置（产品）</a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <div class="sys-conf clearfix">
+      <dl class="ui-corner-all conf-col">
+      <dt>规则配置管理</dt>
+        <dd>
+          <ul>
+            <li><a href="?m=com&c=setting&a=prod_rule_list&type=b01001_index">强制性规则名称 *</a></li>
+            <li><a href="?m=com&c=setting&a=prod_rule_list&type=b01001_detail">强制性细则名称 * </a></li>
+          </ul>
+        </dd>
+      
+        <dt>受理模块配置</dt>
+        <dd>
+          <ul>
+            <li><a href="?m=com&c=setting&a=prod_list&type=b01001">产品小类设置 *</a></li>
+            <li><a href="?m=com&c=setting&a=ver_list&type=b01001">标准设置 *</a></li>
+  			<li><a href="?m=com&c=setting&a=prod_ver_list&type=b01001">产品对标准 *</a></li>
+            <li><a href="?m=com&c=setting&a=prod_test_list&type=b01001">检测机构对实施规则 *</a></li>
+            <li><a href="?c=setting&a=list&type=ep_site_related">生产者关系 r</a></li>
+            <li><a href="?c=setting&a=list&type=b01001_audit_tpl">认证模式 [C] r</a></li>
+          </ul>
+        </dd>
+        <dt>证书模块配置</dt>
+        <dd>
+          <ul>
+            <li><a href="?c=setting&a=list&type=b01001_certLogout">注销原因</a> [C] r</li>
+            <li><a href="?c=setting&a=list&type=b01001_certpasue">暂停原因</a> [C] r</li>
+            <li><a href="?c=setting&a=list&type=b01001_certrecall">撤消原因</a> [C] r</li>
+            <li><a href="?c=setting&a=list&type=b01001_certchange">变更类别</a>     r</li>
+            <li><a href="?c=setting&a=list&type=b01001_certchange_report">变更原因类别</a> [C] r</li>
+            <li><a href="?c=setting&a=list&type=b01001_certreplace">换证原因</a> [C] r</li>
+            <li><a href="?c=setting&a=list&type=app_change">申请变更类别</a> [C] r</li>
+          </ul>
+        </dd>
+      </dl>
+
+
+      <dl class="ui-corner-all conf-col">
+        <dt class="ui-corner-all conf-col">检查员</dt>
+        <dd>
+          <ul>
+            <li><a href="?c=setting&a=list&type=check_result">工厂检查结论</a></li>
+            <li><a href="?c=setting&a=list&type=bufuhe">工厂检查不符合项</a></li>
+          </ul>
+        </dd>
+
+      </dl>
+
+      <dl class="ui-corner-all conf-col">
+        <dt class="ui-corner-all conf-col">系统相关</dt>
+        <dd>
+          <ul>
+            <li><a href="?c=setting&a=com_cache_all">生成全部缓存</a></li>
+          </ul>
+        </dd>
+      </dl>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

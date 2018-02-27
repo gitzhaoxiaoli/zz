@@ -1,0 +1,370 @@
+<?php tpl('header')?>
+<script type="text/javascript" src="theme/js/region.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript">
+
+$(function() { 
+	var tooltips = $( "[title]" ).tooltip({position:{my:"left bottom+37", at:"left bottom"}});
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+	$('#upload-dialog').dialog({
+		autoOpen: false,
+		height: 300,
+		width: 530,
+		modal: true,
+		resizable: false
+	});
+	$('#org').click(function(){
+		if($('#work-code').val()){
+			if(checkdaima()){
+			$('#step').val('org');
+			$('#entry-form').submit();
+			}else{
+				$('#work-code').focus();
+				return false;
+			}
+		}
+		else{
+			alert("请填写组织机构代码！！");
+			$('#work-code').focus();
+			return false;
+		}
+		});
+	var anchor = $.url.attr('anchor');
+	if( anchor ) $( "#enterprise-tab" ).tabs( 'enable', 'tab-archive' );
+
+	$('button.submit-btn').click(function(){
+		if( !Validator.Validate( $('#entry-form')[0], 2 ) ) return;
+		var ep_addr = $("#ep_addr").val();
+		var meta_areaaddr = $("#meta_areaaddr").val();
+			$('#entry-form').submit();
+		
+	});
+
+	var region = Region.init('data/cache/region.json');
+	window.region = region;
+	
+ 	$('#select-region').click( region_dlg );
+ 	$('#select-regionaa').click( region_dlg );
+	$('#select-industry').click( industry_dlg );
+	$(":checkbox").click(function(){
+		var val=$(this).val();
+		 
+		if($(this).attr("checked")){
+		 
+			$("#"+val).show();
+			
+			}
+		else
+			{
+				$("#"+val).hide();
+				$("#"+val).find(':input').each(function(){
+				
+				$(this).val('');
+				});
+		
+			}
+		})
+});
+
+
+
+function checkdaima() {
+	daima = $('#work-code').val();
+	if(daima == '**********')return;
+	if(daima == '')return;
+	var errormsg='';
+	if(daima.length!=10&&daima.length!=9){
+		errormsg = '组织组织代码为9或者 10位 \n';
+	}
+
+	var ck=/[^0-9A-Z-]/;
+	if(daima.match(ck)){
+		errormsg= errormsg + '必须是数字和大写字母组成 \n';
+	}
+	if(errormsg != '')
+	{
+		alert(errormsg);
+		return false;
+	}
+	return check_work_code(daima);
+}
+
+function check_work_code(daima) {
+	//是否为新增企业
+	var r = 1;
+	if( $('#eid').val() == undefined && daima != '' ) {
+		$.post(
+			'?c=ajax&a=check_daima',
+			{'work_code':daima},
+			function(result) {
+				var state = parseInt( result );
+				if( result > 0 ) {
+					alert('组织组织代码系统中已存在');
+					r = 0;
+				}
+			}
+		);
+	}
+	return r;
+}
+
+//检测组织名称是否重复
+function check_ep_name() {
+	name = $('#ep-name').val();
+	var r = 1;
+	//@HBJ 2013-09-26 修复修改时不检测的问题
+	if( name != '<?=$ep_name;?>' && name != '' ){
+		$.post(
+			'?c=ajax&a=check_name',
+			{ep_name:name},
+			function(result) {
+				var state = parseInt( result );
+				if( state > 0 ) {
+					alert('组织名称系统中已存在');
+					r = 0;
+				}
+			}
+		);
+	}
+	return r;
+}
+
+
+
+
+function region_dlg(){
+	$('#select-region-dialog').dialog({
+		title	: '选择行政区',
+		width	: 500,
+		height	: 150,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var r = false;
+				var country = parseInt($('#statecode').val());
+				
+				var code_city = $('#city-select').val();
+				var code_district = $('#district-select').val();
+				
+				var code = $('#district-select').val();
+				if( !code )
+					code = $('#city-select').val();
+
+				//if( (code && code.substring(4,6) != '00') || 156 != country ){
+				if( (DistrictNum==0 && code_city) || (DistrictNum!=0 && code_district) ){
+					var text = $('#province-select').find('option:selected').text() + $('#city-select').find('option:selected').text() + $('#district-select').find('option:selected').text();
+					text = text.replace('市辖区','');
+					text = text.replace('--县','');
+					text = text.replace('请选择市','');
+					text = text.replace('请选择区/县','');
+					$('.meta_areaaddr').val(text);
+					$('#areacode').val(code);
+					$(this).dialog('close');
+				} else {
+					alert( '请选择行政区！' );
+				}
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	});
+}
+
+
+function industry_dlg(){
+	$('<iframe src=?c=ajax&a=select-industry></iframe>').dialog({
+		title	: '选择所属行业',
+		width	: 800,
+		height	: 420,
+		cache:false,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var s_str = '';
+				var old_str=$('#industry').val(); 
+				$(this).contents().find('input.s-industry').each(function(index){
+					if( $(this).attr( 'checked' ) && $(this).val() )
+						s_str += $(this).val() + '；';
+				});  
+				 
+				if(old_str!=0){//如果原数据不为0的情况下追加
+				s_str = s_str+old_str;
+				}
+				 
+				$('#industry').val( s_str );
+				$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(780);
+}
+</script>
+</head>
+
+<body>
+<div id="select-region-dialog" class="tal" style="display:none;">
+  <p style="margin-bottom:8px;">请选择行政区(到区/县)，完成后点确定。</p>
+  <p> <span id="prov-span">
+    <select name="province" id="province-select" style="width:130px;">
+      <option value="">选择省</option>
+    </select>
+    </span> <span id="city-span">
+    <select name="city" id="city-select" style="width:160px;">
+      <option value="">请选择市</option>
+    </select>
+    </span> <span id="dist-span">
+    <select name="district" id="district-select" style="width:150px;">
+      <option value="">请选择区/县</option>
+    </select>
+    </span> </p>
+</div>
+<form method="post" id="entry-form" action="<?=$REAUEST_URI;?>">
+  <input type="hidden" name="step" id="step" value="1" />
+  <?php
+if( 'edit' == $a ){
+?>
+  <input id="coo_id" type="hidden" name="coo_id" value="<?=$coo_id;?>" />
+  <?php
+}
+?>
+  <div id="enterprise-tab" style="margin:0 auto;width:750px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">合作机构信息<?php if('edit' == $a){?>修改<?php }else{?>录入<?php } ?></a></li>
+  </ul>
+  <div id="tab-epfiles" style="padding:10px">
+    <ul class="main-form">
+	  <li>
+		 <label class="field">类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label>
+	     <em></em><span>
+		 <select style='width:150px;' name="coo_leibie">
+		     <option value="1" <?php if($coo_leibie == 1){echo 'selected';}?>>机构</option>
+		     <option value="2" <?php if($coo_leibie == 2){echo 'selected';}?>>个人</option>
+		 </select>
+		 </span>
+		 <label class="field">编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="text" name="coo_code" value="<?=$coo_code;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">机构/人员来源：</label>
+	     <em></em><span>
+		    <select name="coo_from" style="width:150px">
+			  <?=$coo_from_select;?>
+		    </select>
+		 </span>
+
+
+		 <label class="field">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;域：</label>
+	     <em></em>
+		  <select id="coo_baddr" name="coo_baddr" dataType="Require" msg="请选择省！" style="width:150px;">
+			<option value="">请选择</option><?=$coo_baddr_code;?>
+			
+		  </select>		 
+		 <span >
+	  </li>
+	  <li>
+		 <label class="field">名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+	     <em></em><span>
+		 <input style="width:450px" type="text" name="coo_name" value="<?=$coo_name;?>" />
+		 </span>
+	  </li>
+	  <li>
+
+
+	  </li>
+	  <li>
+		 <label class="field">邮政编码：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_addrcode" value="<?=$coo_addrcode;?>" />
+		 </span>
+		 <label class="field">负&nbsp;&nbsp;责&nbsp;&nbsp;人：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_fzperson" value="<?=$coo_fzperson;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">联系地址：</label>
+	     <em></em><span >
+		 <input type="text" class="meta_areaaddr" dataType="Require" msg="请选择企业据地域!" name="coo_addr" value="<?=$coo_addr;?>" title="组织认证地址所在地域" style="height:18px;width:450px;" />
+         </span>
+	  </li>
+	  <li>
+		 <label class="field">联&nbsp;&nbsp;系&nbsp;&nbsp;人：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_person" value="<?=$coo_person;?>" />
+		 </span>
+		 <label class="field">联系手机：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_mphone" value="<?=$coo_mphone;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_tphone" value="<?=$coo_tphone;?>" />
+		 </span>
+		 <label class="field">传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;真：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_fax" value="<?=$coo_fax;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">合作状态：</label>
+		<em></em><span >
+			 <select name="coo_status" style="width:150px;">
+			    <option value="1" <?php if($coo_status == 1)echo 'selected';?>>合作</option>
+			    <option value="2" <?php if($coo_status == 2)echo 'selected';?>>不合作</option>
+			 </select>
+		 </span>
+		 <label class="field">电子邮箱：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="coo_mail" value="<?=$coo_mail;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">企业网址：</label>
+		<em></em><span >
+		 <input style='width:450px;' type="text" name="coo_web" value="<?php if($coo_web){echo $coo_web;}else{echo "http://";}?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">业务范围：</label>
+		<em></em><span >
+		 <textarea name="coo_fanwei" style="width:450px;"><?=$coo_fanwei;?></textarea>
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</label>
+		<em></em><span >
+		 <textarea name="coo_note" style="width:450px;"><?=$coo_note;?></textarea>
+		 </span>
+	  </li>
+    </ul>
+    <p>
+      <center>
+        <button class="btn btn-submit submit-btn" type="button"> 保 存 </button>
+      </center>
+    </p>
+  </div>
+</form>
+</div>
+</body>
+</html>

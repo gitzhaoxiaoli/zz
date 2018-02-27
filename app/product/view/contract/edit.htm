@@ -1,0 +1,965 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>申请单元</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/region.js"></script>
+<style type="text/css">
+.ctxm-table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.ctxm-table .td {
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+.txxm-table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.txxm-table td {
+	padding: .4em .6em;
+	border: 1px solid #f2f6fb;
+}
+.cert_form{
+	display:none;
+	}
+.old{
+	display:none;
+	}
+</style>
+<script type="text/javascript">
+            var self = null;
+			var create_uid; //申请人对象
+			
+	//更新申请人
+	function edit_hr(id,name){
+		create_uid.val(name);
+		create_uid.parent().find('.create_uid').val(id);
+		   close_iframe_dialog();
+	}		
+			
+    $(document).ready(function() { 
+ 
+	 $( "#prod-tab" ).tabs({
+		collapsible: false
+	});
+ 	$('.add-audit-code-btn').live('click', select_code );
+ 	$('.del-code').live( 'click', del_code );
+ 	if($('.place').val() == 3) $('.place_note').show();
+ 	$(".place").click(function(){
+		var cc = $('.place').val();
+		if(cc == 3){
+			$('.place_note').show();	
+		}else{
+			$('.place_note').hide();	
+		}
+	});
+		
+ 
+		
+        $("input.input-date").datepicker(); //日期
+		var region = Region.init('data/cache/region.json');
+		window.region = region;
+		$('#select-region').click( region_dlg );
+        $('#add-record').click(addRecord); //添加合同项目
+        //选择产品小类
+        $('.select_prod').live('click', select_prod);
+
+        $('.select_prod_ver').live('click', select_prod_ver);
+       
+		
+         //选择分子公司-项目所属单位 
+        $('.select_ctfrom').live('click', function() {
+            self = this;
+            iframe_dialog('选择项目所属单位', '?app=com&m=setting&a=select_ctfrom', 800, 420);
+         }); 
+       
+	    $("#select-industry").live('click',signe_name);//选择推荐人
+		
+        $('.select_ep').live('click', select_ep);  //选择公司 
+		$('.select_eps').live('click', select_eps); 
+        //否采取已获证企业的认证结果
+        $('.show').live('click', function() {
+            var div = $(this).attr('show');
+            var val = $(this).attr("checked"); 
+            if (val) {
+                $('.' + div).show();
+            } else {
+                $('.' + div).hide();
+            }
+        });
+		
+		//产品型号重名验证(在生产者、生产企业、委托人型号都一样的情况下视为重复)
+		$('.pro_chinese_scope').live('blur',function(){
+			var comeid = $('.comeid').attr('eid');//委托人id
+			if(!comeid){
+				alert('委托人信息有误!');
+				return false;
+			}
+
+			var ep_manu_id = $('.sczid').val();//获得生产者id
+			if(!ep_manu_id){
+				alert('请选取生产者信息!');
+				return false;
+			}
+			var ep_prod_id = $('.scqyid').val();//获得生产企业id
+			if(!ep_prod_id){
+				alert('请选取生产企业信息');
+				return false;
+			}
+			var chinese_scope = $.trim($(this).val());
+			if(!chinese_scope){
+				return false;
+			}	
+			var url = '?app=cqm&m=contract&a=b01001edit&flag=check_scope';
+			$.ajax({
+				type : 'post',
+				url  : url,
+				data : {eid:comeid,ep_manu_id:ep_manu_id,ep_prod_id:ep_manu_id,chinese_scope:chinese_scope},
+				dataType : 'json',
+				success:function(data){
+					if(!data.status && data.scope){
+						alert(data.scope + '该型号已经存在');						
+					}
+				}
+			});
+			
+		});
+
+        
+        //通过企业ID获取企业信息
+        $('.last').live('click', function() {
+            var ep_name = $(".last").attr('p');
+			var eid = $(".last").attr('eid');
+            $(".ep_name").val(ep_name);
+			$(".eid").val(eid);
+        })
+		$('.last-1').live('click', function() {
+            var ep_name = $(".last").attr('p');
+			var eid = $(".last").attr('eid');
+
+            $(".ep_manu").val(ep_name);
+			$(".ep_manu_id").val(eid);
+        })
+		$('.last-2').live('click', function() {
+            var ep_name = $(".ep_name").val();
+			var eid = $(".eid").val();
+            $(".ep_manu").val(ep_name);
+			$(".ep_manu_id").val(eid);
+        })
+       
+		
+		$('.lasteid').live('click',function(){
+			 alert("如下实际生产地址如果不相符,可直接修改");
+		});
+
+        $('.del_prod_ver_code').live('click', del_prod_ver_code);
+        <?php
+                if (!$cti_info_db['eid']):
+                ?>
+                addRecord();
+        <?php
+                endif;
+        ?>
+                $('.del-item').live('click', delRecord);
+        $('input.cnt-total').bind('blur', check_iso_total);
+
+        $('button.submit-btn').click(function() {
+			if($(this).parent().parent().find("input[name=iso]:checked").length<1){
+				message_dialog("请选择类别！","warnning");
+				return;}
+		
+            if (!Validator.Validate(document.forms[0], 2))
+                return;
+            var ep_total = parseInt($('#ep-amount').text());
+				
+            var iso_totals = $('input.cnt-total');
+            for (var i = 0; i < iso_totals.length; i++) {
+                var iso_total = parseInt(iso_totals[i].value);
+                if (iso_total > ep_total) {
+                    message_dialog('与产品有关人数不可以大于企业人数！',"warnning");
+                    return;
+                }
+            }
+						 
+            $('#edit-contract').submit();
+			 
+        });
+		$(".cert").click(function(){
+			
+			iframe_dialog('选择证书', '?m=product&c=ajax&a=select_cert&step=1', 800, 420);
+			
+			})
+	$(".ep_site_related").click(function(){
+		if($(this).val() == '1001'){
+			$(".cert_form").show();
+			
+			}else{
+				$(".cert_form").hide();
+				}
+		
+		})
+	if($(".ep_site_related:checked").val() == '1001'){
+		
+		$(".cert_form").show();
+		
+		}
+	// 转机构 要填写上次查厂时间
+	$("#audit_type").click(function(){
+		if($(this).val() == '6'){
+			$(".old").show();
+			
+			}else{
+				$(".old").hide();
+				}
+		
+		})
+	if($(".audit_type:checked").val() == '6'){
+		
+		$(".old").show();
+		
+		}
+    });
+	
+function signe_name(){
+	//alert("ok");
+	self = $(this);
+	var coo_from = $("#ctfrom").val();
+	$('<iframe src=?c=ajax&a=signe_name&coo_from='+coo_from+'></ifram>').dialog({
+		title	: '选择推荐人',
+		width: 600,
+		height: 400,
+		cache:false,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var e = $(this).contents().find("input[type=radio]:checked").val();
+				var n = e.split('|');
+				self.parent().parent().find('.signe_name').val(n[0]);
+				self.parent().parent().find('.coo_id').val(n[1]);
+				$(this).dialog("close");
+			}
+			
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(580).height(380);
+}
+//选择证书—————————————————— 
+    function updatcert(id,certno) {
+		$.getJSON("?m=product&c=ajax&a=select_cert&step=2&id="+id,function(data){
+			$(".cnt-total").val(data.total);
+			$(".prod_name").val(data.prod_name);
+			$(".prod_id").val(data.prod_id);
+			$(".fac_code").val(data.fac_code);
+			$(".prod_ver_area").append(data.body);
+			$(".prod_ver").val(data.prod_ver);
+			//$(".prod_name").val(data.total);
+			
+			})
+        $(".cert").prev('input').val(certno)
+        close_iframe_dialog();
+    }
+
+    var add_cnt = 0;
+    //添加合同项目
+    function addRecord() {
+        //获取产品数量
+        var prodNum = $('.prodNum:last').text();
+        prodNum = parseInt(prodNum);
+        $('.prodNum:last').text(prodNum + 1)
+         tbody = $('#ctxm-items');
+        tr = $('#ctxm-item');
+        new_tr = tr.clone();
+        new_tr.attr('id', '');
+        new_tr.find('.input_date').datepicker();
+         add_cnt += 1;
+        new_tr.show();
+        tbody.append(new_tr);
+    }
+     function delRecord() {
+        tr = $(this).parent().parent().parent().parent().parent();
+        id = tr.attr('id');
+        tr.remove(); 
+    }
+    function check_iso_total() {
+        var iso_total = parseInt(this.value);
+        var ep_total = parseInt($('#ep-amount').text());
+        if (ep_total < iso_total)
+            alert('与产品有关人数不可以大于企业人数！');
+     }
+//选择产品小类
+    function select_prod() {
+        var href = '?m=com&c=ajax&a=select_prod&type=b01001';
+        self = this; 
+		iframe_dialog('添加产品',href,800,420); 
+    }
+    function update_prod(prod_id,fac_code, prod_name) {
+        $(self).parent().find('.prod_name').val(prod_name);
+        $(self).parent().find('.prod_id').val(prod_id);
+		$(self).parent().find('.fac_code').val(fac_code);
+		close_iframe_dialog(); 
+    }
+
+//选择多个产品标准
+    function select_prod_ver() {
+        self = this;
+         var prod_code = $(this).parent().parent().parent().parent().find('.prod_id').val();
+        if (!prod_code) { //判断是否选择产品
+            alert('请先选择产品');
+            return false;
+        }
+        var href = '?m=com&c=ajax&a=select_prod_ver&prod_code=' + prod_code;
+
+        $('<iframe id="frame2" src=' + href + '></iframe>').dialog({
+            title: '选择产品标准',
+            width: 800,
+            height: 420,
+            modal: true,
+            resizable: false,
+            autoResize: true,
+            overlay: {opacity: 0.5, background: "black"},
+            close: function(ev, ui) {
+                $(this).remove();
+            },
+            buttons: {
+                '取消': function() {
+                    $(this).dialog('close');
+                },
+                '确定': function() {
+                    var prod_ver = $(self).parent().parent().find('.prod_ver'); //需要更改的字段
+                    var old_prod_ver_code = $(self).parent().parent().find('.prod_ver').val();
+                    var tbody = $(self).parent().parent().find('.prod_ver_area');
+                    var prod_ver_code_arr = new Array();
+                    $(this).contents().find('input[name="code[]"]:checked').each(function(index) {
+                        var prod_ver_code = $(this).val();
+						
+                        var prod_ver_code_name = $(this).parent().parent().find('.prod_name').text();
+                        var html = '<span>' + prod_ver_code
+                                + ' ' + prod_ver_code_name;
+
+                        html += '<a attr="' + prod_ver_code + '"></a>; </span>';
+                        // html += '<a attr="' + prod_ver_code + '"  class="icon-del del_prod_ver_code"></a></p>';
+                        $(tbody).append(html);
+                        prod_ver_code_arr[index] = prod_ver_code;
+                    })
+					var s=(old_prod_ver_code ? old_prod_ver_code + '；' : '') + prod_ver_code_arr.join('；');
+                    prod_ver.val(s);
+                    $(this).dialog('close');
+                }
+            },
+            
+            open: function() {
+                var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+                btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+            }
+        }).width(780);
+    }
+
+//选择生产者--生产企业
+    function select_ep() {
+        self = this;
+        var href = '?m=product&c=ajax&a=select_ep';
+        $('<iframe class="select_ep_iframe" src=' + href + '></iframe>').dialog({
+            title: '选择生产企业',
+            width: 800,
+            height: 420,
+            modal: true,
+            resizable: false,
+            autoResize: true,
+            overlay: {opacity: 0.5, background: "black"},
+        }).width(780);
+
+    }
+
+	function select_eps() {
+        self = this;
+        var href = '?m=product&c=ajax&a=select_eps';
+        $('<iframe class="select_ep_iframe" src=' + href + '></iframe>').dialog({
+            title: '选择委托人',
+            width: 800,
+            height: 420,
+            modal: true,
+            resizable: false,
+            autoResize: true,
+            overlay: {opacity: 0.5, background: "black"},
+        }).width(780);
+
+    }
+//更新企业信息
+    function update_ep(prod_id, prod_name, prod_addr, work_code) {
+        //当前合同项目位置
+        $cur_item = $(self).parent().parent().parent().parent();
+
+        //区分生产者还是生产企业
+        $org_type = $(self).parent().parent().attr('class');
+
+        $cur_item.find('.' + $org_type).find('.ep_names').val(prod_name);
+
+        $cur_item.find('.' + $org_type).find('.ep_manu_id').val(prod_id);
+
+        $('.select_ep_iframe').dialog('close');
+        $('.select_ep_iframe').dialog('destroy');
+        $('.select_ep_iframe').remove();
+    }
+	function update_eps(prod_id, prod_name, prod_addr, work_code) {
+        //当前合同项目位置
+        $cur_item = $(self).parent().parent().parent().parent();
+
+        //区分生产者还是生产企业
+        $org_type = $(self).parent().parent().attr('class');
+
+        $cur_item.find('.' + $org_type).find('.ep_name').val(prod_name);
+
+        $cur_item.find('.' + $org_type).find('.eid').val(prod_id);
+
+        $('.select_ep_iframe').dialog('close');
+        $('.select_ep_iframe').dialog('destroy');
+        $('.select_ep_iframe').remove();
+    }
+//更新合同来源
+    function update_ctfrom(code, name) {
+
+        $(self).parent().find('.ctfrom').val(code);
+        $(self).parent().find('.ctfrom_v').val(name);
+        $('#iframe-dialog').dialog('close');
+        $('#iframe-dialog').dialog('destroy');
+        $('#iframe-dialog').remove();
+    }
+ 
+//删除产品标准编码
+    function del_prod_ver_code() {
+        var del_code = $(this).attr('attr');
+
+        var db_code = $(this).parent().parent().parent().find('.prod_ver');
+
+        var old_code = db_code.val().split('；');
+
+		var s=-1;
+        for (var i = 0; i < old_code.length; i++) {
+            if (old_code[i]== del_code) {
+				s=i;
+				break;
+            }
+        }
+		if(s!=-1)
+		old_code.pop(old_code[s]);
+
+        db_code.val(old_code.join('；'));
+
+
+        $(this).parent().remove();
+    }
+
+ 
+//更新实验室数据 
+function update_test(test_id,test_name){    
+	$(self).parent().find('.test_org_name').val(test_name);  
+	$(self).parent().find('.test_org_id').val(test_id); 
+	close_iframe_dialog(); //关闭子窗口弹窗
+}
+
+function select_code(){
+	var $this = $(this);
+	var tbody = $this.parent().parent().find('.audit-codes');
+	var href = '?c=ajax&a=select_code&iso=B05';
+
+	$('<iframe border="0" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业代码',
+		autoOpen: true,
+		width: 800,
+		height: 420,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();},
+		buttons: {
+			'取消'	: function(){$(this).dialog('close');},
+			'确定'	: function(){
+				var audit_code_arr = new Array();
+				var use_code_arr = new Array();
+				var audit_input = $this.parent().parent().find('input.audit-code');
+				var use_input = $this.parent().parent().find('input.use-code');
+				var old_audit_code = audit_input.val();
+				var old_use_code = use_input.val();
+				$(this).contents().find('input[name="code[]"]:checked').each(function(index){
+					var _this = $(this);
+					var audit_code = _this.val();
+					var use_code = _this.parent().parent().find('.use-code').text();
+					var mark = _this.parent().parent().find('.mark').text();
+					var risk = _this.parent().parent().find('.risk').text();
+					var html = '<tr align="center"><td>';
+					html += use_code + '</td><td>';
+					html += audit_code + '</td><td>';
+					html += mark + '</td><td>'
+					html += risk + '</td><td><a href="javascript:;" class="del-code" rel="'+audit_code+'">'
+					html += '<img src="theme/images/b_drop.png" border=0 /></a></td></tr>';
+					$(html).appendTo( tbody );
+					audit_code_arr[index] = audit_code;
+					use_code_arr[index] = use_code;
+				});
+				audit_input.val( ( old_audit_code ? old_audit_code+'；' : '' ) + audit_code_arr.join('；') );
+				use_input.val( ( old_use_code ? old_use_code+'；' : '' ) + use_code_arr.join('；') );
+				$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(780);
+}
+
+function del_code(){
+	var $this = $(this);
+	var code = $this.attr( 'rel' );
+	var use_input = $this.parent().parent().parent().parent().parent().find('input.use-code');
+	var audit_input = $this.parent().parent().parent().parent().parent().find('input.audit-code');
+	var use_code_arr = use_input.val().split('；');
+	var audit_code_arr = audit_input.val().split('；');
+	var new_use_code_arr = [];
+	var new_audit_code_arr = [];
+	for( var i = 0; i < audit_code_arr.length; i++ ){
+		if( audit_code_arr[i] != code ){
+			new_audit_code_arr.push(audit_code_arr[i]);
+			new_use_code_arr.push(use_code_arr[i]);
+		}
+	}
+	use_input.val( new_use_code_arr.join( '；' ) );
+	audit_input.val( new_audit_code_arr.join( '；' ) );
+	$this.parent().parent().remove();
+}
+</script>
+</head>
+<body>
+<?php if($id)echo prod_einfo("cti_id=$id");else echo prod_einfo("ep_prod_id=$ep_prod_id"); ?>
+<br/>
+<div id="select-region-dialog" class="tal" style="display:none;">
+  <p style="margin-bottom:8px;">请选择行政区(到区/县)，完成后点确定。</p>
+  <p> <span id="prov-span">
+    <select name="province" id="province-select" style="width:130px;">
+      <option value="">选择省</option>
+    </select>
+    </span> <span id="city-span">
+    <select name="city" id="city-select" style="width:160px;">
+      <option value="">请选择市</option>
+    </select>
+    </span> <span id="dist-span">
+    <select name="district" id="district-select" style="width:150px;">
+      <option value="">请选择区/县</option>
+    </select>
+    </span> </p>
+</div>
+<form method="post" id="edit-contract" action="<?=$REAUEST_URI;?>">
+  <input type="hidden" name="step" value="1"/>
+  <input type="hidden" name="id" value="<?=$id;?>" />
+  <input type="hidden" name="ep_prod_id" value="<?=$ep_prod_id;?>" />
+  <div id="prod-tab" style="margin:0 auto;width:750px;margin-bottom:100px" class="tal">
+    <ul>
+      <li><a href="#tab-prod">申请单元</a></li>
+    </ul>
+    <div id="tab-prod">
+        <table class="edit-table">
+          <tbody id="ctxm-items">
+          		
+				<tr>
+					<th>类别</th>
+					<td colspan="3" >
+						<label><input  type="radio" name="iso" value="B01" <?=$iso=='B01'?'checked':'';?>  />3C认证</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label><input  type="radio" name="iso" value="B05" <?=$iso=='B05'?'checked':'';?> />自愿性认证</label>
+					</td>
+				</tr>
+
+				<!--<tr>
+					<td>推荐人</td>
+					<td colspan="3">
+					    <input type="hidden" name="ctfrom" id="ctfrom" value="<?=$ctfrom;?>" />
+                      	<input type="hidden" name="coo_id" value="<?=$coo_id;?>" class="coo_id" />
+                      	<input type="text" name="signe_name" class="signe_name" style="width:450px; float:left;height:18px;border-width:1px 0 1px 1px;border-color:#ddd;border-style:solid;" value="<?=$signe_name;?>"/><i id="select-industry" class="i-select" ></i>
+					</td>
+				</tr>
+				<tr>
+				   <td>受理日期</td>
+				   <td><input type="text" name="accept_date" dataType="Require"  value="<?=$accept_date;?>" class="input input-date" style=" width: 100%" /></td>
+                   <td>是否返款</td>
+                   <td>
+                        <input type="radio" name="is_refund" <?=$is_refund ?"checked":""; ?> value="1"/>是
+                        <input type="radio" name="is_refund" <?=$is_refund ?"":"checked"; ?> value="0"/>否
+                   </td>
+				</tr>-->
+                <tr>
+					<th>委托人信息</th>
+					<th colspan="3"><button type="button" epType='ep_prod' eid="<?=$ep_prod_id;?>"  class="btn btn-button last" p="<?=$ep_prod_name;?>">同生产企业</button></th>
+
+				</tr>
+            <tr class="ep_prod">
+              <td>中文名称</td>
+              <td colspan="3"><input class="input ep_name"  epType="ep_name"  value="<?=$ep_name?>" type="text" style='width:450px; float:left;border-width:1px 0 1px 1px' readonly="readonly" />
+              <i class="i-select select_eps" ></i></td>
+              <input type="hidden" name="eid" class="eid" value="<?=$eid;?>" />
+              
+            </tr>
+                <tr>
+                  <th>生产者信息</th>
+				  <th colspan="3">
+					<button type="button" epType='ep_prod' eid="<?=$ep_prod_id;?>"  class="btn btn-button last-1" p="<?=$ep_prod_name;?>">同生产企业</button>
+					<span class="ep_manu"><button type="button"   class="btn btn-button last-2" >同委托人</button></span>
+				  </th>
+                </tr>
+												
+                <tr class="ep_manu">
+                  <td>中文名称</td>
+                  <td colspan="3"><input class="input ep_manu"   type="text" name="ep_name" value="<?=$ep_manu;?>"  style='width:450px; float:left;border-width:1px 0 1px 1px' readonly="readonly"/>
+                  <i class="i-select select_ep" ></i>
+                  <input type="hidden" name="ep_manu_id" class="ep_manu_id" value="<?=$ep_manu_id;?>" />
+                </tr>
+            <tr><th colspan="4">生产企业</th></tr>    
+            <tr class="ep_prod">
+              <td>实际生产地址</td>
+              <td colspan="3"><input class="input prod_addr" value="<?=$ep_prod_addr;?>" type="text" name="ep_prod_addr" style='width:470px; float:left;' /></td>
+            </tr>
+            <tr class="ep_prod">
+              <td>实际英文生产地址</td>
+              <td colspan="3"><input class="input prod_addr_e" value="<?=$ep_prod_addr_e;?>" type="text" name="ep_prod_addr_e" style='width:470px; float:left;' /></td>
+            </tr>
+            <tr>
+              <td>行政区划</td>
+              <td colspan="3">
+				<input type="hidden" id="areacode" name="pro_areaaddr" value="<?=$pro_areaaddr;?>" />
+				<input type="text" class="data_areaaddr areaaddr"  value="<?=$pro_areatext;?>" name="" dataType="Require" msg="请选择行政区划！" id="meta_areaaddr" style='width:450px; float:left;border-width:1px 0 1px 1px' readonly="readonly" />
+                <i class="i-select select_prod_areacode" id="select-region" ></i><span class="cRed">*</span></td>
+               </tr>
+
+
+			<tr>
+			   <th colspan="4" >申请信息</th>
+			</tr>
+            <tr>
+              <!-- <td align="left">申请类型</td>
+              <td><select name="audit_type" dataType="Require" msg="请选择申请类型！" style="width:162px;" id="audit_type">
+					  <option value="">请选择</option> -->
+					  <!-- <option value="1" <?=$audit_type == '1' ?'selected':''?> >普通类型/Normal</option>
+					  <option value="2" <?=$audit_type == '2' ?'selected':''?> >OEM</option>
+					  <option value="3" <?=$audit_type == '3' ?'selected':''?> >ODM</option>
+					  <option value="4" <?=$audit_type == '4' ?'selected':''?> >其他利用已获证书结果，如扩项</option>
+					  <option value="5" <?=$audit_type == '5' ?'selected':''?> >部分利用其他CCC认证机构评价结果</option>
+					  <option value="6" <?=$audit_type == '6' ?'selected':''?> >已有证书转换机构</option>
+					  <option value="7" <?=$audit_type == '7' ?'selected':''?> >证书有效期满，申请换发证书</option>
+					  <option value="8" <?=$audit_type == '8' ?'selected':''?> >扩大</option>
+					  <option value="9" <?=$audit_type == '9' ?'selected':''?> >缩小</option>
+					  <option value="0" <?=$audit_type == '0' ?'selected':''?> >其它变更</option> -->
+	               <!-- </select> <span class="cRed">*</span></td> -->
+	               <td>审核类型</td>
+                        <td><select  style='width:167px' name="audit_type" dataType="Require" msg="请选择审核类型！" class="audit_type">
+                            <option value="">==请选择==</option>
+                            <?=$audit_type_select;?>
+                          </select>
+                          <span class="cRed">*</span></td>
+                <td align="right" class="old">上次查厂时间</td>
+				<td class="old"><input type="text" class="input-date" name="old_pddate" value="<?=$old_pddate;?>" /></td>
+            </tr>
+            <tr>
+            	<!-- 说明:ODM 模式停止使用 -->
+            	<!-- @zys 2016-5-6 -->
+                <!-- <td >ODM 模式</td>
+                <td>
+					<label><input class="ep_site_related" type="radio" name="ep_site_related" value="1001" <?=$ep_site_related == '1001'?'checked':'';?> />是</label>&nbsp;&nbsp;&nbsp;<label><input class="ep_site_related" type="radio" name="ep_site_related" value="1003" <?=$ep_site_related == '1003'?'checked':'';?> />否</label>
+				</td> -->
+				 <td align="right" class="cert_form" >初始证书编号</td>
+				 <td align="left" class="cert_form" >
+					<input type="text" class="input" readonly="readonly"  name="cert_form" value="<?=$cert_form;?>" style='width:113px; float:left;border-width:1px 0px 1px 1px'  /><i class="i-select cert cert-select"></i>
+				 </td>
+                </tr>
+				<tr>
+					<td align="">与产品有关人数</td>
+					<td><input type="text"  dataType="Require" msg="请输入与产品有关人数！" name="total" class="cnt-total" value="<?=$total;?>" />
+						<span class="cRed">*</span></td>
+					<td align="right">产品小类</td>
+					<td><input class="input prod_name" type="text" style='width:113px; float:left;border-width:1px 0 1px 1px' name="prod_name" dataType="Require" msg="请选择产品小类！" value="<?=$prod_name;?>" readonly="readonly" />
+					  <input type="hidden" name="prod_id" class="prod_id" value="<?=$prod_id;?>" />
+					  <input type="hidden" name="fac_code" class="fac_code" value="<?=$fac_code;?>" />
+					<i class="i-select select_prod" ></i><span class="cRed">*</span></td>	
+				</tr>
+
+				<!--  -->
+
+                <tr>
+                  <th colspan="4">产品信息</th>
+                </tr>
+				<tr>
+					<td align="left" id="protr2">产品名称:</td>
+					<td colspan="3">
+					
+                    <textarea name="prod_name_chinese" rows="3" dataType="Require" msg="请输入产品名称！" style=" width:97%"><?=$prod_name_chinese;?></textarea><span class="cRed">*</span>		
+					</td>
+                 </tr>
+                 <tr>
+                 <td align="left" id="">产品英文名称:</td>
+					<td colspan="3">
+                    <textarea name="prod_name_english" style=" width:97%" dataType="Require" msg="产品英文名称！" rows="3"><?=$prod_name_english;?></textarea><span class="cRed">*</span>
+                    </td>
+                    </tr>
+					<!-- 英文型号:<br/>
+					<textarea name="scope_e" rows="3" dataType="Require" msg="英格型号！" style=" width: 290px" class="cnt-scope"><?=$scope_e;?></textarea>&nbsp;&nbsp; -->
+				
+				<tr>
+				<td>产品型号:</td>
+				<td colspan="3" >
+				<textarea name="scope" rows="3" dataType="Require" msg="中文规格型号！" style=" width:97%" class="cnt-scope"><?=$scope;?></textarea><span class="cRed">*</span>
+				</td>
+				</tr>
+                <tr>
+                <td>认证模式</td>
+                    <td>
+                    	<select name="audit_tpl" style="width:200px;">
+                        <option value="">--请选择--</option>
+                    	<?=f_select("b01001_audit_tpl",$audit_tpl);?>
+                        </select>
+                    </td>
+                    <!-- 说明:停止使用 -->
+                    <!-- @zys 2016-5-6 -->
+                	<!-- <td>检验方式</td>
+                    <td>
+                    	<?=$place_select;?>
+                    </td> -->
+                    
+                </tr>
+                <tr class="place_note" style="display:none">
+                	<td>备注</td>
+                    <td colspan="3">
+                    	<textarea name="place_note" rows="3" style=" width: 470px" class="cnt-note"><?=$place_note;?></textarea>
+                    </td>
+                </tr>		
+                <tr>
+                  	<td>产品标准</td>
+                  	<td colspan="3">
+                  		<!-- 说明:样式停用;换了input框样式 -->
+                  		<!-- @zys 2016-5-11 -->
+	                  	<!-- <span class="prod_ver_area"><?=$body;?></span>
+	                    <input type="hidden" name="prod_ver" class="prod_ver_id" value="<?=$prod_ver;?>" />
+	                    <p class="button-panel" style="margin-top:9px;">
+	                    <button type="button" class="btn btn-button select_prod_ver" > 添加产品标准 </button>
+	                    <span class="cRed">*</span> </p> -->
+
+	                    <input type="text" dataType="Require" msg="请选择产品标准！" id="prod_ver" name="prod_ver" class="prod_ver" value="<?=$prod_ver;?>" style="width:430px; float:left;height:18px;border-width:1px 0 1px 1px;border-color:#ddd;border-style:solid; "/>
+	        			<i class="i-select select_prod_ver" ></i>
+	        			&nbsp; 标准用"；"隔开
+        			</td>
+                </tr>
+                <tr>
+                  <td>产品商标</td>
+                  <td colspan="3"><input type="text" id="mark" dataType="" msg="" name="mark" value="<?=$mark?>" class="input" style="width:450px" /></td>
+                </td>
+
+
+<!-- CB测试证书 相关
+
+                <tr>
+                  <td>申请认证的产品是否有CB测试证书</td>
+                  <td colspan="3"><label><input type="radio" value="1" name="new[is_cb]" <?=$is_cb=='1'?'checked':'';?> />是</label><label><input type="radio" value="2" name="new[is_cb]" <?=$is_cb=='2'?'checked':'';?> />否</label></td>
+                </td>
+                <tr>
+                  <td>CB证书号</td>
+                  <td ><input type="text"  dataType="" msg="" name="new[cbno]" value="<?=$cbno?>" class="input"  /></td>
+                  <td>获证日期</td>
+                  <td ><input type="text"  dataType="" msg="" name="new[cbdate]" value="<?=$cbdate?>" class="input"  /></td>
+                </td>
+                <tr>
+                  <td>颁发CB测试证书的认证机构</td>
+                  <td colspan="3"><input type="text" id="" dataType="" msg="" name="new[cborg]" value="<?=$cborg?>" class="input" style="width:500px" /></td>
+                </td>
+                <tr>
+
+ -->
+
+<!-- CCC认证相关
+
+
+                  <td>同类产品获得过CCC证书号</td>
+                  <td colspan="3"><input type="text" id="" dataType="" msg="" name="new[cborg]" value="<?=$cborg?>" class="input" style="width:500px" /></td>
+                </td>
+                <tr><td colspan="4">
+     A. 如果选择本次申请的获证模式为"OEM"，选择此项显示：请正确填写相关联的OEM证书号<input type="text" name="new[s1]" value="<?=$s1?>"  />    
+     </td></tr>
+     <tr><td colspan="4">
+     B. 选择本次申请的获证模式为"ODM"，出现下面两个选项：<br />
+<input type="radio" name="new[s2]" value="1" <?=$s2 == '1' ?'checked':'';?> /> 本次申请拟利用ODM生产企业已有CCC证书的结果<br/>
+选择此项显示：请正确填写ODM生产企业已有CCC证书（初始认证证书）的证书号<input type="text" name="new[s3]" value="<?=$s3;?>"  />  <br />                   
+<input type="radio" name="new[s2]" value="2" <?=$s2 == '2' ?'checked':'';?> /> 作为ODM初始认证证书持证人身份申请<br />
+	注：若原获证产品的关键项目发生变更（如规格、结构、关键原材料/元器件及其供应商变更）时，本ODM产品也应随之变更并办理变更手续。原产品未涉及上述变更时，本产品也不能变更。
+   
+     </td></tr>
+	<tr><td colspan="4">C. 如果选择本次申请的的获证模式为"其他利用已获证书结果" 则出现如下界面: 请正确填写拟利用的已获证书结果的证书号<input type="text" name="new[s4]" value="<?=$s4;?>"  /></td></tr>
+     <tr><td colspan="4">D. 如部分利用其他CCC认证机构评<input type="text" name="new[s5]" value="<?=$s5;?>"  /></td></tr>
+     <tr><td colspan="4">
+     E. 已有证书转换机构<br />
+除新申请应提交的资料外，认证委托人还需补充提交如下资料：<br />
+（1）CTC/070406.01《自愿转换证书和质量保证声明》；<br />
+（2）其他认证机构颁发的证书（复印件）；<br />
+（3）最近一次的工厂检查报告/监督检查报告或其他证明材料的复印件；<br />
+（4）型式试验报告及相关检测报告。
+</td></tr>
+	<tr><td colspan="4">
+    申请认证的型号（见第8条）或类似的产品（见第5条）在最近三年内是否出现过政府抽检不合格的结果？如有，是否已整改完毕？请提供抽检结果信息资料（如政府公告、检验报告）和整改材料。"</td></tr>
+
+
+	 -->
+
+
+                <!--变更信息-->
+                <?php if($cti->app_type == '1'){?>
+                 <tr>
+                  <th colspan="4">变更信息</th>
+                </tr>
+                <tr>
+		<td width='20%' align='right'>申请简要描述：</td>
+		<td width='80%' align='left' colspan="3"><input type='text' name='title' value='<?=$res[title]?>' class="input " style="width:200px;"/> 
+			</td>
+           
+	</tr>
+	 <tr>
+		<td width='20%' align='right'>原测试报告编号：</td>
+		<td width='80%' align='left' colspan="3"><input type='text' name='reportno' value='<?=$res[reportno]?>' class="input" style="width:200px;"/> 
+			</td>
+           
+	</tr>
+
+	<tr>
+	
+		<td width='20%' align='right'>变更类别：</td>
+
+		<td colspan="3"> 
+		<ul class="change_ul" style="min-height:140px;">
+				<?=$changeitem_li?>
+			</ul>
+		
+		</td>
+           
+	</tr>
+ 
+	
+		<td align='right'>变更前：</td>
+		<td align='left' colspan="3"><textarea name="cg_af" style="width:500px;height:60px;"><?=$res['cg_af']?></textarea></td>
+	</tr>
+    <tr >
+		<td align='right'>变更后：</td>
+		<td align='left' colspan="3"><textarea name="cg_bf" style="width:500px;height:60px;"><?=$res['cg_bf']?></textarea></td>
+	</tr>
+    <?php }?>
+                <tr>
+                  <td>备注</td>
+                  <td colspan="3"><textarea name="note" rows="3" style=" width: 450px" class="cnt-note"><?=$note;?></textarea></td>
+                </tr>
+              </table>
+        
+      <br/>
+      <p class="button-panel tac">
+        <button type="button"  class="btn btn-submit submit-btn"  > 保存 </button>
+      </p>
+    </div>
+  </div>
+
+</form>
+
+</body>
+<script>
+	$(document).ready(function(){
+		$("#addpro2").click(function(){	
+			//alert("a");
+			var newdiv = $("#proclone2").clone();
+			newdiv.attr("id","");			
+			$("#protr2").append(newdiv);
+			//alert("c");
+		});
+		
+		$(".rmpro").live('click',function(){
+			$(this).parent().parent().remove();
+		});
+			
+		$(".rmpro2").click(function(){
+			var url = $(this).data('url');
+			var div = $(this).parent();
+			$.ajax({
+				url : url,
+				type: "get",
+				dataType:'json',
+				success:function(data){
+					if(data.status){						
+						div.remove();						
+					}else{
+						alert("删除失败!");
+					}
+				}
+			});
+		});
+		
+		
+	});
+	
+	
+function region_dlg(){
+	$('#select-region-dialog').dialog({
+		title	: '选择行政区',
+		width	: 500,
+		height	: 150,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var r = false;
+				var country = parseInt($('#statecode').val());
+				
+				var code_city = $('#city-select').val();
+				var code_district = $('#district-select').val();
+				
+				var code = $('#district-select').val();
+				if( !code )
+					code = $('#city-select').val();
+
+				//if( (code && code.substring(4,6) != '00') || 156 != country ){
+				if( (DistrictNum==0 && code_city) || (DistrictNum!=0 && code_district) ){
+					var text = $('#province-select').find('option:selected').text() + $('#city-select').find('option:selected').text() + $('#district-select').find('option:selected').text();
+					text = text.replace('市辖区','');
+					text = text.replace('--县','');
+					text = text.replace('请选择市','');
+					text = text.replace('请选择区/县','');
+					$('#meta_areaaddr').val(text);
+					$('#areacode').val(code);
+					$(this).dialog('close');
+				} else {
+					alert( '请选择行政区！' );
+				}
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	});
+}
+</script>
+</html>

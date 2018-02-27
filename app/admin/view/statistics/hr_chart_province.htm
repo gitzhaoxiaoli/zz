@@ -1,0 +1,58 @@
+<link href="theme/js/flot/examples.css" rel="stylesheet" type="text/css">
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="theme/js/w2ui-1.2/w2ui-1.2.min.css" />
+<script type="text/javascript" src="theme/js/w2ui-1.2/w2ui-1.2.min.js"></script>
+
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="theme/js/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="theme/js/flot/jquery.flot.js"></script>
+  
+	<script language="javascript" type="text/javascript" src="theme/js/flot/jquery.flot.categories.js"></script>
+	<script type="text/javascript">
+
+	$(function() {
+
+		var data = <?=$data;?>;
+
+		$.plot("#placeholder", [ data ], {
+			series: {
+				bars: {
+					show: true,
+					barWidth: 0.6,
+					align: "center"
+				}
+			},
+			xaxis: {
+				mode: "categories",
+				tickLength: 0
+			}
+		});
+
+
+	});
+
+	</script>
+</head>
+<body>
+
+	<div id="header">
+		<h2>人员省份</h2>
+	</div>
+
+	<div id="content">
+
+		<div class="demo-container">
+			<div id="placeholder<?=$k?>" class="demo-placeholder"></div>
+		</div>
+
+		<p><hr></p><br>
+
+
+	</div>
+
+</body>
+</html>
+ 

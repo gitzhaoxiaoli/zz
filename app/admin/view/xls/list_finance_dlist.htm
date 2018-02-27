@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>财务收费明细列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	<table class="grid-table tal">
+		<thead>
+		<tr>
+			 
+              <th width="">企业名称</th>
+              <th width="">合同编号</th>
+              <th width="80">收费类型</th>
+              <th width="80">收费金额</th>
+              <th width="">到款金额</th>
+              <th width="">到款日期</th>
+              <th width="">欠费金额</th>
+              <th width="">合同来源</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+	
+<?php
+if( $datas ){
+	foreach( $datas as $row ){
+     if($row['cost_type']=='1002'){
+          $row['cost_type']='监督费';
+       }elseif ($row['cost_type']=='1001') {
+         $row['cost_type']='初审费';
+       }
+       if($row['ctfrom']=='01000000'){
+          $row['ctfrom']='总部';
+       }elseif ($row['ctfrom']=='01010000') {
+         $row['ctfrom']='广州';
+       }
+?>
+		<tr align='center'>
+			        
+              <td><?=$row['ep_name'];?></td>
+              <td><?=$row['ct_code'];?></td>
+              <td><?=$row['cost_type'];?></td>
+              <td><?=$row['cost'];?></td>
+              <td><?=$row['dk_cost'];?></td>
+              <td><?=$row['dk_date'];?></td>
+              <td><?=$row['qf_cost'];?></td>
+              <td><?=$row['ctfrom'];?></td>
+		</tr>
+<?php
+	}
+}
+?>
+		</tbody>
+	</table>
+</body>
+</html>

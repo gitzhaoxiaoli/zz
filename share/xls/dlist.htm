@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+<body>
+ <table class="grid-table tal">
+          <thead>
+        <tr>
+              <th>认证申请编号</th>
+              <th>生产企业</th>
+              <th>检查类型</th>
+              <th>申请费</th>
+              <th>翻译费</th>
+              <th>初始工厂检查费</th>
+              <th>批准与注册费</th>
+              <th>年金</th>
+              <th>产品检测费</th>
+              <th>监督检查费</th>
+               <th>证书工本费</th>
+              <th>其他</th>
+              <th>到款时间</th>
+          
+            </tr>
+      </thead>
+          <tbody>
+        <?php
+if( $datas ){
+  foreach( $datas as $row ){
+?>
+        <tr align='center'>
+      
+              <td><?=$row['cti_code'];?></td>
+              <td align="left"><?=$row['ep_prod'];?></td>
+              <td><?=$row['audit_type'];?></td>
+              <td><?=$row['application'];?></td>
+              <td><?=$row['translation'];?></td>
+              <td><?=$row['c_cost'];?></td>
+              <td><?=$row['app_reg'];?></td>
+              <td><?=$row['annuity'];?></td>
+              <td><?=$row['testing'];?></td>
+              <td><?=$row['j_cost'];?></td>
+              <td><?=$row['certificate'];?></td>
+              <td><?=$row['others'];?></td>
+              <td><?=$row['dk_date'];?></td>
+
+            </tr>
+        <?php
+  }
+} else {
+?>
+        <tr>
+              <td align="center" colspan="12">未找到相关记录</td>
+            </tr>
+        <?php
+}
+?>
+      </tbody>
+        </table>
+</body>
+</html>

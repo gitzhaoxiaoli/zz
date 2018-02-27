@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>任务</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<style type="text/css">
+.ctxm-table{border-collapse: collapse;border-spacing: 0;}
+.ctxm-table .td{padding:5px;border:1px solid #ccc;}
+
+.txxm-table{border-collapse: collapse;border-spacing: 0;}
+.txxm-table td{padding:.4em .6em;border:1px solid #f2f6fb;}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$( "#contract-tab" ).tabs({
+		collapsible: false
+	});
+
+	$( ".input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$(".st-num").live("blur",function(){
+		var temp=0.0;
+		$(".st-num").each(function(){
+			if($(this).val()!='')
+			temp+=parseFloat($(this).val());
+			
+			})
+		// $("#tk_num,#xc_num,#zb_num,#sj_num").val(temp);	
+		})
+	$('#tijiao').click(function(){
+		
+		// if(!check())return false;
+		if( !Validator.Validate( $('#edit-contract')[0], 2 ) ) return false;
+		$('#edit-contract').submit();
+	});
+	
+});
+
+
+// function check_submit(){
+	// var r = true;  
+	// var s_time=$('input[name=tb_date]'); //计划开始日期
+	// var e_time=$('input[name=te_date]'); //计划结束日期
+	// $('input.st-num').each(function(){
+	// 	var o = $(this);
+	// 	if( o.val() == '' ){
+	// 		alert('审核人日不能为空');
+	// 		r = false;
+	// 	}
+	// });
+
+	// if(!s_time.val()){
+	// 	alert('计划开始日期不能为空');
+	// 	r = false;
+	// }
+	// if(!e_time.val()){
+	// 	alert('计划结束日期不能为空');
+	// 	r = false;
+	// }
+
+
+	//@WZM 验证计划结束日期不能小于计划开始日期
+	// if(e_time.val()<s_time.val()){
+	// 	alert('计划结束日期不能小于计划开始日期');
+	// 	r=false; 
+	// } 
+// 	return r;
+// }
+
+</script>
+</head>
+
+<body>
+<?php echo einfo("ct_id=$ct_id");?>
+<br/>
+
+<div style="margin:0 auto;width:750px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">企业下未安排项目</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	<table class="grid-table">
+		<tr>
+        	<th width="80">项目号</th>
+			<th width="80">状态</th>
+			<th width="80">标准版本</th>
+			<th width="80">审核类型</th>
+            <th>代码</th>
+			<th>专业代码</th>
+		</tr>
+		<?php if( $ct_projects ):foreach( $ct_projects as $_p ):?>
+		<tr>
+        	<td align="center"><?=$_p['cti_code'];?></td>
+			<td align="center"><?=r_sys_cache('project_status',$_p['status']);?></td>
+			<td align="center"><?=$_p['audit_ver_V'];?></td>
+			<td align="center"><?=$_p['audit_type_V'];?></td>
+            <td><?=$_p['use_code'];?></td>
+			<td><?=$_p['audit_code'];?></td>
+		</tr>
+		<?php endforeach;endif;?>
+	</table>
+
+	</div>
+</div><br/>
+<div id="contract-tab" style="margin:0 auto;width:750px;" class="tal">
+	<ul>
+		<li><a href="#tab_xmjh">项目计划</a></li>
+	</ul>
+<form id="edit-contract" method="post" onsubmit="return check_submit();" action="<?=$REAUEST_URI;?>" >
+<input type="hidden" name="tid" value="<?=$tid;?>" />
+	<div id="tab_xmjh">
+		<table width="100%">
+			<tr>
+				<td width="80">总人日：</td>
+				<td>
+					<input type="text" name="tk_num" value="<?=$tk_num?>" class="input" id="tk_num" />
+				</td>
+				<td width="80">文审起始日期</td>
+				<td>
+					<input type="text" name="wsqs_date" value="<?=$wsqs_date;?>" class="input input-date" />
+					</td>
+				</td>
+			</tr>
+			<tr>
+				<td>计划起始日期</td>
+				<td><input type="text" id="tb_date" name="tb_date" value="<?=$tb_date;?>" class="input input-date"  />
+				<!-- <span class="cRed">*</span> -->
+					<select name="tb_time">
+						<option value="08:00"<?=$bm_8;?>>上午</option>
+						<option value="13:00"<?=$bm_13;?>>下午</option>
+					</select> <input type="checkbox" name="tb_c" value="9" id="">9点</td>
+				<td width="80">计划结束日期</td>
+				<td><input type="text" id="te_date" name="te_date" value="<?=$te_date;?>" class="input input-date" />
+				<!-- <span class="cRed">*</span> -->
+					<select name="te_time">
+						<option value="12:00"<?=$em_12;?>>上午</option>
+						<option value="17:00"<?=$em_17;?>>下午</option>
+					</select><input type="checkbox" name="te_c" value="18" id="">18点</td>
+			</tr>
+			 
+			<tr>
+				<td>任务备注</td>
+				<td colspan="3"><textarea name="task_note" cols="80" rows="3"><?=$note;?></textarea></td>
+			</tr>
+			<tr>
+				<td>自用备注</td>
+				<td colspan="3"><textarea name="self_note" cols="80" rows="3"><?=$self_note;?></textarea></td>
+			</tr>
+            <tr>
+            	<td>批准人</td>
+            	<td><input type="text" name="approval_user" value="<?=$approval_user;?>"></td>
+                <td>批准时间</td>
+            	<td><input type="text" name="approval_date" value="<?=$approval_date;?>"></td>
+            <tr>
+            	<td>制单人</td>
+            	<td><input type="text" name="create_user" value="<?=$create_user;?>"></td>
+                <td>制单时间</td>
+            	<td><input type="text" name="create_date" value="<?=$create_date;?>"></td>
+            </tr>
+            </tr>
+		</table><br/>
+		<p class="button-panel tac">
+			<button  id="tijiao" class="btn btn-submit" type="submit"> 保 存 </button>
+		</p>
+	</div>
+    </form>
+</div>
+<br>
+<div style="margin:0 auto;width:750px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">审核组</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	<table class="grid-table">
+		<tr>
+        	<th width="80">名称</th>
+			<th width="80">角色</th>
+			<th width="80">删除</th>
+		</tr>
+		<?php if( $auditor ):foreach( $auditor as $_p ):?>
+		<tr>
+        	<td align="center"><?=$_p['name'];?></td>
+			<td align="center"><?=read_cache('audit_role',$_p['role']);?></td>
+            <td><a href="?c=<?=$c?>&a=del_auditor&tid=<?=$tid?>&uid=<?=$_p[uid];?>" class="c-del icon-del"></a></td>
+		</tr>
+		<?php endforeach;endif;?>
+        <form action="" method="post">
+        <input type="hidden" name="tid" value="<?=$tid?>">
+        <tr>
+        	<td><input type="text" name="auditor[name]"></td>
+        	<td><select name="auditor[role]" id="">
+        		<option value=""></option>
+                <?=f_select('audit_role');?>
+        	</select></td>
+            <td><button class="btn btn-submit">提交</button></td>
+        </tr>
+        </form>
+	</table>
+
+	</div>
+</div><br/>
+</body>
+</html>

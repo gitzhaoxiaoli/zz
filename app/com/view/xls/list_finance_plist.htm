@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>财务收费登记列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	<table class="grid-table tal">
+		<thead>
+		<tr>
+			<th width="120">申请编码</th>
+			<th width="300">委托人名称</th>
+			<th width="*">项目所属单位</th>
+			<th width="*">已收完</th>
+			<th width="*">检查类型</th>
+			<th width="*">认证体系</th>
+			<th width="*">检查开始时间</th>
+			<th width="*">签发日期</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $datas ){
+	foreach( $datas as $row ){
+?>
+		<tr align='center'>
+			<td><?=$row['ct_code'];?></td>
+			<td align="left"><?=$row['ep_name'];?> </td>
+			<td><?=$row['ctfrom'];?></td>
+			<td><?=$row['is_finance_V'];?></td>
+			<td><?=$row['audit_type'];?></td>
+			<td><?=$row['iso'];?></td>
+			<td><?=$row['tb_date'];?></td>
+			<td><?=$row['sp_date'];?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+}
+?>
+		</tbody>
+	</table>
+</body>
+</html>

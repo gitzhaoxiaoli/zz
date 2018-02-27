@@ -1,0 +1,12 @@
+list_contract.php	导出批次列表
+list_contract_cost.php	导出批次费用
+list_enterprise.php	导出企业
+list_project.php	导出未安排检查项目
+list_task.php		导出任务/计划
+
+list_plan_project.php	上报计划
+
+plan_report.php		
+
+report1.php		月报项目
+report2.php		月报人员

@@ -1,0 +1,61 @@
+<link href="theme/js/flot/examples.css" rel="stylesheet" type="text/css">
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="theme/js/w2ui-1.2/w2ui-1.2.min.css" />
+<script type="text/javascript" src="theme/js/w2ui-1.2/w2ui-1.2.min.js"></script>
+
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="theme/js/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="theme/js/flot/jquery.flot.js"></script>
+  
+	<script language="javascript" type="text/javascript" src="theme/js/flot/jquery.flot.categories.js"></script>
+	<script type="text/javascript">
+
+	$(function() {
+
+		<?php foreach($data as $k => $v){?>
+		var data = <?=$v;?>;
+
+		$.plot("#placeholder<?=$k?>", [ data ], {
+			series: {
+				bars: {
+					show: true,
+					barWidth: 0.6,
+					align: "center"
+				}
+			},
+			xaxis: {
+				mode: "categories",
+				tickLength: 0
+			}
+		});
+		<?php }?>
+
+
+	});
+
+	</script>
+</head>
+<body>
+	<?php foreach($data as $k => $v){?>
+	<div id="header<?=$k;?>">
+		<h2><?=$k?></h2>
+	</div>
+
+	<div id="content<?=$k;?>">
+
+		<div class="demo-container">
+			<div id="placeholder<?=$k?>" class="demo-placeholder"></div>
+		</div>
+
+		<p><hr></p><br>
+
+
+	</div>
+<?php }?>
+
+</body>
+</html>
+ 

@@ -1,0 +1,128 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>证书列表</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script> 
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script>
+$(document).ready(function(){
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$("#buttons").click(function(){
+		
+		var o = $("input[type=checkbox]:checked");	
+		if( o.length < 1 ){
+			alert("请至少选择一个项目！");
+			return false;
+		}	
+	});
+});
+function check_form(){
+	var c= $('input[type=checkbox]:checked');
+	if(c.length<1){
+		alert("请选择项目！！");
+		return false;
+	}
+	}
+function select_all(){
+	$(":input[type=checkbox]").attr("checked","checked");
+	}
+function clearForm(obj){
+
+$(obj).find(":input[type=text]").each(function(){
+	$(this).val("");
+
+})
+
+}
+
+</script>
+</head>
+<body>
+<form method="get" id="search-form" action="" class="search-form tal" style='width:1100px;margin:0 auto;'>
+<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+<input type="hidden" name="is_sms" value="<?=$is_sms;?>" />  
+	<table>
+		<tr>
+			<td class='left'>姓名：</td>
+			<td class='right'><input type="text" id="name" name="name" value="<?=$_GET['name'];?>" class="input finput" /></td>
+		</tr>
+	</table>
+	<p class="button-panel">
+		<button class="btn btn-submit" type="submit"> 搜 索 </button> &nbsp; 
+		<button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>&nbsp;  
+	</p>
+</form>
+<br/>  
+
+
+<div style="margin:0 auto;width:1100px;"  class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top <?=$status_n_tab?>"><a href="?m=ot_train&a=certificate_sms&is_sms=n<?php gettourl();?>">未邮寄<span class="cnt-total">&nbsp;[<?=$total[n];?>]</span></a></li>
+        <li class="ui-state-default ui-corner-top <?=$status_y_tab?>"><a href="?m=ot_train&a=certificate_sms&is_sms=y<?php gettourl();?>">已邮寄<span class="cnt-total">&nbsp;[<?=$total[y];?>]</span></a></li>
+	</ul>
+    <form action="?m=ot_train&a=sms_edit" method="post">
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+ 		 <table class="grid-table">
+              <thead>
+                <tr>
+                	<th width="10"></th>
+                	<th width="30">编辑</th>
+                    <th>姓名</th>
+                    <th>发证日期</th>
+                    <th>邮寄日期</th>
+                    <th>快递公司</th>
+                    <th>单号</th>
+
+                </tr>
+              </thead>
+              
+              <tbody>
+              <?php 
+              	if($certificate_list) foreach($certificate_list as $v){
+              ?>
+                 <tr>
+                 <td><input type="checkbox" name="cid[]" value="<?=$v['id']?>"/></td>
+                  <td align="center"><a href="?m=ot_train&a=sms_edit&certificateId=<?=$v['id']?>"><img src="theme/images/b_edit.png" border=0 /></a></td>
+                    <td><?=$v['name']?></td>
+                    <td><?=$v['date']?></td>
+                    <td><?=$v['sms_date']?></td>
+                    <td><?=read_cache("send_company",$v['sms_name'])?></td>
+                    <td><?=$v['sms_no'];?></td>
+                   
+                 </tr> 
+                 
+                 <?php } else {?>
+                 <tr>
+                
+              
+               <td colspan="3" align="center">
+                没有找到记录
+                 </td>
+                 </tr>
+                 <?php }?>
+              </tbody>
+              
+  		</table><br/><br/>
+        快递公司：<select name="sms_name"><?=f_select("send_company",$sms_name)?></select>&nbsp;&nbsp;
+        快递单号：<input type="text" name="sms_no" />&nbsp;&nbsp;
+        邮寄日期：<input type="text" name="sms_date" value="<?=$sms_date;?>"  class="input input-date" />&nbsp;&nbsp;
+        <button type="submit" class="btn btn-submit" id="buttons" />批量邮寄</button>
+         </form>
+        <p><?=$pages['pages'];?></p>
+    </div>
+
+</div>
+
+
+</body>
+</html>

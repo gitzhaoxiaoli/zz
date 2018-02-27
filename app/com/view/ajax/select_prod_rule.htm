@@ -1,0 +1,69 @@
+<?php tpl('header')?>
+
+<script>
+    $(function() {
+		//var tooltips = $( "[title]" ).tooltip({position:{my:"left+6 center", at:"right center"}});
+        $( "#enterprise-tab" ).tabs();
+    });
+    </script>
+</head>
+
+<body> 
+<form method="get">  
+<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="c" value="<?=$c;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+			<table>
+				<tr>
+					<td>编码：</td>
+					<td><input type="text" name="code" value="<?=$_GET['code'];?>" class="input input-search" /></td>
+					<td>产品名称：</td>
+					<td><input type="text" name="name" value="<?=$_GET['name'];?>" class="input input-search" /></td>
+					<!--td>产品内容：</td>
+					<td><input type="text" name="msg" value="<?=$_GET['msg'];?>" class="input input-search" /></td --> 
+				</tr>
+			</table>
+			<p class="button-panel tal">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</p>
+		</form>
+
+		<?=$pages['pages'];?>
+
+<p style="font-size:0;height:9px;overflow:hidden;"></p>
+
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="60">编号</th>
+			<th width="80">产品名称</th> 
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $list_datas ){
+	foreach( $list_datas as $id => $row ){
+?>
+		<tr align="cneter">
+			<td><a href="javascript:window.parent.update_prod_rule( '<?=$row['code'];?>', '<?=$row['name'];?>' );"><img src="theme/images/b_edit.png" border="0" /></a></td>
+			<td><?=$row['code'];?></td>
+			<td><?=$row['name'];?></td> 
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

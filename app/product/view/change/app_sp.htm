@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>证书变更审批</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script> 
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$( "#certificate-tab" ).tabs();
+	
+});
+function checkForm(){
+	if($("input[name=status]:checked").length<1){
+		
+		alert("请选择项目！");
+		return false;
+	}
+	}
+</script>
+<style>
+.change_ul li{
+	width:240px;}
+</style>
+</head>
+
+<body>
+<br/>
+<form name="winput" method="post" action="" onsubmit="return checkForm()" >
+<input type="hidden" name="id" value="<?=$id?>" />
+<div id="certificate-tab" style="margin: 0 auto;width:800px;" class="tal" >
+	<ul>
+		<li><a href="#tab-content-basic">变更申请审批</a></li>
+	</ul>
+		
+
+<div class="list-table tal">
+<table style='width:760px;margin: 0 auto;margin-top:20px;' class='grid-table'>
+	
+    <tr >
+		<td align='right'>备注说明：</td>
+		<td align='left'><textarea name="sp_note" style="width:500px;height:60px;"><?=$res['sp_note']?></textarea></td>
+	</tr>
+	<tr>
+		<td align='center' colspan='2'><p><center><label><input type="radio" name="status" value="1" <?=$res['status'] == '1' ?'checked':''?> />同意审批</label>&nbsp;&nbsp;&nbsp;<label><input type="radio" name="status" value="2"  <?=$res['status'] == '2' ?'checked':''?> />不通过退回</label>&nbsp;&nbsp;&nbsp;<button class="btn btn-submit" type="submit"> 提 交 </button></center></p> </td>
+	</tr>
+</table>
+<br/>
+</div>
+</div>
+</form>
+</body>
+</html>

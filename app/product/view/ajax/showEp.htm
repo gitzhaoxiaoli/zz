@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?=get_conf('charset');?>" />
+<title>企业信息</title>
+
+<link href="<?=get_conf('theme_url');?>css/style.css" type="text/css" rel="stylesheet" />
+<link href="<?=get_conf('theme_url');?>css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+    });
+    </script>
+</head>
+
+<body>  
+
+
+	<table width="100%" class="grid-table">
+			<tr>
+				<td >名称</td>
+				<td colspan="3" align="left"><span class="red"><?=$e_info['ep_name'];?></span></td>
+			</tr>
+			<tr>
+				<td  style="width:100px;">企业编号</td>
+				<td align="left"><?=$e_info['code'];?></td>
+				<td  >组织人数</td>
+				<td ><span id="ep-amount"><?=$e_info['ep_amount'];?></span></td>
+			</tr>
+			
+			<tr>
+				<td >注册地址</td>
+				<td colspan="3" align="left"><?=$e_info['ep_addr'];?></td>
+			</tr>
+			<tr>
+				<td >通讯地址</td>
+				<td colspan="3" align="left"><?=$e_info['cta_addr'];?></td>
+			</tr>
+			<tr>
+				<td >生产地址</td>
+				<td colspan="3" align="left"><?=$e_info['prod_addr'];?></td>
+			</tr>
+			<tr>
+				<td >县/区级地址</td>
+				<td align="left"><?=$e_info['areaaddr'];?></td>
+				<td >县/区级代码</td>
+				<td ><?=$e_info['areacode'];?></td>
+			</tr>
+			<tr>
+				<td >合同来源</td>
+				<td align="left"><?=f_ctfrom($e_info['ctfrom']);?></td>
+				<td >组织联系传真</td>
+				<td ><?=$e_info['ep_fax'];?></td>
+			</tr>
+            <tr>
+				<td >联系人</td>
+				<td align="left"><?=sub_Str($e_info['person'],"||:||");?></td>
+				<td >联系人职务</td>
+				<td ><?=sub_Str($e_info['person_job'],"||:||");?></td>
+			</tr> 
+             <tr>
+				<td >联系人手机</td>
+				<td align="left"><?=sub_Str($e_info['person_mph'],"||:||");?></td>
+				<td >联系人邮箱</td>
+				<td ><?=sub_Str($e_info['person_mail'],"||:||");?></td>
+			</tr> 
+            <tr>
+				<td >法    人</td>
+				<td align="left"><?=$e_info['delegate'];?></td>
+				<td >管理者代表</td>
+				<td ><?=$e_info['manager_daibiao'];?></td>
+			</tr>
+			<tr>
+				<td >备注</td>
+				<td ><?=$e_info['note']; ?></td>
+				<td ></td>
+				<td ><!--<a href="?c=enterprise&a=edit&eid=<?=$e_info['eid'];?>&type=view#tab-contract" target="_blank">查看</a>--></td>
+			</tr>
+            <?php if($e_info['is_energy']){ ?>
+            <tr>
+            	<td  style="background-color:#CCC" colspan="4"><b>能源信息：</b></td>
+                
+            </tr>
+            <tr>
+				<td >典型生产工艺流程</td>
+				<td ><?=$e_info['process']?></td>
+				<td >是否有高耗能落后机电设备或产品</td>
+				<td ><?=$e_info['energy']?"是":"否";?></td>
+			</tr>
+            <tr>
+				<td >是否属于国家"十二五"规定的万家企业</td>
+				<td ><?=$e_info[is_125]?"是":"否";?></td>
+				<td >落后机电设备清单</td>
+				<td ><?=$e_info['energy_list']?></td>
+			</tr>
+            <tr>
+				<td >年度综合能耗（总能耗）</td>
+				<td ><?=$e_info['t_energy']?></td>
+				<td >能源结构或种类（如煤炭、电力、天然气、热力、汽油、柴油等）</td>
+				<td ><?=$e_info['variety']?></td>
+			</tr>
+            <tr>
+				<td >用能设备种类或主要能源使用数量</td>
+				<td ><?=$e_info['num']?></td>
+				<td >能耗核算边界（有多个生产场所时分别描述）</td>
+				<td ><?=$e_info['energy_e']?></td>
+			</tr>
+            <tr>
+				<td >是否有能源服务外包</td>
+				<td ><?=$e_info['energy_s']?"是":"否";?></td>
+				<td >包含哪些</td>
+				<td ><?=$e_info['include']?></td>
+			</tr>
+           <?php } ?>
+		</table>
+
+
+
+</body>
+</html>

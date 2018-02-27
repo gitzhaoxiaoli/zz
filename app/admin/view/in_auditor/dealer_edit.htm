@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php sysinfo('charset');?>" />
+<title>编辑客户信息</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/region.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script>
+$(function(){ 
+	$('button.btn-submit').click(function(){
+		if( !Validator.Validate( $('#dealer-form')[0], 2 ) ) return false; 
+		//$('#dealer-form').submit();
+ 	}); 
+	//日期
+    $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	}); 
+	var region = Region.init('<?php sysinfo('url');?>/data/cache/region.json');
+	window.region = region;
+	$('#select-region').click( region_dlg );
+})
+function region_dlg(){
+	  
+	$('#select-region-dialog').dialog({
+		title	: '选择行政区',
+		width	: 500,
+		height	: 150,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var r = false;
+				var country = parseInt($('#statecode').val());
+				
+				var code_city = $('#city-select').val();
+				var code_district = $('#district-select').val();
+				
+				var code = $('#district-select').val();
+				if( !code )
+					code = $('#city-select').val();
+
+				//if( (code && code.substring(4,6) != '00') || 156 != country ){
+				if( (DistrictNum==0 && code_city) || (DistrictNum!=0 && code_district) ){
+					var text = $('#province-select').find('option:selected').text() + $('#city-select').find('option:selected').text() + $('#district-select').find('option:selected').text();
+					text = text.replace('市辖区','');
+					text = text.replace('--县','');
+					text = text.replace('请选择市','');
+					text = text.replace('请选择区/县','');
+					$('#areaaddr').val(text);
+					$('#areacode').val(code);
+					$(this).dialog('close');
+				} else {
+					alert( '请选择行政区！' );
+				}
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	});
+}
+
+
+</script>
+</head>
+<body>
+<div id="select-region-dialog" class="tal" style="display:none;">
+  <p style="margin-bottom:8px;">请选择行政区(到区/县)，完成后点确定。</p>
+  <p> <span id="prov-span">
+    <select name="province" id="province-select" style="width:130px;">
+      <option value="">选择省</option>
+    </select>
+    </span> <span id="city-span">
+    <select name="city" id="city-select" style="width:160px;">
+      <option value="">请选择市</option>
+    </select>
+    </span> <span id="dist-span">
+    <select name="district" id="district-select" style="width:150px;">
+      <option value="">请选择区/县</option>
+    </select>
+    </span> </p>
+</div>
+<form method="post" id="dealer-form" action="">
+<input type="hidden" name="data_for" value="4" />
+<div style="margin:0 auto;width:750px;"  class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">客户信息登记</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    	 <ul class="main-form">
+              <li>
+                <label class="field">客户名称</label>
+                <em></em><span>
+                <input type="text" id="name" name="name" dataType="Require" msg="请选择所属分销中心！" value="<?=$dealerInfo['name'];?>" class="input" style="width:175px" />
+                </span>
+              
+               </li>
+                <li>
+                <label class="field">客户简称</label>
+                <em></em><span>
+                <input type="text" id="short_name" name="short_name"  value="<?=$dealerInfo['short_name'];?>" class="input" style="width:175px" />
+                </span>
+                 <label class="field2"> </label>
+                <em></em><span>
+                 
+                </span> 
+               </li>
+                <li>
+        <label class="field">联系地址</label>
+        <em></em><span>
+        <input type="text" id="contract_addr"  name="contract_addr" value="<?=$dealerInfo['contract_addr'];?>" class="input" style="width:465px" />
+      </span> </li>
+              <li>
+                <label class="field">联系人姓名</label>
+                <em></em><span>
+                <input type="text" id="contact_name" name="contact_name" value="<?=$dealerInfo['contact_name'];?>" class="input" style="width:175px" />
+                </span>
+                <label class="field2">联系人电话</label>
+                <em></em><span>
+                <input type="text" id="contact_phone" name="contact_phone"  value="<?=$dealerInfo['contact_phone'];?>" class="input" style="width:175px" />
+                </span> </li>
+             
+              <li>
+                <label class="field">联系人传真</label>
+                <em></em><span>
+                <input type="text" id="contact_fax" name="contact_fax" value="<?=$dealerInfo['contact_fax'];?>" class="input" style="width:175px" />
+                </span>
+                <label class="field2">联系人邮件</label>
+                <em></em><span>
+                <input type="text" id="contact_mail" name="contact_mail" value="<?=$dealerInfo['contact_mail'];?>" class="input" style="width:175px" />
+                </span> </li>
+                <li>
+        <label class="field">教材邮寄地址</label>
+        <em></em><span>
+        <input type="text" id="contract_addr"  name="linkep" value="<?=$dealerInfo['linkep'];?>" class="input" style="width:465px" />
+      </span> </li>
+              <li>
+                <label class="field">教材联系人</label>
+                <em></em><span>
+                <input type="text" id="contact_fax" name="delegate" value="<?=$dealerInfo['delegate'];?>" class="input" style="width:175px" />
+                </span>
+                <label class="field2">教材联系电话</label>
+                <em></em><span>
+                <input type="text" id="contact_mail" name="manager" value="<?=$dealerInfo['manager'];?>" class="input" style="width:175px" />
+                </span> </li>
+                <li>
+               <label class="field">备注</label>
+                <em></em><span>
+              <textarea name="note"  style=" width: 465px;" class="cnt-scope"><?=$dealerInfo['note'];?></textarea></span> 
+              </li>
+        
+              <li>
+              <p class="button-panel tac"><button class="btn btn-submit" type="submit"> 提 交 </button></p>
+         </ul> 
+    </div>
+
+</div>
+
+
+</form>
+</body>
+</html>

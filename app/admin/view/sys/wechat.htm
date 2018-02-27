@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信绑定</title>
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script>
+    $(function() {
+		var tooltips = $( "[title]" ).tooltip({position:{my:"left bottom+37", at:"left bottom"}});
+        $( "#user-tab" ).tabs({
+            collapsible: false
+        });
+
+    });
+
+</script>
+</head>
+
+<body>
+
+
+<form method="post" action="?c=sys&a=resetpw_save" onsubmit="return check_data()">
+<input type="hidden" id='uid' name="uid" value="<?=$uid?>" />
+<input type="hidden" id='isgo' name="isgo" value="" />
+<div id="user-tab" style="margin:0 auto;width:750px;" class="tal">
+	<ul>
+		<li><a href="#tab-basic">微信关注</a></li>
+	</ul>
+	<div id="tab-basic">
+		<ul class="main-form">
+            <li>
+				<label class="field">
+				
+				</label>
+ 
+			</li>
+            <li class="p">
+            		<?php
+						if($wstatus==0){
+							echo "您还没有注册，请联系总部管理人员先注册！";
+						}elseif($wstatus==2){
+							echo "您已经关注，无需再操作！";
+						}elseif($wstatus==1){
+							echo "请用微信  扫一扫 ！<br>";
+							echo "<img src=theme/images/wechat.jpg border=0 />";
+						}
+					?>
+
+			</li>
+		</ul>
+	</div>
+
+</div>
+</form>
+<br/><br/>
+</body>
+</html>

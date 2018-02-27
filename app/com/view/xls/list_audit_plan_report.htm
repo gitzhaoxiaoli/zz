@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>检查计划列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	<table>
+		<thead>
+		<tr>
+			<th width="140">机构批准号</th>
+			<th width="80">组织机构代码</th>
+			<th width="240">委托人名称</th>
+			<th width="60">企业联系人</th>
+			<th width="90">企业联系电话</th>
+			<th width="110">检查类型</th>
+			<th width="80">认证活动类型</th>
+			<th width="110">开始时间</th>
+			<th width="110">结束时间</th>
+			<th width="110">行政区划</th>
+			<th width="320">详细地址</th>
+			<th width="200">检查组成员</th>
+			<th width="80">技术专家</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $task_auditLists ){
+	foreach( $task_auditLists as $pid => $row ){
+?>
+		<tr>
+			<td align="center">CNCA-R-2002-069</td>
+			<td align="center"><?=$row['work_code'];?></td>
+			<td><?=$row['ep_name'];?></td>
+			<td align="center"><?=$row['person'];?></td>
+			<td align="center"><?=$row['person_tel'];?></td>
+			
+			<td align="center"><?=$row['audit_type'];?></td>
+			<td align="center"><?=$row['tb_date'];?></td>
+			<td align="center"><?=$row['te_date'];?></td>
+			<td align="center"><?=$row['areacode'];?></td>
+			<td align="center"><?=$row['ep_addr'];?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); echo implode(',',$audit_teams[$row[id]]['s']);?></td>
+			<td><?php
+!defined('IN_SUPU') && exit('Forbidden'); echo implode(';',$audit_teams[$row['id']]['z']);?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+}
+?>
+		</tbody>
+		<tr>
+			<td align="center" colspan="13">请确认一下数据，如果上传格式不对请重新另存为EXECL。</td>
+		</tr>
+	</table>
+</body>
+</html>

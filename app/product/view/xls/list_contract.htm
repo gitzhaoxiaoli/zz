@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+		<table class="grid-table">
+        <thead>
+          <tr>
+          	
+            <th width="*">认证申请编号</th>
+            <th width="*">委托者</th>
+            <th width="*">生产者</th>
+            <th width="*">生产企业</th>
+            <th width="*">产品小类</th>
+            <th width="*">产品名称</th>
+             <th width="*">是否外网申请</th>
+            <?php if($status){ ?>
+            <th width="*">受理人</th>
+            <th width="*">受理时间</th>
+            <th width="*">受理备注</th>
+            <?php } ?>
+           
+          </tr>
+        </thead>
+        <tbody>
+<?php
+    if( $contracts ){
+        foreach($contracts as $ct_id=>$row){
+?>
+          <tr>
+		    <td align="center"><?=$row['cti_code'];?></td>
+            <td align="center"><?=$row['ep_name'];?></td>
+            <td align="center"><?=$row['ep_manu'];?></td>
+            <td align="center"><?=$row['ep_prod'];?></td>
+            <td align="center"><?=$row['prod_id']?></td>	
+            <td align="center"><?=$row['prod_name_chinese'];?></td>
+             <td align="center"><?=$row['is_app']==1?'是 ' :'否';?></td>
+            <?php if($status){ ?>
+            <td align="center"><?=$row['approval_user'];?></td>
+            <td align="center"><?=$row['approval_date'];?></td>
+            <td align="center"><?=$row['approval_note'];?></td>
+            <?php } ?>
+            
+<?php            
+	}}else{
+?>
+          <tr>
+            <td align="center" colspan="18">未找到相关记录</td>
+          </tr>
+<?php
+	}
+?>
+        </tbody>
+      </table>
+</body>
+</html>

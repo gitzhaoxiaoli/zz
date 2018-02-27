@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>检验安排</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+<script type="text/javascript">
+$(function(){
+$("#form_sub").submit( must_one );//检验项目不能为空
+
+	$( ".input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$('.c-del').click(function(){
+		
+		confirm_dialog('确定删除吗？', $(this).attr( 'href' ), 'warning' );
+		return false;
+	}); 
+	$('#add-btn').click( addRecord );
+	addRecord();
+
+	
+	
+});
+
+function must_one(){
+	var must_one = $('input[type=checkbox]:checked');
+	if( 1 > must_one.length ){
+		alert('检验项目至少选择一个！！');
+		return false;
+	};
+	};
+function addRecord(){
+	tbody = $('#add-attachs');
+	tr = $('#add-attach');
+	new_tr = tr.clone();
+	new_tr.attr('id','');
+	new_tr.show();
+	tbody.append(new_tr);
+	    
+};
+</script>
+</head>
+
+<body>
+<?php echo prod_einfo("pid=$pid&width=$width");?>
+<br/>
+
+	<form method="post" id="form_sub" action="" >
+		<input type="hidden" name="step" value="1" />
+		<input type="hidden" name="test_id" value="<?=$test_id;?>" />
+		
+	 <?php if( $projects ):?>
+<div style="margin:0 auto;width:<?=$width;?>px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">同生产企业下未检验安排项目</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	<table class="grid-table">
+		<tr>
+		   <th width="40"></th>
+        	<th width="180">认证申请编号</th>
+            <th width="80">检测结果</th>
+			<!--<th width="80">状态</th>-->
+			<!--<th width="80">标准</th>-->
+			<th width="80">检查类型</th>
+            <!--<th>代码</th>-->
+			<th>产品小类</th>
+		</tr>
+		<?php foreach( $projects as $_p ):?>
+		<tr>
+		    <td align="center"><input class="must_one" type="checkbox" <?php if($_p[test_id]) echo "checked";?> name="temp_check[]" value="<?=$_p['id']; ?>" cti='<?=$_p[cti_id]?>'></td>
+        	<td class="cti-code" align="center"><?=$_p['cti_code'];?><img src="theme/images/other.png" border="0" onclick="showCti(<?=$_p[cti_id];?>)" /></td>
+            <td><select name="is_qualified[<?=$_p['id'];?>]" style="width:100%">
+			             <?php foreach($check_status as $k=>$v):?>
+				         <option value="<?=$k;?>" <?=$_p[is_qualified] == $k ?'selected':"";?>><?=$v?></option>
+				          <?php  endforeach;?>
+			              </select></td>
+			<!--<td align="center"><?=r_sys_cache('project_status',$_p['status']);?></td>-->
+			<!--<td align="center"><?=$_p['prod_ver'];?></td>-->
+			<td align="center"><?=f_audit_type($_p['audit_type']);?></td>
+           <!-- <td><?=$_p['use_code'];?></td>-->
+			<td align="center"><?=$_p['prod_id'];?></td>
+		</tr>
+		<?php endforeach;?>
+	</table>
+
+	</div>
+</div><br/>
+<?php endif;?>
+<div style="margin:0 auto;width:<?=$width;?>px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">产品检验登记</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+		
+	  <table class="grid-table">
+	     <!--<tr>
+		   <td style="padding-left:30px;padding-top:2px;padding-bottom:2px;" colspan="4">
+		   <a><img src="theme/images/word.gif" border=0 /></a>送样通知&nbsp;&nbsp;&nbsp;
+		   <a><img src="theme/images/word.gif" border=0 /></a>委托通知
+		   </td>
+		 </tr>
+	     <tr>
+		   <td align="center" width="100" >检测机构</td>
+		     <input type="hidden" name="test_org_id" value="<?=$test_org_id;?>" />
+		   <td colspan="3" ><input type="text" class="input"  style="width:95%;float:left;border-width:1px 0 1px 1px" name="test_org_name" value="<?=$test_org_name;?>" readOnly /><i id="test_org" class="i-select select_eps" ></i></td>
+		 </tr>-->
+		 <tr>
+		  <td align="center" colspan="4">型式试验方案 &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-submit" id="add-btn">添加</button></td>
+		  </tr>
+          <tr>
+          <td colspan="4">
+           <table class="grid-table" >
+           <tbody id="add-attachs">
+            <tr>
+            <th>样品名称</th><th>型号规格</th><th>数量</th><th width="200">检测标准及项目</th><th>接收日期</th><th>样品状态</th><th>真实性</th>
+            </tr>
+            <tr id="add-attach" style="display:none">
+            	<td><input type="text" name="new[productname][]" /></td>
+            	<td><input type="text" name="new[productmodel][]" /></td>
+                <td><input type="text" name="new[productnum][]" style="width:40px;" /></td>
+                <td><input type="text" name="new[note][]" style="width:200px;" /></td>
+                <td><input type="text" name="new[productdate][]"  class="input-date" /></td>
+                <td><input type="text" name="new[status][]"  /></td>
+                <td><input type="text" name="new[testres][]" style="width:50px;" /></td>
+            </tr>
+            <?php if($sample) foreach($sample as $v){?>
+            <tr><td><input type="text" name="productname[<?=$v[id]?>]" value="<?=$v[productname]?>" /></td>
+            	<td><input type="text" name="productmodel[<?=$v[id]?>]" value="<?=$v[productmodel]?>" /></td>
+                <td><input type="text" name="productnum[<?=$v[id]?>]" style="width:40px;" value="<?=$v[productnum]?>" /></td>
+                <td><input type="text" name="productnote[<?=$v[id]?>]" value="<?=$v[note]?>" style="width:200px;" /></td>
+                <td><input type="text" name="productdate[<?=$v[id]?>]" value="<?=$v[productdate]?>"  /></td>
+                <td><input type="text" name="status[<?=$v[id]?>]" value="<?=$v[status]?>"  /></td>
+                <td><input type="text" name="testres[<?=$v[id]?>]" value="<?=$v[testres]?>" style="width:50px;" /></td>
+            </tr>
+            <?php }?>
+            </tbody>
+            </table></td>
+		   </tr>
+           <tr>
+           <td>报告编号：</td><td><input type="text" name="test_code" value="<?=$test_code?>" /></td>
+           <td align="center">到样时间</td>
+		   <td><input type="text"  name="sample_reach_date" class="input input-date" value="<?=$sample_reach_date?>" /></td>
+           </tr>
+           <tr>
+		  <td align="center">试验开始时间</td>
+		   <td><input type="text"  name="test_sdate" class="input input-date" value="<?=$test_sdate?>" /></td>
+		   
+		  <td align="center">试验结束时间</td>
+		   <td><input type="text"  name="test_edate" class="input input-date" value="<?=$test_edate?>" /></td>
+		   </tr>
+           <tr>
+		  
+		   
+		  <td align="center">报告出具时间</td>
+		   <td><input type="text"  name="report_chuju_date" class="input input-date" value="<?=$report_chuju_date?>" /></td>
+		   </tr>
+	     <tr>
+		   <td align="center" width="100">备注</td>
+		   <td colspan="3"><textarea name="note" style="width:99%"><?=$note;?></textarea></td>
+		 </tr>
+	  </table>
+	  <p align="center" style="margin-top:20px;">
+      				<a title="上传文档" href="?m=product&c=contract&a=upload&cti_id=<?=$cti_id;?>&test_id=<?=$test_id;?>&ftype=2001" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资料上传<img src="theme/images/up.gif" border=0 />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+
+	      <button class="btn btn-submit save_check" type="submit">保存</button>
+	   </p>
+</div>
+	</form>
+			<?php if($files_list):?>
+			   <table class="grid-table" style="width:90%; margin:auto">
+			      <thead>
+				    <tr>
+				     <th>文件名</th>
+				     <th>上传时间</th>
+                     <th>上传人</th>
+				     <th>下载</th>
+				     <th>删除</th>
+					</tr>
+				  </thead>
+				  <tbody>
+				    <?php foreach($files_list as $v):?>
+				      <tr>
+					    <td><?=$v['name'];?></td>
+					    <td><?=$v['create_date'];?></td>
+                        <td><?=$v['create_user'];?></td>
+						<td align="center">
+							<a href="?c=attachment&a=down&aid=<?=$v['id'];?>&class=pro" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a>
+						</td>
+						<td align="center">
+						   <a href="?c=attachment&a=del&aid=<?=$v['id'];?>&class=pro" class="c-del" ><img src="theme/images/b_drop.png" border=0 /></a>
+						</td>
+					  </tr>
+					<?php endforeach;?>
+				  </tbody>
+			   </table>
+			   <?php  endif;?>
+               <br />
+
+
+</div>
+
+
+</body>
+</html>

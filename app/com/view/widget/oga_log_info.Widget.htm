@@ -1,0 +1,66 @@
+
+<div class="org_log_id" style="position:fixed; z-index:100; background:#fff; top:200px; border:1px solid #ccc; line-height:30px; width:30px; right:0px;">便签</div>
+<div id="org_log_box"  style="margin:0 auto;width:500px; z-index:100; display:none; position:fixed; top:0px; right:0px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#">便签</a></li>
+    <li class="ui-state-default ui-corner-top "><a href="#" class="org_log_id">隐藏</a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <form method="post" action="?app=com&m=org_log&a=save">
+      <?php foreach($org_logs as $log){
+   	$org=explode('-',$log); 
+   ?>
+      <table class="grid-table">
+        <tr>
+          <td>委托人</td>
+          <td colspan="2"><?=load('ep')->getEpFieldById($org[0])?></td>
+        </tr>
+        <tr>
+          <td>生产者</td>
+          <td colspan="2"><?=load('ep')->getEpFieldById($org[1])?></td>
+        </tr>
+        <tr>
+          <td>生产企业</td>
+          <td><?=load('ep')->getEpFieldById($org[2])?></td>
+          <td><span class="icon-add add_new_org_log" tag="<?=$log?>"></span></td>
+        </tr>
+        <?php foreach($items[$log] as $item){?>
+        <tr>
+          <td>备注</td>
+          <td><input style="width:90%;" type="text" name="org_log_old[<?=$item['log_id']?>]log_note" value="<?=$item[log_note]?>" title="<?=$item[log_note]?>"></td>
+          <td><a href="?app=com&m=org_log&a=delete&log_id=<?=$item['log_id']?>">删除</a></td>
+          <?php } ?>
+        </tr>
+      </table>
+      <?php } ?>
+      <p class="button-panle tac">
+        <button class="btn  btn-submit" type="submit" >保存</button>
+      </p>
+    </form>
+  </div>
+</div>
+<script>
+$(function(){ 
+	 $('.org_log_id').click(function(e){
+		 e.preventDefault(); 
+		 $('#org_log_box').toggle(); 
+	});
+	$('.add_new_org_log').click(function(){
+	$tag=$(this).attr('tag');
+	var tmpl=$("#org_log_tmpl").html(); 
+	$(this).parent().parent().parent().after(tmpl.replace(new RegExp("{index}","gm"),$tag))  
+	}).click(); 
+	
+}) 
+//删除
+$("a[batch='remove_item_line']").die().live('click',function(){
+	$(this).parent().parent('tr').remove();
+});
+</script> 
+<script type="text/paint" id="org_log_tmpl"> 
+  	 <tr>
+        <td>备注</td>
+        <td><input type="text" style="width:90%;"  name="data[{index}][]log_note" value=""></td>
+        <td><a href="###" batch='remove_item_line'>删除</a></td>
+      </tr>
+</script> 

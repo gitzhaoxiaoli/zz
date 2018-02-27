@@ -1,0 +1,198 @@
+<?php tpl('header')?>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script>
+    $(function() {
+    	$( "#contract-tab" ).tabs({
+    		collapsible: false
+    	});
+        $( "#enterprise-tab" ).tabs({
+            collapsible: false
+        });
+        $( "#enterprise2-tab" ).tabs({
+            collapsible: false
+        });
+        $( "#enterprise1-tab" ).tabs({
+            collapsible: false
+        });
+		 $( "#enterprise3-tab" ).tabs({
+            collapsible: false
+        });
+        $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+    });
+    function check_form(obj){
+        $("#check_tab").find(); 
+		
+	 
+ 		if(Validator.Validate(obj,2)){
+			return true;
+		}else{
+			return false;
+		} 
+    } 
+    </script>
+</head>
+<body>
+<?php  echo einfo("ct_id=$ct_id&eid=$eid");?>
+<br>
+<div id="enterprise1-tab" style="margin: 0 auto; width: 750px;" class="tal">
+ <ul>
+      <li><a href="#tab-basic">开票信息</a></li>
+    </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table class="grid-table">
+      <thead>
+        <tr>
+          <td align='center' width="100">发票信息：</td>
+          <td>
+            开票类型:
+            <span>
+              <input type="radio" name="invoice_type" value="1" <?php if($rows['invoice_type'] == 1){echo "checked";}else{echo "disabled";}?> />专票&nbsp;&nbsp;
+              <input type="radio" name="invoice_type" value="2" <?php if($rows['invoice_type'] == 2){echo "checked";}else{echo "disabled";}?> />普票&nbsp;&nbsp;
+              <input type="radio" name="invoice_type" value="3" <?php if($rows['invoice_type'] == 3){echo "checked";}else{echo "disabled";}?> />不开票
+            </span>
+            <br/>
+
+            公司税号:
+            <?=$rows[grows];?>
+            <br/>
+
+            开户地址:
+            <?=$rows[r_add];?>
+            <br/>
+
+            开户电话:
+            <?=$rows[r_tel];?>
+            <br/>
+
+            开户银行:
+            <?=$rows[bank];?>
+            <br/>
+
+            银行帐号:
+            <?=$rows[account];?>
+            <br/>
+            
+            开户名称:
+            <?=$rows[name_ac];?>
+            <br/>
+
+            开票备注:
+            <?=$rows[ac_remark];?>
+            <br/></td>
+        </tr>
+        <tr>
+          <td align='center'>合同财务要求:</td>
+          <td><?=$finance_require;?></td>
+      </thead>
+    </table>
+  </div>
+ </div>
+ <br/>
+
+<br />
+<div id="enterprise2-tab" style="margin: 0 auto; width: 750px;" class="tal">
+ <ul>
+      <li><a href="#tab-basic">收费明细</a></li>
+    </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table class="grid-table">
+      <thead>
+       <tr align='center'>
+            <th width="60">操作</th>
+            <th width="60">到款金额</th>
+            <th width="60"> 到款日期</th>
+            <th width="60"> 备注</th>
+            <th width="60">是否收完</th>
+        </tr>
+
+<?php
+if( $data2 ){
+    foreach( $data2 as $row ){
+      if($row['is_finance']==0){
+          $row['is_finance']='未收完';
+      }elseif($row['is_finance']==2){
+          $row['is_finance']='已收完';
+      }
+?>
+        <tr align='center'>
+            <td align="center"><a href="?c=finance&a=edit&id=<?=$row['id'];?>&cost_id=<?=$row['cost_id'];?>&pid=<?=$row['cost_id'];?>&eid=<?=$row['eid'];?>&ct_id=<?=$row['ct_id']?>"><img src="theme/images/b_edit.png" border=0 title="操作" /></a></td>
+            <td><?=$row['dk_cost'];?></td>
+            <td><?=$row['dk_date'];?></td>
+            <td><?=$row['note']?></td>
+            <td><?=$row['is_finance']?></td>
+        </tr>
+<?php
+    }?>
+<?php
+    }?>
+          </thead>
+    </table>
+  </div>
+ </div>
+ <br/>
+<br/>
+<div id="enterprise3-tab" style="margin: 0 auto; width: 750px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">收费登记
+      <?=$str?>
+      </a></li>
+  </ul>
+  <form method="post">
+  <input type="hidden" name="id" value="<?=$id;?>">
+  <input type="hidden" name="cost_id" value="<?=$cost_id;?>">
+  <div id="tab-basic">
+  
+    <ul class="main-form">
+     <li>
+        <label class="field"><font color="#F00"></font>到款金额：</label>
+         <em></em> <span>
+        <input type="text" name="dk_cost" value="<?=$dk_cost;?>" />
+
+        </span>
+        <label class="field2"><font color="#F00"></font>收费时间：</label>
+        <em></em> <span>
+        <input type="text" name="dk_date"  value="<?=$dk_date;?>" class="input-date" />
+        </span>
+    </li>
+     <li>
+        <label class="field"><font color="#F00"></font>开票金额：</label>
+         <em></em> <span>
+        <input type="text" name="invoice_cost" value="<?=$invoice_cost;?>" />
+
+        </span>
+        <label class="field2"><font color="#F00"></font>开票时间：</label>
+        <em></em> <span>
+        <input type="text" name="invoice_date"  value="<?=$invoice_date;?>" class="input-date" />
+        </span>
+    </li>
+         <li>
+        <label class="field"><font color="#F00"></font>发票号：</label>
+         <em></em> <span>
+        <input type="text" name="invoice" value="<?=$invoice;?>" />
+
+        </span>
+</li>
+	<li>
+       <label class="field">财务备注：</label><em></em>
+       <span><textarea name="note" style="width: 300px; height: 50px;"><?=$note?></textarea></span>
+	</li>
+    <li>
+        <label class="field"> </label>
+        <em></em>
+        <p>
+          <center><label><input type="checkbox" value="2" name="is_finance" <?=$is_finance == '2' ?"checked":'';?> /> 收完</label>&nbsp;&nbsp;&nbsp;
+          
+            <button class="btn btn-submit" type="submit"> 保 存 </button>
+          </center>
+        </p>
+      </li>
+    </ul>
+    </div>
+  </form>
+</div>
+</body>
+</html>

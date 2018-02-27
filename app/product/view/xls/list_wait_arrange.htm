@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+		 <table class="grid-table">
+          <thead>
+            <tr>
+              
+              <!--th width="30"><a href="javascript:checkall()" style="cursor:pointer">选择</a></th-->
+       
+              <th width="80">检查类型</th>
+              <th width="50">状态</th>
+              <!--<th width="70">合同编号</th>-->
+              <th width="70">认证申请编号</th>
+              <th width="40">省份</th>
+              <th width="200">委托人</th>
+              <th width="200">生产企业</th>
+              <th width="200">生产者</th>
+              <!--th width="100">审核要求</th-->
+              <th width="50">审核人日</th>
+              <th width="50">联系人</th>
+              <th width="50">联系人手机</th>
+              <th width="50">企业电话</th>
+              <th width="50">企业传真</th>
+               <th width="60">合作单位/人</th>
+              <th width="80">标准</th>
+              <th width="80">计划开始</th>
+              <th width="80">最晚审核日</th>
+              <th width="80">证书到期日</th>
+              <th width="40">合同来源</th>
+
+              <th width="30">客户级别</th>
+    
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+if( $projects ){
+  foreach( $projects as $pid => $row ){
+?>
+            <tr >
+              
+              
+        <td align="center"><span class="audit-type">
+                <?=$row['audit_type_V'];?>
+                </span></td>
+              <td align="center" >
+                <?=${'status_'.(int)$row['status']};?>
+                </td>
+            <!--<td align="center"><?=$row['ct_code'];?></td>-->
+              <td align="center"><?=$row['cti_code'];?></td>
+              <td><?=$row['province'];?></td>
+              <td class="ep-name" <?=$row[style];?>><?=$row['ep_name'];?></td>
+              <td align="center"><?=$row['ep_prod_name'];?></td>
+              <td align="center"><?=$row['ep_manu_name'];?></td>
+              <!--td align="center"><?=$row['audit_require'];?></td-->
+              <td align="center"><?=$row['st_num'];?></td>
+              <td align="center"><?=sub_Str($row['person'],"||:||");?></td>
+              <td align="center"><?=sub_Str($row['person_mph'],"||:||");?></td>
+              <td align="center"><?=$row['ep_phone'];?></td>
+              <td align="center"><?=$row['ep_fax'];?></td>
+              <td align="center"><?=$row['signe_name'];?></td>
+              <td align="center"><?=$row['audit_ver_V'];?></td>
+              <td align="center"><?=$row['pre_date'];?></td>
+              <td align="center"><?=$row['final_date'];?></td>
+              <td align="center"><?=$row['cert_date'];?></td>
+              <td align="center"><?=$row['ctfrom_V'];?></td>
+      
+<td class="center"><?=read_cache('ep_level',$row['ep_level']);?></td>
+           
+            </tr>
+            <?php
+  }
+} else {
+?>
+            <tr>
+              <td align="center" colspan="14">未找到相关记录</td>
+            </tr>
+            <?php
+}
+?>
+          </tbody>
+          <!--tr>
+            <td colspan="2"></td>
+            <td colspan="12"><button class="btn btn-submit" type="submit" id="audit-btn">审核安排</button></td>
+          </tr-->
+        </table>
+</body>
+</html>

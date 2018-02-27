@@ -1,0 +1,91 @@
+<?php tpl('header');?> 
+<script type="text/javascript">
+$(function(){
+   		$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	  });
+})
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+</script>
+<form method="get" id="search-form" class="search-form tal" >
+  <input type="hidden" name="c" id="mode-m" value="<?=$c;?>" />
+  <input type="hidden" name="a" id="action-a" value="<?=$a;?>" />
+<table>
+	<tr>
+	   <td class="left">企业名称：</td><td class="right"><input type="text" name="ep_name" value="<?=$ep_name;?>" /></td>
+	   <td class="left">证书名称：</td><td class="right"><input type="text" name="name" value="<?=$name;?>" /></td>
+	   <td class="left">起始时间：</td><td class="right"><input class="input input-date finput"  type="text" name="zz_sdate" value="<?=$zz_sdate;?>" /></td>
+	   <td class="left">到期时间：</td><td class="right"><input class="input input-date finput"  type="text" name="zz_edate" value="<?=$zz_edate;?>" /></td>
+	</tr>
+	<tr>
+	   <td class="left">月份搜索：</td>
+	   <td>
+	     <select name="yuefei" >
+		   <?php foreach($yuefei_array as $key => $val):?>
+  		      <option value="<?=$key;?>" <?php if($yuefei == (int)$key){echo "selected";}?>><?=$val;?></option>
+    	   <?php endforeach;?>
+		 </select>
+	   </td>
+	</tr>
+</table>
+  <p class="button-panel">
+    <button class="btn btn-submit" type="submit">搜 索</button>
+    &nbsp;
+    <button id="reset-btn" class="btn btn-button" onClick="clearForm(this.form);" >清空</button>
+  </p>
+</form>
+<br />
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul
+	class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li
+		class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a
+		href="javascript:;">客户信息查询 <span class="cnt-total">
+      <?=$total;?>
+      </span></a></li>
+  </ul>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+  <table class="grid-table">
+    <tr>
+	  <th>查看</th>
+	  <th>企业名称</th>
+	  <th>证书名称</th>
+	  <th>证书起始时间</th>
+	  <th>证书到期时间</th>
+	  <th>证书备注</th>
+	  <th>下载</th>
+	</tr>
+	<?php if($res):?>
+	<?php foreach($res as $row):?>
+	  <tr>
+	     <td align="center"><a href=""><img src="theme/images/b_edit.png" /></a></td>
+	     <td><?=$row['ep_name'];?></td>
+	     <td><?=$row['zz_name'];?></td>
+	     <td><?=$row['zz_sdate'];?></td>
+	     <td><?=$row['zz_edate'];?></td>
+	     <td><?=$row['description'];?></td>
+	     <td align="center"><a href="?c=attachment&a=down&aid=<?=$row['id'];?>&class=zz"><img src="theme/images/down.gif" /></a></td>
+	  </tr>
+	<?php endforeach;?>
+	<?php else:?>
+	<tr>
+	    <td colspan="99" align="center">未找到数据！！！</td>
+	</tr>
+	<?php endif;?>
+  </table>
+    <?=$pages['pages'];?>
+</div>
+</div>

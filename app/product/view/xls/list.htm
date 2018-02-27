@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+
+    <table  class="grid-table">
+   <thead>
+     <tr>
+
+       <th width="50">状态</th>
+       <!-- <th width="120">合同编号</th> -->
+       <th>认证申请编号</th>
+       <th align="center">计划检验时间</th>
+       <th>送样时间</th>
+       <th>委托人</th><!--企业名称-->
+       <th>生产者</th><!--ep_manu_id-->
+       <th>生产企业</th><!--ep_prod_id-->
+       <th>产品名称</th><!--prod_name_chinese-->
+       <th>检查类型</th><!--audit_type-->
+       <th>产品标准</th><!--prod_ver-->
+     </tr>
+   </thead>
+   <tbody>
+   <?php foreach($resdb as $k=>$v ): ?>
+     <tr>
+   
+       <td align="center">
+     <?php 
+        switch($v['is_qualified']){
+          case 0:
+           echo "未检验";
+           break;
+        case 1:
+           echo "合格";
+           break;
+        case 2:
+           echo "需整改";
+           break;
+        case 3:
+           echo "不合格";
+           break;
+      }
+     ?>
+     </td>
+       <td align="center"><?=$v['cti_code']?></td>
+       <td align="center"><?=$v['plan_date']?></td>
+       <td align="center"><?=$v['send_date']?></td>
+       <td><?=$v['ep_name']?></td>
+       <td><?=$v['ep_manu_name']?></td>
+       <td><?=$v['ep_prod_name']?></td>
+       <td><?=$v['prod_name_chinese']?></td>
+       <td align="center"><?=$v['audit_type_V']?></td>
+       <td align="center"><?=$v['prod_ver']?></td>
+     
+     </tr> 
+   <?php endforeach;?>
+   </tbody>
+  </table>
+</body>
+</html>

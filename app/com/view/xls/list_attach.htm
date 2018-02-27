@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>委托人文档列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table>
+	<thead>
+		<tr>
+			<td>编号</td>
+			<td>企业注册名称</td>
+			
+			<td>项目所属单位</td>
+			<td>上传人</td>
+			<td>文件名</td>
+			<td>文件类型</td>
+			<td>上传时间</td>
+			<td>备注</td>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $attachs ){
+	foreach( $attachs as $row ){
+	$i++;
+?>
+		<tr>
+			<td align="center"><?=$i;?></td>
+			<td><?=$row['ep_name'];?></td>
+			<td align="center"><?=$row['ctfrom_V'];?></td>
+			<td><?=$row['name'];?></td>
+			<td align="center"><?=$row['ftype_V'];?></td>
+			<td align="center"><?=$row['postdate'];?></td>
+			<td align="center" ><?=f_username($row['upload_uid']);?></td>
+			<td><?=$row['description']?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); }}?>
+	</tbody>
+</table>
+</body>
+</html>

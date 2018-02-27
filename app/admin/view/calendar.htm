@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>审核员行程</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('#export-xls-btn').click( do_export_xls );
+
+
+});
+function do_export_xls(){
+	var form = $('#search-form');
+	form.append($('<input type="hidden" name="export" value="1" />'));
+	form.submit();
+	form.find('input[name=export]').remove();
+}
+
+</script>
+<style type="text/css">
+.day-zm {
+	background:#996;
+}</style>
+</head>
+
+<body>
+<form method="get" action="?" class="search-form tal" id="search-form" style='width:550px;margin:0 auto;'>
+<input type="hidden" name="c" value="<?=$c;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+	<table>
+		<tr>
+			<td class="left">年：</td>
+			<td class="right"><select name="year" class='fselect'>
+				<?php  for($i = $year - 1 ;$i < $year+2;$i++ ){ if($i == $year)$check = "selected";else$check = "";?>
+                <option value="<?=$i;?>" <?=$check;?> ><?=$i;?></option>
+                <?php }?>
+			</select></td>
+			<td class="left">月：</td>
+			<td class="right"><select name="month" class='fselect'>
+				<?php  for($i = 1 ;$i <= 12;$i++ ){ if($i == $month)$check = "selected";else$check = "";?>
+                <option value="<?=$i;?>" <?=$check;?> ><?=$i;?></option>
+                <?php }?>
+			</select></td>
+			
+		</tr>
+	</table>
+	<p class="button-panel">
+		<button class="btn btn-submit" type="submit"> 搜 索 </button>&nbsp;
+        <!--<?php if(current_user('check_auth') == 1){ ?>
+        <button id="export-xls-btn" class="btn btn-button" type="button"> 批量导出 </button>
+        <?php }?>-->
+	</p>
+</form>
+<br/>
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" style='width:550px;margin:0 auto;'>
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li class="ui-state-default ui-corner-top"><a href="javascript:;">审核日期登记</a></li>
+	</ul>
+	<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	
+<form method="post" action="" id="audit-form">
+<input type="hidden" name="year" value="<?=$year?>-<?=$month?>">
+	<table class="grid-table2 list-hr">
+		<tbody>
+        <tr>
+            <?php foreach($out_dayzjs as $v){?>
+            <th><?=$v;?></th>
+            <?php }?>
+        </tr>
+        <?php foreach ($_data as $key => $value) {
+?>
+        <tr>
+        <?php 	foreach ($value as $_key => $_value) {
+?>
+          <td align="center"><label><span class="<?=in_array($_key,array('0','6'))?'day-zm':''?>"><?=$_value;?>
+          <?php if($_value){?><input type="checkbox" name="day[]" value="<?=$_value;?>" id=""><?php }?></span></label></td>
+          <?php }?>
+        </tr>
+        <?php }?>
+		</tbody>
+	</table><br />
+
+    <button class="btn btn-submit">提交</button>
+</form>
+
+
+	</div>
+</div>
+</body>
+</html>

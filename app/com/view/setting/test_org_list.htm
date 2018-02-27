@@ -1,0 +1,238 @@
+<?php template('header');?>
+<script type="text/javascript" src="themejs/validator.js"></script>
+<script>
+                    $(
+					function() {
+                        $('button.submit-btn').click(function(){
+                            if(!Validator.Validate( $('#entry-form')[0], 2 ) ) return;
+                            $('#entry-form').submit();
+                        })
+                         
+                        $('.icon-del').click(function() {
+                            confirm_dialog('确定删除配置信息？',$(this).attr('href'), 'warning');
+                            return false;
+                        });
+                    })
+
+        </script>
+<<<<<<< .mine
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.select_ep').live('click', select_ep);  //添加联系人 
+				
+	});
+	//添加联系人
+    function select_ep() {
+        self = this;
+		var org_id = $(this).data('id');
+		
+        var href = '?app=com&m=enterprise&a=add_link&org_id=' + org_id;	  
+        $('<iframe class="add_link_iframe" src=' + href + '></iframe>').dialog({
+            title: '增加联系人',
+            width: 620,
+            height: 320,
+            modal: true,
+            resizable: false,
+            autoResize: true,
+            overlay: {opacity: 0.5, background: "black"},
+        }).width(620);
+
+    }
+	
+	function update_ep() {       
+        $('.add_link_iframe').dialog('close');
+        $('.add_link_iframe').dialog('destroy');
+        $('.add_link_iframe').remove();
+		window.location.href="?m=com&c=setting&a=test_org_list";
+    }
+</script>		
+=======
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.select_ep').live('click', select_ep);  //选择公司 
+	});
+	//选择生产者--生产企业
+    function select_ep() {
+        self = this;
+		var org_id = $(this).data('id');
+		
+        var href = '?app=com&m=enterprise&a=add_link&org_id=' + org_id;	  
+        $('<iframe class="add_link_iframe" src=' + href + '></iframe>').dialog({
+            title: '增加联系人',
+            width: 600,
+            height: 320,
+            modal: true,
+            resizable: false,
+            autoResize: true,
+            overlay: {opacity: 0.5, background: "black"},
+        }).width(600);
+
+    }
+</script>		
+>>>>>>> .r21
+</head>
+<body>
+<div style="margin:0 auto; width:2560px;" class="tal ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="javascript:;">系统设置&gt;&gt;检测机构</a></li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <form method="get" id="entry-form">
+      <input type="hidden" name="m" value="<?=$m;?>" />
+      <input type="hidden" name="app" value="<?=$app;?>" />
+      <input type="hidden" name="a" value="<?=$a;?>" />
+      <input type="hidden" name="c" value="<?=$c;?>" />
+      <table>
+        <tr>
+          <td>认证领域：</td>
+          <td><select name='audit_ver'>
+              <option></option>
+              <?php
+!defined('IN_SUPU') && exit('Forbidden'); echo f_select('audit_ver') ?>
+            </select></td>
+          <td>编号：</td>
+          <td><input type="text" name="code" value="<?=$_GET['code'];?>" class="input input-search" /></td>
+          <td>机构名称：</td>
+          <td><input type="text" name="name" value="<?=$_GET['name'];?>" class="input input-search" /></td>
+          <td>联系人：</td>
+          <td><input type="text" name="person" value="<?=$_GET['person'];?>" class="input input-search" /></td>
+          <td>地址：</td>
+          <td><input type="text" name="addr" value="<?=$_GET['addr'];?>" class="input input-search" /></td>
+        </tr>
+      </table>
+      <p class="button-panel tal">
+        <button type="submit" class="btn btn-submit"> 搜索 </button>
+      
+      </p>
+    </form>
+    <?=$pages['pages'];?>
+    <p style="font-size:0;height:9px;overflow:hidden;"></p>
+    <form method="post">
+      <table class="form-table tal">
+        <tr>
+          <th width="30px">排序</th>
+          <th width="40">编号</th>
+          <th width="60">指定编号</th>
+          <th width="40">CCC</th>
+         <!-- <th width="">有机</th>
+          <th width="">GAP</th>-->
+          <th width="">工业品</th>
+          <th width="140">机构名称</th>
+          <th>登录账户</th>
+		  <th>增加联系人</th>
+          <th>登录密码</th>
+          <th>机构地址</th>
+          <th width="60">邮政编码</th>
+          <th>能力范围</th>
+          <th>地域范围</th>
+          <th>联系人</th>
+          <th>座机</th>
+          <th>手机</th>
+          <th>传真</th>
+          <th>邮箱</th>
+          <th>账户名称</th>
+          <th>账号</th>
+          <th>开户行</th>
+          <th>其他名称</th>
+          <th>省份</th>
+          <th>备注</th>
+		  <th>变更备注</th>
+          <th width="120">状态</th>
+          <th width="40">删除</th>
+        </tr>
+        <?php
+!defined('IN_SUPU') && exit('Forbidden');
+                        if( $resdb ){
+                        foreach( $resdb as $id => $row ){
+                        $row['stop_Y'] = $row['is_stop'] ? 'checked' : '';
+                        $row['stop_N'] = $row['is_stop'] ? '' : 'checked';
+                        ?>
+        <tr align="center">
+          <td><input type="text"  name="old[<?=$id;?>][vieworder]" value="<?=$row['vieworder'];?>" size="2" class="input" /></td>
+          <td><input style="width:50px;" type="text"  name="old[<?=$id;?>][code]" value="<?=$row['code'];?>" class="input" /></td>
+          <td><input style="width:40px;" type="text"  name="old[<?=$id;?>][cnas_no]" value="<?=$row['cnas_no'];?>" class="input" /></td>
+          <td><input type="checkbox"  name="old[<?=$id;?>][is_b01001]" value="1" <?php if($row['is_b01001']){?> checked="checked" <?php } ?> /></td>
+          <!--<td><input type="checkbox"  name="old[<?=$id;?>][is_b02001]" value="1"
+                                       <?php if($row['is_b02001']){?> checked="checked" <?php } ?> /></td>
+          <td><input type="checkbox"  name="old[<?=$id;?>][is_b02004]" value="1" 
+                                       <?php if($row['is_b02004']){?> checked="checked" <?php } ?> /></td>-->
+          <td><input type="checkbox"  name="old[<?=$id;?>][is_b0200x]" value="1" 
+                                       <?php if($row['is_b0200x']){?> checked="checked" <?php } ?> /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][name] " value="<?=$row['name'];?>" size="35" class="input" /></td>
+          <td align="left"><input type="text" size="7"  name="old[<?=$id;?>][userName]"  value="<?=$row['userName']; ?>" class="input" autocomplete="off"/>
+          <?php if($row['userPwd']=='b2d369b2375854f11e36fdba88338151'){ echo '默认';}?>
+          
+          </td>
+		  <td><i class="i-select select_ep" data-id="<?=$id;?>" style="border:0px;"></i></td>
+          <td><input type="password" size="9" name="old[<?=$id;?>][userPwd]" class="input" autocomplete="off"/></td>		  
+          <td align="left"><input type="text" name="old[<?=$id;?>][addr]" value="<?=$row['addr'];?>" size="30" class="input" /></td>
+          <td align="center"><input type="text" name="old[<?=$id;?>][post_code] " value="<?=$row['post_code'];?>" size="5" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][note2] " value="<?=$row['note2'];?>" size="5" class="input" /></td>
+          <td align="left"><input type="text" size="9" name="old[<?=$id;?>][area] " value="<?=$row['area'];?>" size="35" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][person] " value="<?=$row['person'];?>" size="20" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][person_phone] " value="<?=$row['person_phone'];?>" size="20" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][tel]" value="<?=$row['tel'];?>" size="13" class="input" /></td>
+             <td align="left"><input type="text" name="old[<?=$id;?>][fax]" value="<?=$row['fax'];?>" size="13" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][person_email] " value="<?=$row['person_email'];?>" size="20" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][bank] " value="<?=$row['bank'];?>" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][bank_no] " value="<?=$row['bank_num'];?>" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][bank_name] " value="<?=$row['bank_name'];?>" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][name_ot] " value="<?=$row['name_ot'];?>" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][province] " value="<?=$row['province'];?>" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="old[<?=$id;?>][note] " value="<?=$row['note'];?>" size="10" class="input" /></td>
+		  <td align="left"><input type="text" name="old[<?=$id;?>][bgnote] " value="<?=$row['bgnote'];?>" size="10" class="input" /></td>
+          <td><input type="radio" id="stop-{$id}-N" name="old[<?=$id;?>][is_stop]" value="0" <?=$row['stop_N'];?>/>
+            <label for="stop-{$id}-N"> 启用</label>
+            <input type="radio" id="stop-{$id}-Y" name="old[<?=$id;?>][is_stop]" value="1" <?=$row['stop_Y'];?>/>
+            <label for="stop-{$id}-Y"> 停用</label></td>
+          <td align="center"><a href="?m=com&c=<?=$c;?>&a=<?=$a?>&del=<?=$row['id'];?>" class="icon-del"></a></td>
+        </tr>
+        <?php 
+                    }
+                 }
+                ?>
+        <tr align="center">
+          <td><input type="text" name="new[vieworder]" size="2" class="input" /></td>
+          <td><input type="text" name="new[code]" size="6" class="input" /></td>
+          <td><input type="text" name="new[cnas_no]" size="5" class="input" /></td>
+          <td><input type="checkbox"  name="new[is_b01001]" value="1" /></td>
+          <td><input type="checkbox"  name="new[is_b02001]" value="1" /></td>
+          <td><input type="checkbox"  name="new[is_b02004]" value="1" /></td>
+          <td><input type="checkbox"  name="new[is_b0200x]" value="1" /></td>
+          <td align="left"><input type="text" name="new[name]" size="30" class="input" /></td>
+          <td><input type="text" size="7"  name="new[userName]" class="input"/></td>
+          <td><input type="password" size="9" name="new[userPwd]" class="input"/></td>
+          <td align="left"><input type="text" name="new[addr]"  size="30" class="input" /></td>
+          <td align="left"><input type="text" name="new[post_code]" size="5" class="input" /></td>
+          <td align="left"><input type="text" name="new[note2]" size="5" class="input" /></td>
+          <td align="left"><input type="text"   name="new[area]" size="9" class="input" /></td>
+          <td align="left"><input type="text" name="new[person]" size="20" class="input" /></td>
+          <td align="left"><input type="text" name="new[person_phone]" size="20" class="input" /></td>
+          <td align="left"><input type="text" name="new[tel]" size="13" class="input" /></td>
+            <td align="left"><input type="text" name="new[fax]" size="13" class="input" /></td>
+          <td align="left"><input type="text" name="new[person_email]" size="20" class="input" /></td>
+          <td align="left"><input type="text" name="new[bank]" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[bank_no]" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[bank_name]" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[name_ot]" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[province]" size="10" class="input" /></td>
+          <td align="left"><input type="text" name="new[note]" size="10" class="input" /></td>
+          <td><label>
+              <input type="radio" name="new[is_stop]" value="0" />
+              启用</label>
+            <label>
+              <input type="radio" name="new[is_stop]" value="1" />
+              停用</label></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5"><center>
+              <button class="btn btn-submit" type="submit"> 保 存 </button>
+            </center></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+</body>
+</html>

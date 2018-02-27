@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>认证方案</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="<?php sysinfo('url');?>/include/style/style.css" type="text/css" rel="stylesheet" />
+<link href="<?php sysinfo('url');?>/include/style/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/jquery.js"></script>
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/ui-dialog.js"></script>
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(function() {
+	//var tooltips = $( "[title]" ).tooltip({position:{my:"left+6 center", at:"right center"}});
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+	$( ".input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$('#export-xls-btn').click( do_export_xls );
+});
+
+function do_export_xls(){
+	var form = $('#search-form');
+	form.append($('<input type="hidden" name="export" value="1" />'));
+	form.submit();
+	form.find('input[name=export]').remove();
+}
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+</script>
+</head>
+
+<body>
+<form method="get" action="?" id="search-form" class="search-form tal" style='width:1150px;margin:0 auto;'>
+  <input type="hidden" name="m" value="<?=$m;?>" />
+  <input type="hidden" name="c" value="<?=$c;?>" />
+  <input type="hidden" name="a" value="<?=$a;?>" />
+  <input type="hidden" name="pd_type" value="<?=$pd_type;?>" />
+  <table>
+    <tr>
+      <td class="left">申请编号：</td>
+      <td class="right"><input type="text" name="cti_code" value="<?=$cti_code;?>" class="input finput" /></td>
+      <td class="left">委托人：</td>
+      <td class="right"><input type="text" name="ep_name" value="<?=$ep_name;?>" class="input finput" /></td>
+      <td class="left"> 生产者：</td>
+	  <td class="rifht"><input type="text" name="ep_manu_name" value="<?=$ep_manu_name?>" class="input finput"></td>
+	  <td class="left"> 生产企业：</td>
+	  <td class="rifht"><input type="text" name="ep_prod_name" value="<?=$ep_prod_name?>" class="input finput"></td>
+        </tr>
+	<tr>
+      
+      <td class="left">省份：</td>
+      <td class="right"><select id="areacode" name="areacode"
+			class='fselect'>
+          <option value="">--请选择--</option>
+          <?=$province_select;?>
+        </select></td>
+	</tr>
+  </table>
+  <br />
+  <p class="button-panel">
+    <button class="btn btn-submit" type="submit"> 搜 索 </button>
+    &nbsp;
+    <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>
+    &nbsp;
+        <?php if(current_user('check_auth') == 1){ ?>
+    <button class="btn btn-button" id="export-xls-btn" type="button"> 批量导出 </button>
+    <?php }?>
+  </p>
+</form>
+<br/>
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" style='width:1150px;margin:0 auto;'>
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top<?=$status_0;?>"><a href="?m=product&c=contract&a=protocol_list<?php gettourl();?>">未安排 <span class="cnt-total">
+      <?=$total[0];?>
+      </span></a></li>
+    <li class="ui-state-default ui-corner-top<?=$status_1;?>">
+    	<!-- <a href="?m=product&c=contract&a=protocol_list&status=1<?php gettourl();?>">已安排  -->
+    	<a href="?m=product&c=contract&a=protocol_list&status=1<?php gettourl();?>">已安排 
+	    	<span class="cnt-total">
+	      		<?=$total[1];?>
+	      	</span>
+      	</a>
+    </li>
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <table  class="grid-table">
+	 	<thead>
+	   	<tr>
+		    <th width="50">操作</th>
+		    <th>申请编号</th>
+		    <th>委托人</th><!--企业名称-->
+		    <th>生产者</th><!--ep_manu_id-->
+		    <th>生产企业</th><!--ep_prod_id-->
+		    <!-- <th>审批时间</th>prod_name_chinese -->
+		    <!--<th>检查类型</th>audit_type-->
+		
+			<!--  -->
+			<!-- <th>生产企业名称</th> -->
+	        <th>产品小类</th>
+			<th>产品标准</th>
+			<th>是否检测</th>
+			<th>是否检查</th>
+			<th>现场检查人日</th>
+			<!--  -->
+	     
+	   </tr>
+	 </thead>
+	 <tbody>
+	 <?php foreach($resdb as $k=>$v ): ?>
+	    <tr>
+		    <td align="center">
+		        <a href="?m=product&c=contract&a=protocol_edit&tid=<?=$v['tid'];?>&ep_prod_id=<?=$v['ep_prod_id'];?>&status=<?=$status;?>" title='点击操作'><img src="theme/images/b_edit.png" border=0 /></a>
+		    </td>
+		    <td align="center"><?=$v['cti_code']?></td>
+		    <td><?=$v['ep_name']?></td>
+		    <td><?=$v['ep_manu_name']?></td>
+		    <td><?=$v['ep_prod_name']?></td>
+		    <!-- <td><?=$v['approval_date']?></td> -->
+		    <!--<td align="center"><?=$v['audit_type_V']?></td>-->
+
+		    <!--  -->
+		    <!-- <td align="center"><?=$v['ep_prod_name']?></td> -->
+	        <td align="center">	
+				<?=$v[prod_id];?>
+			</td>
+			<td align="center">
+				<?=$v[prod_ver];?>
+			</td>
+
+			<td align="center">
+				<label>
+				<span><?=$v[is_samp] == '1'?'是':'否';?></span>
+				</label>
+			</td>
+
+			<td align="center">
+				<label>
+				<span><?=$v[is_check] == '1'?'是':'否';?></span>
+			</td>
+			
+			<td align="center">
+				<?=$v[st_num]?>
+			</td>
+	    </tr> 
+	 <?php endforeach;?>
+	 </tbody>
+	</table>
+    <?=$pages['pages'];?>
+  </div>
+</div>
+</body>
+</html>

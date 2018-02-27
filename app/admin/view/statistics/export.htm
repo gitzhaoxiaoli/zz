@@ -1,0 +1,31 @@
+<script type="text/javascript">
+$(document).ready(function(){
+  $( "#month-59" ).tabs({
+    collapsible: false
+  });
+  
+	$("#tab-basic a").click(function(e) {
+		$(this).attr('disabled',true);
+	    });
+  
+});
+</script>
+</head>
+<body><br>
+
+<div id="month-59" style="margin: 0 auto; width: 750px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">导出数据</a></li>
+  </ul>
+  <div id="tab-basic" style="100%">
+    <ul class="doc-list2 clearfix">
+    	<li><a href="?c=statistics&a=report_cert" target="_blank">导出项目信息</a></li>
+        <li></li>
+    	<li><a href="?c=statistics&a=report_enterprises" target="_blank">导出企业信息</a></li>
+    </ul>
+  </div>
+</div>
+<br/>
+
+</body>
+</html>

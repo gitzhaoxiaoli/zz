@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>认证方案</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="<?php sysinfo('url');?>/include/style/style.css" type="text/css" rel="stylesheet" />
+<link href="<?php sysinfo('url');?>/include/style/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/jquery.js"></script>
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/ui-dialog.js"></script>
+<script type="text/javascript" src="<?php sysinfo('url');?>/include/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(function() {
+    $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	 $(".is_check").click(function(){
+		 var last_date = $(this).parent().parent().find("input[type=text]");
+		 var review_the = $(this).parent().parent().nextAll().find(".review_the");
+	   if($(this).val()=='0'){
+	 
+			last_date.show();
+			last_date.attr('disabled',false);
+	        review_the.attr('disabled',true);
+		 }else{
+			last_date.hide();
+			last_date.attr('disabled',true);
+		    
+			review_the.attr('disabled',false);
+		 }
+	 });
+	
+	
+
+	
+	//var tooltips = $( "[title]" ).tooltip({position:{my:"left+6 center", at:"right center"}});
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+	$(".is_check:checked").each(function(index, element) {
+        var last_date = $(this).parent().parent().find("input[type=text]");
+		 var review_the = $(this).parent().parent().nextAll().find(".review_the");
+	   if($(this).val()=='0'){
+	 
+			last_date.show();
+			last_date.attr('disabled',false);
+	        review_the.attr('disabled',true);
+		 }else{
+			last_date.hide();
+			last_date.attr('disabled',true);
+		    
+			review_the.attr('disabled',false);
+		 }
+    });
+});
+
+</script>
+</head>
+
+<body>
+
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" style='width:1100px;margin:0 auto;'>
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top<?=$status_0;?>"><a href="#">安排 </a></li>
+   
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+  <form action="" method="post">
+  <input type="hidden" name="ct_id" value="<?=$ct_id?>" />
+    <table  class="grid-table">
+	<tbody>
+            <tr>
+            <td align="center"> 生产企业名称</td>
+	        <td align="center">	产品小类</td>
+			<td align="center">	产品标准</td>
+			<td align="center">	是否检测</td>
+			<td align="center">	是否检查</td>
+
+			<td align="center">	现场检查人日</td>
+
+		<tr>
+			<?php foreach($reb as $k=>$v){?>
+			<tr>
+						<td align="center"><?=$v['ep_prod_name']?></td>
+				        <td align="center">	
+							<?=$v[prod_id];?>
+						</td>
+						<td align="center"><?=$v[prod_ver];?></td>
+
+						<td align="center">
+						<label>是<input type="radio" name="is_samp[<?=$v[id];?>]" id="" value="1" <?=$v[is_samp]?'checked':'';?> /></label>
+						<label>否<input type="radio" name="is_samp[<?=$v[id];?>]" id="" value="0" <?=!$v[is_samp]?'checked':'';?> /></label>
+						
+						</td>
+
+						<td align="center">
+						<label>
+						是<input type="radio" name="is_check[<?=$v[id];?>]" value="1" <?=$v[is_check]?'checked':'';?> class="is_check" />
+						否<input type="radio" name="is_check[<?=$v[id];?>]"  value="0"  <?=!$v[is_check]?'checked':'';?> class="is_check" />
+						</label>
+						
+						
+						</td>
+						
+						<td align="center"><input type="text"  name="st_num[<?=$v[id];?>]" value="<?=$v[st_num]?>" class='review_the'  />
+						</td>
+						<label><input type="hidden"  name="p_idarr[]" value="<?=$v[id];?>" /></label>
+			</tr>
+			<?php }?>
+        	<td colspan="12" align="center">
+        		<label>
+		          <input type="checkbox" id="protocol_status" name="protocol_status" value="1" <?=$_GET['status']==1? " checked":'';?> />
+		          已安排
+		        </label>
+		        
+        		<button id="submit-btn" class="btn btn-submit">提 交</button>
+        	</td>
+        	
+       </tr>
+	</tbody>
+	</table>
+    </form>
+  </div>
+</div>
+</body>
+</html>

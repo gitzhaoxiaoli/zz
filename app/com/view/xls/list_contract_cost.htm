@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>批次费用列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #000;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #000;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+<table>
+	<thead>
+		<tr>
+			
+			<th width="40">状态</th>
+			<th width="100">申请编码</th>
+			<th width="100">申请编号</th>
+			<th width="*">委托人名称</th>
+			<th width="80">项目所属单位</th>
+			<th width="230">收费项目</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+!defined('IN_SUPU') && exit('Forbidden');
+if( $datas ){
+	foreach( $datas as $row ){
+?>
+		<tr>
+			
+			
+			
+			
+			<td align="center"><?=$row['status'];?></td>
+			
+			<td align="center"><?=$row['cti_codes'];?></td>
+			<td align="left"><?=$row['ep_name'];?></td>
+			<td align="center"><?=$row['ctfrom_V'];?></td>
+			<td align="center"><?=$row['cost_type'];?></td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden'); }}
+?>
+	</tbody>
+</table>
+</body>
+</html>

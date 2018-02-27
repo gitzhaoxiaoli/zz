@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+	
+  
+  <table class="grid-table tal">
+    <thead>
+    <tr>
+            <th>人员编号</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>联系手机</th>
+			<th>省份</th>
+			<th>专兼职</th>
+            <th>出生日期</th>
+            <th>年龄</th>
+			<!--<th>身份证号码</th>-->
+			<th>E-mail</th>
+            <th>工作单位</th>
+    </tr>
+    </thead>
+    <tbody>
+<?php
+if( $users ){
+  foreach( $users as $row ){
+?>
+    <tr>
+    <td align="center"><?=$row['code'];?></td>
+			<td align="center"><?=$row['name'];?></td>
+			<td align="center"><?=$row['sex'];?></td>
+			<td align="center"><?=$row['tel'];?></td>
+			<td align="center"><?=$row['areacode'];?></td>
+			<td align="center"><?=$row['audit_job'];?></td>
+            <td align="center"><?=$row['birthday'];?></td>
+            <td align="center"><?=$row['age'];?></td>
+			<!--<td align="center"><?=$row['card_no'];?></td>-->
+			<td align="center"><?=$row['mail'];?></td>
+            <td align="center"><?=$row['unit'];?></td>
+      
+    </tr>
+<?php
+  }
+} else {
+?>
+    <tr>
+      <td align="center" colspan="12">没有找到数据</td>
+    </tr>
+<?php
+}
+?>
+    </tbody>
+  </table>
+</body>
+</html>

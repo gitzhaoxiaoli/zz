@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>人员代码编辑</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script>
+$(function() {
+ 	//标签
+        $( "#enterprise-tab" ).tabs({
+            collapsible: false
+        });
+ 	//日期
+        $( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+		});   
+	//添加业务代码
+		$('.add-audit-code-btn').live('click', select_code );
+ 	 //验证删除
+    	$('.c-del').click(function(){
+    		confirm_dialog('确定要删除吗！', $(this).attr( 'href' ), 'warning' );
+    		return false;
+     });
+	 $('#evaluater').live( 'click', select_pduser );
+	 
+	 
+	 
+ }); 
+//选择业务代码
+function select_code(){
+	iso = $(this).attr("rel");
+	iframe_dialog("选择代码","?m=com&c=ajax&a=select_prod_code&iso="+iso,"600","400");
+}
+function update_prod_rule(code){
+	$(".use-code").val(code)
+	close_iframe_dialog();
+	
+	
+	}
+ function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+var $this = null;
+function select_pduser(){ 
+	//var iso=$(this).attr("iso");
+	//var audit_code=$(this).attr("code");
+	//var href = '?c=ajax&a=select_zy_name&iso='+iso+'&audit_code='+audit_code;
+	iso=$("input[name=iso]").val();
+	var href = '?c=ajax&a=select_code_teacher';
+ 	$this = $(this).parent().find("input"); 
+	$('<iframe border="0" id="frame1" frameborder="no" src="' + href + '" />').dialog({
+		title: '选择专业管理人员',
+		autoOpen: true,
+		width: 400,
+		height: 380,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		overlay: {opacity: 0.5,background: "black"},
+		close: function(ev,ui){$(this).remove();}
+	}).width(400 - 30).height(380);
+}
+
+
+function update_user( uid, name ){
+	var val=$this.val();
+	if(val)
+	val+="；";
+	val+=name;
+	$this.val(val);
+
+	$('#frame1').dialog('close');
+}
+</script>
+</head>
+
+<body>
+<br/>
+<br/>
+<form method="post" name="winput" action="?c=hr_code&a=save_prod"  onsubmit="return Validator.Validate(this,2);" >
+  <input type="hidden" name="id" value="<?=$id?>" />
+  <input type="hidden" name="uid" value="<?=$uid?>" />
+  <input type="hidden" name="qua_id" value="<?=$qua_id?>" />
+  <div id="enterprise-tab" style="margin:0 auto;width:750px;" class="tal">
+    <ul>
+      <li><a href="#tab-basic">
+        <?=$tip_msg?>
+        </a></li>
+    </ul>
+    <div id="tab-basic">
+      <ul class="main-form">
+        <li>
+          <label class="field">类别:</label>
+          <em></em> <span>
+          <?=f_iso($iso);?>
+          </span> </li>
+        <li>
+          <label class="field">代码：</label>
+          <em>*</em> <span>
+          <input type="text" size="45" class="use-code" name="use_code"  value="<?=$rows['use_code'];?>" readonly="readonly" />
+		<button type="button" class="btn btn-button add-audit-code-btn" rel="<?=$iso;?>">添加</button></span></li>
+         
+        <li>
+          <label class="field">评定人员：</label>
+          <em>*</em>
+          <input type="text" name="evaluater" value="<?=$rows[evaluater]?>" dataType="Require" msg="请添加评定人员！"/>
+                    <!--<button class="btn" id="evaluater"  type="button">添加</button> -->
+          
+        </li>
+    
+        <li>
+          <label class="field">通过日期：</label>
+          <em>*</em> <span>
+          <input type="text" name="pass_date" value="<?=$rows[pass_date]?>"  class='input-date' style='width:130px' dataType="Require" msg="通过日期不能为空！"/>
+          </span> </li>
+        
+        <li>
+          <label class="field">备注：</label>
+          <em></em> <span>
+          <textarea name="note" style="width:300px;height:40px;"><?=$rows[note]?>
+</textarea>
+          </span> </li>
+        <li>
+          <label class="field"></label>
+          <em></em> <span>
+          <p>
+            <center>
+              <button class="btn btn-submit" type="submit"> 保 存 </button>
+            </center>
+          </p>
+          </span> </li>
+        <li>
+          <label class="field">全部业务代码：</label>
+          <em></em>
+          <div style="width:655px; word-wrap:break-word; padding-left:30px;"><?=$ucode_str;?></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</form>
+</body>
+</html>

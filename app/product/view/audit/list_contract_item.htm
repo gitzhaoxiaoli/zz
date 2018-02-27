@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>产品列表</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/jquery.url.js"></script>
+<script type="text/javascript" src="theme/js/ui-dialog.js"></script>
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('.c-del').click(function(){
+		confirm_dialog('此操作将删除合同信息以及隶属于该合同的所有项目信息！', $(this).attr( 'href' ), 'warning' );
+		return false;
+	});
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+ 	$('#export-xls-btn').click( do_export_xls );
+	$(".a_link").live("click",function(){
+		$(this).parent().find("span").toggle();
+		})
+	
+});
+
+function approval(){
+	iframe_dialog( '合同审批', $(this).attr( 'href' ), 500, 260 );
+	return false;
+}
+
+function do_export_xls(){
+	var form = $('#search-form');
+	form.append($('<input type="hidden" name="export" value="1" />'));
+	form.submit();
+	form.find('input[name=export]').remove();
+}
+function clearForm(objE){
+    $(objE).find(':input').each(
+        function(){
+            switch(this.type){
+                case "text":
+                case "select-one":
+                	$(this).val('');
+                    break;
+            }
+        }
+    );
+}
+</script>
+</head>
+
+<body>
+<form method="get" id="search-form" action="" class="search-form tal" style='width:1400px;margin:0 auto;'>
+  <input type="hidden" name="m" value="<?=$m;?>" />
+  <input type="hidden" name="c" value="<?=$c;?>" />
+  <input type="hidden" name="a" value="<?=$a;?>" />
+  <input type="hidden" id="status" name="status" value="<?=$status;?>" />
+  <table>
+    <tr>
+      <td class="left">认证申请编号：</td>
+      <td class='right'><input type="text" id="cti_code" name="cti_code" value="<?=$cti_code;?>" class="input finput" /></td>
+      <td class="left">委托人：</td>
+      <td class='right'><input type="text" id="" name="ep_name" value="<?=$ep_name;?>" class="input finput" /></td>
+      <td class="left">生产者：</td>
+      <td class='right'><input type="text" id="" name="ep_manu_id" value="<?=$ep_manu_id;?>" class="input finput" /></td>
+      <td class="left">生产企业：</td>
+      <td class='right'><input type="text" id="" name="ep_prod_id" value="<?=$ep_prod_id;?>" class="input finput" /></td>
+    </tr>
+    <tr>
+        <td class="left">产品小类：</td>
+      <td class='right'><input type="text" id="" name="prod_id" value="<?=$prod_id;?>" class="input finput" /></td>
+                   <td class="left">是否外网申请：</td>
+      <td class='right'>
+        <select name="is_app" id="is_app">
+          <option value="">请选择</option>
+          <option value="1">是</option>
+          <option value="0">否</option>
+        </select></td>
+        <td class="left">工厂编号</td>
+      <td class="right"><input type="text" name="fac_code" value="<?=$fac_code;?>" class="input finput" /></td>
+
+    </tr>
+    <tr> 
+  </table>
+  <p class="button-panel">
+    <button class="btn btn-submit" type="submit"> 搜 索 </button>
+    &nbsp;
+    <button  class="btn btn-button" onclick="clearForm(this.form);" >清空</button>
+    &nbsp;
+        <?php if(current_user('check_auth') == 1){ ?>
+    <button class="btn btn-button" id="export-xls-btn" type="button"> 批量导出 </button>
+    <?php }?>
+  </p>
+</form>
+<br/>
+<div class="tal ui-tabs ui-widget ui-widget-content ui-corner-all" style='width:1400px;margin:0 auto;'>
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top <?=$status_0;?>"><a href="javascript:;">未受理<span class="cnt-total">&nbsp;&nbsp;
+      <?=$total[0];?>
+      </span></a></li>
+    <!--  <li class="ui-state-default ui-corner-top <?=$status_1;?>"><a href="?m=product&c=contract&a=approval&status=1 ">已审批<span class="cnt-total">&nbsp;&nbsp;
+      <?=$total[1];?>
+      </span></a></li>
+      <li class="ui-state-default ui-corner-top <?=$status_2;?>"><a href="?m=product&c=contract&a=approval&status=2 ">退回<span class="cnt-total">&nbsp;&nbsp;
+      <?=$total[2];?>
+      </span></a></li>
+      <li class="ui-state-default ui-corner-top <?=$status_3;?>"><a href="?m=product&c=contract&a=approval&status=3 ">变更评审<span class="cnt-total">&nbsp;&nbsp;
+      <?=$total[3];?>
+      </span></a></li>-->
+  </ul>
+  <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <div>
+      <table class="grid-table">
+        <thead>
+          <tr>
+          	<th width="10">添加</th>
+            <th width="40">认证申请编号</th>
+             <th width="30">是否外网申请</th>
+             <th width="30">申请人</th>
+            <th width="30">委托人</th>
+            <th width="30">生产者</th>
+            <th width="30">生产企业</th>
+            <th width="30">产品小类</th>
+            <th width="30">产品名称</th>
+            
+            <th width="30">受理人</th>
+            <th width="30">受理时间</th>
+            <th width="30">受理备注</th>
+          </tr>
+        </thead>
+        <tbody>
+<?php
+    if( $contracts ){
+        foreach($contracts as $cti_id=>$row){
+?>
+          <tr>
+            <td align="center"><a title="添加" href="?m=product&c=audit&a=edit_item&cti_id=<?=$row['cti_id'];?>"><img src="theme/images/b_edit.png" border=0 /></a></td>
+            
+		    <td align="center"><?=$row['cti_code'];?></td>
+            <td align="center"><?=$row['is_app']==1?'是' :'否';?></td>
+            <td align="center"><?=$row['create_user'];?></td>
+            <td align="center"><?=$row['ep_name'];?></td>
+            <td align="center"><?=$row['ep_manu'];?></td>
+            <td align="center"><?=$row['ep_prod'];?></td>
+            <td align="center"><?=$row['prod_id']?></td>	
+            <td align="center"><?=$row['prod_name_chinese'];?></td>
+             
+            <td align="center"><?=$row['approval_user'];?></td>
+            <td align="center"><?=$row['approval_date'];?></td>
+            <td align="center"><?=$row['approval_note'];?></td>
+<?php            
+	} ?>
+    
+  <?php  }else{
+?>
+          <tr>
+            <td align="center" colspan="18">未找到相关记录</td>
+          </tr>
+<?php
+	}
+?>
+        </tbody>
+      </table>
+      <p>
+        <?=$pages['pages'];?>
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

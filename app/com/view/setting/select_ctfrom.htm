@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择人员</title>
+
+<link href="themecss/style.css" type="text/css" rel="stylesheet" />
+<link href="themecss/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="themejs/jquery.js"></script>
+<script type="text/javascript" src="themejs/jquery-ui.js"></script>
+<script type="text/javascript" src="themejs/core.js"></script>
+<script>
+    $(function() { 
+        $( "#enterprise-tab" ).tabs();
+    });
+    </script>
+</head> 
+<body>  
+<form method="get" action="">
+	<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="app" value="<?=$app;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" /> 
+	<table>
+<!--		<tr>  
+			<td>组织名称：</td>
+			<td ><input type="text" name="ep_name" value="<?=$_GET['ep_name'];?>"  class="input input-search-basic" /></td>
+ 			<td align="left">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</td>
+		</tr>-->
+	</table>
+</form>
+	<table class="grid-table" style="width:700px;">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="60">编号</th> 
+			<th>单位名称</th> 
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $ctfrom_infos ){
+	foreach( $ctfrom_infos as $id => $row ){
+?>
+		<tr align="left">
+			<td>
+          <input type="radio" onclick="javascript:window.parent.update_ctfrom( '<?=$row['code'];?>', '<?=$row['name'];?>');" />
+           <!-- <a href=""><img src="themeimages/b_edit.png" border="0" /></a>--></td>
+			<td><?=$row['code'];?></td> 
+			<td><?=$row['name'];?></td>  
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+!defined('IN_SUPU') && exit('Forbidden');
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

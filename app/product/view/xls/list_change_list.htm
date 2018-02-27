@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资料回收列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+		 <table class="grid-table tal">
+    <thead>
+    <tr align='center'>
+<?php
+  if($status=='1'){
+?>
+      <!-- <th width="*">增加特殊项目</th> -->
+    <!--  <th width="*"></th>-->
+      
+<?php
+  }else{
+?>
+  
+<?php
+  }
+?>
+      
+      <!--<th width="*">增加变更项目</th>-->
+      <th width="*">认证申请编号</th>
+      <th width="*">证书编号</th>
+      <th width="*">组织名称</th>
+      <th width="*">合同来源</th>
+      <th width="*">体系标准</th>
+      <th width="*">变更类型</th>
+      <th width="80">变更日期</th>
+            <th width="40">暂停期限</th>
+            <th width="80">暂停结束</th>
+      <th width="100">变更前</th>
+            <th width="100">变后前</th>
+      <th width="*">备注</th>
+            <?php if($status) {?>
+            <th width="50">通知</th>
+      <th width="50">通知发放时间</th><?php }?>
+      <th width="30">删除</th>
+    </tr>
+    </thead>
+    <tbody>
+
+<?php
+if( $datas ){
+  foreach( $datas as $id=>$row ){
+?>
+    <tr align='center'>
+<?php
+  if($status=='1'){
+?>
+ 
+        <!--    <td></td>-->
+      
+<?php
+  }else{
+?>
+    
+<?php
+  }
+    
+?>
+      <!--<td><a  href="?m=product&c=audit&a=edit_item&cti_id=<?=$row[cti_id]?>"><img src="theme/images/b_edit.png" border=0 /></a></td>-->
+      <td><?=$row['cti_code']?></td>
+      <td><?=$row['certno']?></td>
+      <td><?=$row['cert_name']?></td>
+      <td><?=$row['ctfrom']?></td>
+      <td><?=$row['prod_ver']?></td>
+      <td align="center"><?=read_cache("b01001_certchange",$row['cg_type'])?></td>
+      <td><?=$row['cg_date']?></td>
+            <td><?=$row['ztdq']?></td>
+            <td><?=$row['cge_date']?></td>
+      <td><?=$row[cg_af];?></td>
+            <td><?=$row[cg_bf];?></td>
+      <td><?php if($row['note']){?><a href="#" title="<?=$row['note'];?>" ><img src="theme/images/other.png" border=0 /></a><?php } ?></td><?php if($status) { if($row[action]) {?>
+            <td><a href="#"  title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a></td>
+      <td class="tongzhi_date" i="<?=$id;?>"><?=$row['tongzhi_date']?></td><?php }else {?><td></td><td></td><?php }}?>
+      <td><a href="?c=change&a=del&cgid=<?=$row['id'];?>" class='c-del'><img src="theme/images/b_drop.png" border=0 /></a></td>
+    </tr>
+<?php
+  }
+} else {
+?>
+    <tr>
+      <td align="center" colspan="17">未找到相关记录</td>
+    </tr>
+<?php
+}
+?>
+    </tbody>
+  </table>
+</body>
+</html>

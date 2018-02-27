@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>证书变更</title>
+<meta name="generator" content="editplus" />
+<meta name="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script> 
+<script type="text/javascript" src="theme/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	$( "#certificate-tab" ).tabs();
+	
+	$(".change_ul li").css("width","175px");
+});
+
+</script>
+<script>
+var zt_endtime = '$zt_endtime[finalItemDate]';
+
+function ck_changeitem(k){
+	var x;
+	var cg_arr = new Array('08_01','08_02','08_03','08_04','08_05','98');
+	for(x in cg_arr){
+		if(cg_arr[x] != k && $('#'+cg_arr[x]).attr('checked')){
+			alert('同时只能选择一种证书状态变更');
+			$('#'+k).attr('checked',false);
+			return false;
+			break;
+		}
+	}
+	$('#table'+k).toggle();
+	$('.table'+k).toggle();
+	
+}
+
+function del(obj){
+	var del_url = $(obj).parents("a").attr("title");
+	if(confirm("你确定要删除吗？")){location.href = del_url;}
+}
+function get_zs_zanting_edate(){
+	var iso = $('#pro_iso').val();
+	var zs_change_date = $('#zs_change_date').val();
+	if(zs_change_date!=''){
+		$.post('.?c=change&do=ajax',{kind:'zs_zanting_edate','zs_change_date': zs_change_date,'iso':iso},function(r){
+			$('#zs_zanting_edate').val(r);
+		});
+	}
+}
+
+</script>
+<style>
+.change_ul li{
+	width:240px;}
+</style>
+</head>
+
+<body>
+<?php echo prod_einfo("zsid=$zsid&width=800");?>
+<br/>
+<form name="winput" method="post" action="?m=product&c=change&a=save" onsubmit="return checkForm()" >
+<input type="hidden" name="zsid" value='<?=$zsid?>' />
+<div id="certificate-tab" style="margin: 0 auto;width:800px;" class="tal" >
+	<ul>
+		<li><a href="#tab-content-basic">证书内容变更</a></li>
+		<li><a href="#tab-state-basic">证书状态变更</a></li>
+	</ul>
+		<div id="tab-content-basic">
+			<ul class="change_ul" style="min-height:280px;">
+				<?=$changeitem_content_li?>
+			</ul>
+		</div>
+		<div id="tab-state-basic">
+			<ul class="change_ul" style="min-height:50px;">
+				<?=$changeitem_state_li?>
+			</ul>
+			
+		</div>
+</div>
+<div class="list-table tal">
+<table border='1' style='width:800px;margin: 0 auto;margin-top:20px;' class='grid-table'>
+	<tr>
+		<td width='20%' align='right'>变更时间：</td>
+		<td width='80%' align='left'><input type='text' name='cg_date' value='<?=$cg_info['cg_date']?>' class="input input-date" style="width:200px;"/> 
+			</td>
+           
+	</tr>
+    <tr>
+		<td width='20%' align='right'>变更原因：</td>
+		<td width='80%' align='left'><select name="cg_reason" style="width:200px;">
+        							<option value="">==请选择==</option>
+                                    <?=f_select("b01001_certchange_report",$cg_info['cg_reason']);?>
+                                    </select> 
+			</td>
+           
+	</tr>
+	
+	<tr style='display:<?=$change_zt_display;?>;' id='table08_01'>
+		<td align='right'>暂停原因：</td>
+		<td align='left'>
+			<select name="certpasue_value" style="width:200px">
+            <option value="">==请选择==</option>
+            <?=f_select('b01001_certpasue',$cg_info['cert_value']);?></select> 
+            </td>
+    </tr>
+    <tr style='display:<?=$change_zt_display;?>;' class='table08_01' id='table08_01'>
+        <td align='right'>暂停期限：</td>
+        <td align='left'><select name="ztdq" style="width:200px">
+        <option value="">==请选择==</option>
+        <?=$ztdq_select;?>	
+        </select>
+		</td>
+	</tr>
+<!--	<tr style='display:<?=$change_zt_display;?>;' id='table97_01' class='table97_01'>
+		<td align='right'>具体原因：</td>
+		<td align='left'>
+			<?=$certpasue_check;?>
+    
+	</tr>
+-->	<tr style='display:<?=$change_cx_display;?>;' id='table08_03'>
+		<td align='right'>撤销原因：</td>
+		<td align='left'>
+			<select name="certrecall_value" style="width:200px;">
+            <option value="">==请选择==</option><?=f_select('b01001_certrecall',$cg_info['cert_value']);?></select>
+		</td>
+	</tr>
+<!--	<tr style='display:<?=$change_cx_display;?>;' id='table97_03' class='table97_03'>
+		<td align='right'>具体原因：</td>
+		<td align='left'>
+			
+			<?=$recalqus_check;?>
+	
+           
+		</td>
+	</tr>
+-->    
+<tr style='display:<?=$change_zx_display;?>;' id='table97_04'>
+		<td align='right'>注销原因：</td>
+		<td align='left'>
+			<select name="certlogout_value" style="width:200px;">
+            <option value="">==请选择==</option><?=f_select('b01001_certLogout',$cg_info['cert_value']);?></select>
+		</td>
+	</tr>
+<tr >
+		<td align='right'>变更前：</td>
+		<td align='left'><textarea name="cg_af" style="width:500px;height:60px;"><?=$cg_info[cg_af]?></textarea></td>
+	</tr>
+    <tr >
+		<td align='right'>变更后：</td>
+		<td align='left'><textarea name="cg_bf" style="width:500px;height:60px;"><?=$cg_info[cg_bf]?></textarea></td>
+	</tr>
+    <tr >
+		<td align='right'>变更备注：</td>
+		<td align='left'><textarea name="note" style="width:500px;height:60px;"><?=$cg_info[note]?></textarea></td>
+	</tr>
+	<tr>
+		<td align='center' colspan='2'><p><center><button class="btn btn-submit" type="submit"> 保 存 </button></center></p> </td>
+	</tr>
+</table>
+</div>
+</form>
+
+</body>
+</html>

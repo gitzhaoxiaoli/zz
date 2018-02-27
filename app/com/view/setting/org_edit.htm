@@ -1,0 +1,133 @@
+<?php tpl('header')?>
+<script type="text/javascript" src="theme/js/region.js"></script>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript">
+
+$(function() { 
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+	
+});
+
+
+</script>
+</head>
+
+<body>
+
+<form method="post" id="entry-form" action="?m=com&c=org&a=save">
+  <input id="id" type="hidden" name="id" value="<?=$id;?>" />
+ 
+
+  <div id="enterprise-tab" style="margin:0 auto;width:750px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">检测机构编辑</a></li>
+  </ul>
+  <div id="tab-epfiles" style="padding:10px">
+    <ul class="main-form">
+    	 <li>
+		 
+		 <label class="field">用户名：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="text" name="username" value="<?=$username;?>" />
+		 </span>
+         <label class="field">密码：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="password" name="userPwd" value="" />
+		 </span>
+	  </li>
+	  <li>
+		 
+		 <label class="field">编号：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="text" name="code" value="<?=$code;?>" />
+		 </span>
+         <label class="field">省份：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="text" name="province" value="<?=$province;?>" />
+		 </span>
+	  </li>
+      <li>
+		 
+		 <label class="field">档案号：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="text" name="ctc_code" value="<?=$ctc_code;?>" />
+		 </span>
+         <label class="field">法人：</label>
+	     <em></em><span>
+		 <input style='width:150px;' type="text" name="delegate" value="<?=$delegate;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">名称：</label>
+	     <em></em><span>
+		 <input style="width:450px" type="text" name="name" value="<?=$name;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">地址：</label>
+	     <em></em><span >
+		 <input style="width:450px" type="text" name="addr" value="<?=$addr;?>" /></span>
+	  </li>
+      <li>
+		 <label class="field">联系人：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="person" value="<?=$person;?>" />
+		 </span>
+		 <label class="field">联系手机：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="phone" value="<?=$phone;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">电话：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="tel" value="<?=$tel;?>" />
+		 </span>
+		 <label class="field">传真：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="fax" value="<?=$fax;?>" />
+		 </span>
+	  </li>
+	  <li>
+		 <label class="field">邮政编码：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="post_code" value="<?=$post_code;?>" />
+		 </span>
+		 <label class="field">E-mail：</label>
+		<em></em><span >
+		 <input style='width:150px;' type="text" name="email" value="<?=$email;?>" />
+		 </span>
+	  </li>
+	  
+	  <li>
+		 <label class="field">指定业务范围：</label>
+		<em></em><span >
+		 <textarea name="scope" style="width:450px;"><?=$scope;?></textarea>
+		 </span>
+	  </li>
+      <li>
+		 <label class="field">网址：</label>
+		<em></em><span >
+         <input style='width:450px;' type="text" name="website" value="<?=$website;?>" />
+		 
+		 </span>
+	  </li>
+       <li>
+		 <label class="field">备&nbsp;注：</label>
+		<em></em><span >
+		 <textarea name="note" style="width:450px;"><?=$note;?></textarea>
+		 </span>
+	  </li>
+    </ul>
+    <p>
+      <center>
+         <button class="btn btn-submit submit-btn" type="submit"> 保 存 </button>
+      </center>
+    </p>
+  </div>
+</form>
+</div>
+</body>
+</html>

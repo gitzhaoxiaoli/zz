@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?=get_conf('charset');?>" />
+<title>选择产品标准</title>  
+<link href="theme/css/style.css" type="text/css" rel="stylesheet" />
+<link href="theme/css/jquery-ui.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<script type="text/javascript" src="theme/js/jquery-ui.js"></script>
+<script type="text/javascript" src="theme/js/core.js"></script>  
+</head> 
+<body> 
+<!--<form method="get">  
+			<input type="hidden" name="m" value="<?=$m;?>" />
+<input type="hidden" name="app" value="<?=$app;?>" />
+<input type="hidden" name="a" value="<?=$a;?>" />
+			<table>
+				<tr>
+					<td>编码：</td>
+					<td><input type="text" name="code" value="<?=$_GET['code'];?>" class="input input-search" /></td>
+					<td>产品标准名称：</td>
+					<td><input type="text" name="name" value="<?=$_GET['name'];?>" class="input input-search" /></td>
+					<td>产品标准内容：</td>
+					<td><input type="text" name="msg" value="<?=$_GET['msg'];?>" class="input input-search" /></td> 
+				</tr>
+			</table>
+			<p class="button-panel tal">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</p>
+		</form> -->
+		<?=$pages['pages'];?> 
+        <div style="height:210px;overflow-y:scroll;">
+<p style="font-size:0;height:9px;overflow:hidden;"></p>
+ 	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="150">编号</th>
+			<th width="*">产品标准名称</th> 
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $list_datas ){
+	foreach( $list_datas as $id => $row ){
+?>
+		<tr align="cneter">
+			<td> 
+            <input type="checkbox" name="code[]" value="<?=$row['prod_ver_id'];?>" />
+            </td>
+			<td class="prod_code"><?=$row['prod_ver_id'];?></td>
+			<td align="left" class="prod_name"><?=load('set')->get_set_name_by_id('ver',$row['prod_ver_id']);?></td> 
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?> 
+    </div>
+</body>
+</html>

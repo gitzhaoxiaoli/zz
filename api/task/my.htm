@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>任务</title>
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<style type="text/css">
+  body{
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    line-height: 25px;
+  }
+</style>
+</head>
+<body>
+ <div class="container">
+ <div class="row clearfix">
+    <div class="col-md-12 column">
+      <h3 class="text-center">
+        任务信息
+      </h3>
+    </div>
+  </div> 
+  <div class="row clearfix"> 
+    <div class="col-md-4 column"> 
+      <ol class="list-inline"> 
+        <?php $_y = date("Y");$_m = date("m"); for ($i=$_m - 2; $i < $_m + 1; $i++) { 
+        ?>
+        <li><a href="my.php?month=<?=$_y.'-'.sprintf("%02d",$i);?>"><?=$_y .'年' . $i . '月';?></a></li>  
+        <?php }?>
+      </ol> 
+    </div>
+    <div class="col-md-8 column"> 
+      <?php if ($data):foreach ($data as $v) :
+       ?>
+      <table class="table"> 
+        <thead> 
+          <tr> 
+            <th colspan='2'>任务信息</th>  
+          </tr> 
+        </thead>  
+        <tbody> 
+          <tr> 
+            <td class="warning" width="130">企业</td>  
+            <td><?=$v['task']['ep_name']?></td>  
+          </tr>  
+          <tr class="success"> 
+            <td>审核时间</td>  
+            <td><?=$v['task']['tb_date']?>至<?=$v['task']['te_date']?></td>  
+          </tr>  
+          <tr class="info"> 
+            <td>审核组</td>  
+            <td><?=$v['team']?></td>  
+          </tr>  
+        </tbody> 
+      </table> 
+    <?php endforeach;?>
+  <?php else:?>
+    没有信息
+  <?php endif;?>
+    </div>  
+     
+  </div> 
+</div>
+ 
+</body>
+</html>

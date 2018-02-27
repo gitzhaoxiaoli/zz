@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>企业列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+tabld{border-collapse:collapse;border:1px solid #999;}
+TD{font-size: 12px;vertical-align: middle;vnd.ms-excel.numberformat:@;border:1px solid #999;}
+br{mso-data-placement:same-cell;}
+</style>
+</head>
+
+<body>
+ <table class="grid-table">
+      <thead>
+        <tr>
+        
+         <th width="60"  align="center">工厂编码</th>
+          <th width="200"  align="center">企业名称</th>
+          <th width="*"  align="center">省份</th>
+          
+          <th width="*" align="center">客户级别</th>
+          <th width="*" align="center">联系人</th>
+          <th width="*"  align="center">电话</th>
+          <th width="*"  align="center">传真</th>
+          <th width="60"  align="center">人数</th>
+          <th width="200"  align="center">注册地址</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+if( $enterprises ){
+  foreach( $enterprises as $eid => $row ){
+?>
+      
+        <tr>
+        
+          <td align="center"><?=$row['fac_code'];?></td>
+          <!--其中href属性是用来添加分场所获取eid 用的-->
+          <td class="ep-name" href="?eid=<?=$row['eid']?>"><?=$row['ep_name'];?></td>
+          <td align="center"><?=$row['province'];?></td>
+         
+          <td align="center"><?=$ep_level_array[$row['ep_level']]['name']?></td>
+          <td align="center"><?=$row['person']?></td>
+          <td align="center"><?=$row['ep_phone'];?></td>
+          <td align="center"><?=$row['ep_fax'];?></td>
+          <td align="center"><?=$row['ep_amount'];?></td>
+          <td align="center"><?=$row['ep_addr'];?></td>
+
+        </tr>
+      <?php
+    
+  }
+    
+}
+?>
+        </tbody>
+      
+    </table>
+</body>
+</html>

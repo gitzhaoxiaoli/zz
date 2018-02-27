@@ -1,0 +1,1065 @@
+<?php tpl('header')?>
+<script type="text/javascript" src="theme/js/validator.js"></script>
+<script type="text/javascript">
+//更新 区划
+function update_region(code, name) {
+	$('#meta_areaaddr').val(name);
+	$('#areacode').val(code);
+	$('#iframe-dialog').dialog('close');
+	$('#iframe-dialog').dialog('destroy');
+	$('#iframe-dialog').remove();
+}
+$(function() { 
+    //行政区划
+    $('#select-region').live('click', function(){
+			iframe_dialog("选择区划","?c=ajax&a=select_region",500,410);
+	});
+
+	var tooltips = $( "[title]" ).tooltip({position:{my:"left bottom+37", at:"left bottom"}});
+	$( "#enterprise-tab" ).tabs({
+		collapsible: false
+	});
+		$( "input.input-date" ).datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	  });
+	$("#x-y-value").click(select_xy);
+	var v = $(".energy_s").is(":checked");
+	var m = $(".energy").is(":checked");
+	if(v){$('.li_e').show();}
+	if(m){$('.li_s').show();}
+	$(".energy_s").click(function(){
+		
+		$('.li_e').show();
+	});
+	$(".energy").click(function(){
+		$('.li_s').show();
+	});
+	if($('.checkbox_is').is(":checked")){ $('.tab-en').show() };
+	$('.checkbox_is').click(function(){
+		$('.tab-en').show()	
+	});
+	$('.checkbox_if').click(function(){
+		$('.tab-en').hide()	
+	})
+	$('#upload-dialog').dialog({
+		autoOpen: false,
+		height: 300,
+		width: 530,
+		modal: true,
+		resizable: false
+	});
+	$('#org').click(function(){
+		if($('#work-code').val()){
+			if(checkdaima()){
+			$('#step').val('org');
+			$('#entry-form').submit();
+			}else{
+				$('#work-code').focus();
+				return false;
+			}
+		}
+		else{
+			alert("请填写组织机构代码！！");
+			$('#work-code').focus();
+			return false;
+		}
+		
+		
+		
+		});
+	$("#ctfrom").change(function(){
+	      val = $(this).val();
+		  var d = new Date()
+          var vYear = d.getFullYear()
+		  var vMon = d.getMonth() + 1
+		  var vDay = d.getDate()
+		  var h = d.getHours(); 
+		  var m = d.getMinutes(); 
+		  var se = d.getSeconds(); 
+		  s=vYear+(vMon<10 ? "0" + vMon : vMon)+(vDay<10 ? "0"+ vDay : vDay)+(h<10 ? "0"+ h : h)+(m<10 ? "0" + m : m)+(se<10 ? "0" +se : se);
+		    if(val == '01010000'){
+         $("#code").val("C"+s);
+		  }
+	})
+	$('#chk-org').click(function(){
+		if(!$('#work-code').val()){
+			alert("请填写组织机构代码！！");
+			$('#work-code').focus();
+			return false;
+		}
+		if(!checkdaima()){
+			$('#work-code').focus();
+			return false;
+		}
+		var href='?c=ajax&a=check_org&work_code='+$('#work-code').val()+'&eid=<?=$eid;?>';
+		$('<iframe border="0" name="frame1" frameborder="no" src="' + href + '" />').dialog({
+			title: '组织信息验证',
+			autoOpen: true,
+			width: 650,
+			height: 300,
+			modal: true,
+			resizable: false,
+			autoResize: false,
+			overlay: {opacity: 0.5,background: "black"},
+			close: function(ev,ui){$(this).remove();},
+			buttons : {
+				'确定' :function(){
+					$(this).dialog('close');
+				}
+			},
+			open :function(){
+				var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+				btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+			}
+			}).width(630).height(280);
+		
+		
+		});
+	
+	$('#add-btn').click( addRecord );
+	addRecord();
+	$(".checkbox").click( H );
+	$('#add_per').click( addPerson );
+	<?php if(!$person_list){ ?>
+	addPerson();
+	<?php }?>
+	$("#add_zzbutton").click(addzz);
+	<?php if(!$zz_id):?>
+	addzz();
+	<?php endif;?>
+	var anchor = $.url.attr('anchor');
+	if( anchor ) $( "#enterprise-tab" ).tabs( 'enable', 'tab-archive' );
+
+	$('button.submit-btn').click(function(){
+		if( !Validator.Validate( $('#entry-form')[0], 2 ) ) return;
+		var ep_addr = $("#ep_addr").val();
+		var meta_areaaddr = $("#meta_areaaddr").val();
+			$('#entry-form').submit();
+	});
+
+	$('#select-industry').click( industry_dlg );
+	$(":checkbox").click(function(){
+		var val=$(this).val();
+		 
+		if($(this).attr("checked")){
+		 
+			$("#"+val).show();
+			
+			}
+		else
+			{
+				$("#"+val).hide();
+				$("#"+val).find(':input').each(function(){
+				
+				$(this).val('');
+				});
+		
+			}
+		});
+});
+
+function H(){
+	var p = $('input[class=checkbox]:checked');
+	if(p.length == 2){
+		$('.checkbox').val(3);
+	}	
+}
+
+
+function addRecord(){
+	tbody = $('#add-attachs');
+	tr = $('#add-attach');
+	new_tr = tr.clone();
+	new_tr.attr('id','');
+	new_tr.show();
+	tbody.append(new_tr);
+}
+function copy_addr(){
+    text = $("#ep_addr").val();
+	$("#kh_addr").val(text);
+}
+
+function addPerson(){
+    divs = $('#add_persons');
+	div = $('#add_person');
+	new_div = div.clone();
+	new_div.attr('id','');
+	new_div.show();
+	divs.append(new_div);
+}
+function addzz(){
+    divs = $('#add_zzs');
+	div = $('#add_zz');
+	new_div = div.clone();
+	new_div.attr('id','');
+	new_div.find('.input_date').datepicker({
+		changeMonth	: true,
+		changeYear	: true,
+		dateFormat	: "yy-mm-dd"
+	});
+	new_div.show();
+	divs.append(new_div);
+}
+
+function checkdaima() {
+	daima = $('#work-code').val();
+	if(daima == '**********')return;
+	if(daima == '')return;
+	var errormsg='';
+	if(daima.length!=10&&daima.length!=9&&daima.length!=18){
+		errormsg = '组织组织代码为9或者 10位 、18位 \n';
+	}
+
+	var ck=/[^0-9A-Z-]/;
+	if(daima.match(ck)){
+		errormsg= errormsg + '必须是数字和大写字母组成 \n';
+	}
+
+	if(errormsg != '')
+	{
+		alert(errormsg);
+		return false;
+	}
+	return check_work_code(daima);
+}
+
+function check_work_code(daima) {
+	//是否为新增企业
+	var r = 1;
+	if( $('#eid').val() == undefined && daima != '' ) {
+		$.post(
+			'?c=ajax&a=check_daima',
+			{'work_code':daima},
+			function(result) {
+				var state = parseInt( result );
+				if( result > 0 ) {
+					alert('组织组织代码系统中已存在');
+					r = 0;
+				}
+			}
+		);
+	}
+	return r;
+}
+
+//检测组织名称是否重复
+function check_ep_name() {
+	name = $('#ep-name').val();
+	var r = 1;
+	//@HBJ 2013-09-26 修复修改时不检测的问题
+	if( name != '<?=$ep_name;?>' && name != '' ){
+		$.post(
+			'?c=ajax&a=check_name',
+			{ep_name:name},
+			function(result) {
+				var state = parseInt( result );
+				if( state > 0 ) {
+					alert('组织名称系统中已存在');
+					r = 0;
+				}
+			}
+		);
+	}
+	return r;
+}
+
+function copy0(){
+	$('#ep_addr').val( $('#meta_areaaddr').val() );
+}
+function copy1(){
+	$('#cta_addr').val( $('#ep_addr').val() );
+	$('#cta_addr_e').val( $('#ep_addr_e').val() );
+	$('#cta_addrcode').val( $('#ep_addrcode').val() );
+}
+function copy2(){
+	$('#prod_addr').val( $('#cta_addr').val() );
+	$('#prod_addr_e').val( $('#cta_addr_e').val() );
+	$('#prod_addrcode').val( $('#cta_addrcode').val() );
+}
+function copy3(){
+	$('#cert_addr').val( $('#prod_addr').val() );
+	$('#cert_addr_e').val( $('#prod_addr_e').val() );
+	$('#cert_addrcode').val( $('#prod_addrcode').val() );
+}
+
+function industry_dlg(){
+	$('<iframe src=?c=ajax&a=select-industry></iframe>').dialog({
+		title	: '选择所属行业',
+		width	: 800,
+		height	: 420,
+		cache:false,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				var s_str = '';
+				var old_str=$('#industry').val(); 
+				$(this).contents().find('input.s-industry').each(function(index){
+					if( $(this).attr( 'checked' ) && $(this).val() )
+						s_str += $(this).val() + '；';
+				});  
+				 
+				if(old_str!=0){//如果原数据不为0的情况下追加
+				s_str = s_str+old_str;
+				}
+				 
+				$('#industry').val( s_str );
+				$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(780);
+}
+function select_xy(){
+	$('<iframe src=?c=ajax&a=select_x_y&eid=<?=$eid?>></iframe>').dialog({
+		title	: '选择经纬度',
+		width: 600,
+		height: 400,
+		cache:false,
+		modal: true,
+		resizable: false,
+		autoResize: true,
+		buttons	:{
+			'取消'	: function(){
+				 $(this).dialog("close");
+			},
+			'确定'	: function(){
+				xval=$(this).contents().find('input.x-val').val();
+				yval=$(this).contents().find('input.y-val').val();
+				 
+				$("#xvalue").val(xval)
+				$("#yvalue").val(yval)
+				$(this).dialog('close');
+			}
+		},
+		open	: function(){
+			var btn = $('.ui-dialog-buttonpane').find('button:contains("确定")');
+			btn.removeClass('ui-state-default').addClass('ui-state-default-highlight');
+		}
+	}).width(600).height(400);
+}
+
+</script>
+</head>
+
+<body>
+
+<form method="post" id="entry-form" action="<?=$REAUEST_URI;?>"> 
+  <input type="hidden" name="step" id="step" value="1" />
+
+  <?php
+if( 'edit' == $a ){
+?>
+  <input id="eid" type="hidden" name="eid" value="<?=$eid;?>" />
+  <input id="parent_id" type="hidden" name="parent_id" value="<?=$parent_id;?>" />
+  <?php
+}
+?>
+  <div id="enterprise-tab" style="margin:0 auto;width:750px;" class="tal">
+  <ul>
+    <li><a href="#tab-basic">基本信息</a></li>
+    <li><a href="#tab-contract">附加信息</a></li>
+    <li><a href="#tab-fapiao">开票资料</a></li>
+    <li><a href="#tab-en" class="tab-en" style="display:none">能源信息</a></li>
+	<?php IF($_GET['eid']){?>
+    <li><a href="#tab-zzbook">行政许可资质</a></li>
+    <li><a href="#tab-epfiles">企业文档上传</a></li>
+    <?php } ?>
+  </ul>
+  <div id="tab-basic">
+    <ul class="main-form">
+     <li>
+     <label class="field">组织机构代码<br>统一信用代码</label>
+        <em>*</em><span>
+        <input type="text" id="work-code" dataType="Require" msg="请输入组织机构代码/统一信用代码！"  name="work_code" value="<?=$work_code;?>" class="input" style="width:128px" title="组织机构代码/统一信用代码" />
+        <?php if(!$eid){?><button type="button" id="org" class="btn btn-submit">获取</button><?php }else{?><button type="button" id="chk-org" class="btn btn-submit">验证</button><?php }?>
+        </span> 
+        <label class="field2">合同来源</label>
+        <em>*</em><span>
+        <select id="ctfrom" name="ctfrom" dataType="Require" msg="请选择合同来源！" style="width:166px">
+          
+          <?=$ctfrom_select;?>
+        </select>
+        </span>
+        </li>
+        <!--<li>
+        	<label class="field">是否能源企业</label>
+            <em></em><span>
+            <input type="radio" class="checkbox_is" name="is_energy" <?=$is_energy?"checked":""?> value="1"/>是
+            <input type="radio" class="checkbox_if" name="is_energy" <?=$is_energy?"":"checked"?> value="0"/>否
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+       		<label class="field2">企业类型</label>
+	        <em></em><span>
+	        <input type="checkbox" name="ep_type" class="checkbox" <?=$_1;?> value="1" <?=$_3;?>/>大企业
+            <input type="checkbox" name="ep_type" class="checkbox" <?=$_2;?> value="2" <?=$_3;?>/>涉密企业
+	        </span>
+        </li>-->
+        <input type="hidden" readOnly id="code" name="code" value="<?php if((int)$code){echo $code;}else{echo "Q".date("YmdHis");};?>" class="input" style="width:175px" />
+    <?php if(get_option('is_product')):?><!-- 是否开启产品 -->
+	 <li>
+	    <label class="field">工厂编码</label>
+        <em></em><span>
+        <input type="text" name="fac_code" value="<?=$fac_code;?>" class="input" style="width:175px"  />
+		</span>
+
+        <!--适用于CCC认证<label class="field2">经济类型代码</label>
+        <em>*</em><span>
+         <select id="prod_type" name="prod_type"  style="width:171px;">
+          <option value="">请选择</option>
+          <?=$prod_type_select;?>
+        </select>
+        </span> -->
+		</li>
+	<?php endif;?>
+	 </li>
+      <li>
+        <label class="field">组织名称</label>
+        <em>*</em><span>
+        <input type="text" id="ep-name" dataType="Require" msg="请输入组织名称！" name="ep_name" value="<?=$ep_name;?>" class="input" title="如果组织已经登记，则无需再登记"  style="width:468px" />
+        </span> </li>
+      <li>
+        <label class="field">英文名称</label>
+        <em></em><span>
+        <input type="text" name="ep_name_e" value="<?=$ep_name_e;?>" class="input" title="企业的英文名称，上报CNAS和发证书用"  style="width:468px" />
+        </span> </li>
+      <li>
+        <label class="field">组织原名</label>
+        <em></em><span>
+        <input type="text" id="ep_oldname" name="ep_oldname" value="<?=$ep_oldname;?>" class="input"  style="width:468px" />
+        </span> </li>
+      <li>
+        <label class="field">组织性质</label>
+        <em>*</em><span>
+        <select name="nature" dataType="Require" msg="请选择企业性质！" style="width:175px">
+          <option value="">请选择</option>
+          <?=$nature_select;?>
+        </select>
+        </span>
+        <label class="field2">企业分类等级</label>
+        <em></em><span>
+        <select name="ep_level" id="ep_level" style="width:175px">
+          <option value="">请选择</option>
+          <?=f_select('ep_level',$ep_level)?>
+        </select>
+        </span> </li>
+      <li>
+        <label class="field">组织电话</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" msg="请输入企业联系电话！" name="ep_phone" value="<?=$ep_phone;?>" class="input" style="width:175px" />
+        </span>
+        <label class="field2">组织传真</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" msg="请输入企业传真！" name="ep_fax" value="<?=$ep_fax;?>" class="input" style="width:171px" />
+        </span>
+      </li>
+      <li>
+       <label class="field">组织邮箱</label>
+        <em></em><span>
+        <input type="text" name="ep_mail" value="<?=$ep_mail;?>" class="input" style="width:175px" />
+        </span> 
+		<label class="field2">管理者代表</label>
+		<em></em><span>
+<input type="text" name="meta[manager_daibiao]" value="<?=$manager_daibiao;?>">
+		</span>
+	  </li>
+      <li>
+        <label class="field">国家/地区代码</label>
+        <em>*</em><span>
+        <select id="statecode" name="statecode" dataType="Require" msg="请选择国家/地区代码！" style="width:171px;">
+          <option value="">请选择</option>
+          <?//=$statecode_select;?>
+		  <?=f_select('statecode',$statecode)?>
+        </select>
+        </span>
+        <label class="field2">行业代码</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" msg="请选择行业代码！" id="industry" name="industry" class="input" value="<?=$industry;?>" style="width:157px; float:left;height:18px;border-width:1px 0 1px 1px;border-color:#ddd;border-style:solid; "/>
+        <i id="select-industry" class="i-select" ></i></span> 
+      </li>
+      <li>
+        <label class="field">法人代表</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" msg="请输入法人代表！" name="delegate" value="<?=$delegate;?>" class="input" style="width:171px" />
+        </span>
+        <label class="field2">企业人数</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" msg="请输入企业人数！" name="ep_amount" value="<?=$ep_amount;?>" class="input" style="width:175px" />
+        </span> </li>
+      <li>
+        <label class="field">注册资本</label>
+        <em>*</em><span>
+        <input type="text" dataType="Require" msg="请输入注册资本！" name="capital" value="<?=$capital;?>" class="input" style="width:140px" />
+        万元</span>
+        <label class="field2">货币单位</label>
+        <em>*</em><span>
+	<select name="currency" dataType="Require" msg="请选择注册资本货币种类！" style="width:178px">
+<?=f_select('currency',$currency)?>
+    </select>
+
+
+        </span> </li> 
+      <li>
+        <label class="field" style="float:left;">行政区划</label>
+        <em style="float:left;">*</em><span style="float:left;">
+        <input type="text" id="meta_areaaddr" dataType="Require" msg="请选择企业据在行政区!" name="areaaddr" value="<?=$areaaddr;?>" title="组织认证地址所在行政区" style="height:18px;width:241px;border-style:solid;border-width:1px 0 1px 1px;border-color:#ccc;float:left;" readOnly/>
+        <i class="i-select" id="select-region"></i></span>
+        <label class="field3" style="margin-left:6px;float:left;">区划代码</label>
+        <em style="float:left;">*</em><span>
+        <input type="text" id="areacode" dataType="Require" msg="请输入企业所在行政区代码！" name="areacode" value="<?=$areacode;?>" class="input" style="float:left;width:120px" />
+        </span> </li>
+      <li>
+        <label class="field">注册地址</label>
+        <em>*</em><span>
+        <input type="text" id="ep_addr" dataType="Require" msg="请输入企业注册地址！" name="ep_addr" value="<?=$ep_addr;?>" class="input" style="width:432px" />
+        <a onClick="copy0();"  href="javascript:;">默认</a> </span> </li>
+      <li>
+        <label class="field">英文地址</label>
+        <em></em><span>
+        <input type="text" id="ep_addr_e" name="ep_addr_e" value="<?=$ep_addr_e;?>" class="input"  style="width:328px" title="英文注册地址" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="ep_addrcode" dataType="Require" msg="请输入企业注册地址的邮编！" name="ep_addrcode" value="<?=$ep_addrcode;?>" class="input" size="6" />
+        </span> </li>
+      <li>
+        <label class="field">通讯地址</label>
+        <em>*</em><span>
+        <input type="text" id="cta_addr" dataType="Require" msg="请输入企业通讯地址！" name="cta_addr" value="<?=$cta_addr;?>" class="input" style="width:432px" />
+        <a onClick="copy1();" href="javascript:;">同上</a> </span> </li>
+      <li>
+        <label class="field">通讯英文</label>
+        <em></em><span>
+        <input type="text" id="cta_addr_e" name="cta_addr_e" value="<?=$cta_addr_e;?>" class="input" style="width:328px" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="cta_addrcode" dataType="Require" msg="请输入企业通讯地址邮编！" name="cta_addrcode" value="<?=$cta_addrcode;?>" class="input" size="6" />
+        </span> </li>
+      <li>
+        <label class="field">生产地址</label>
+        <em>*</em><span>
+        <input type="text" id="prod_addr" dataType="Require" msg="请输入企业生产地址！" name="prod_addr" value="<?=$prod_addr;?>" class="input" style="width:432px" />
+        <a onClick="copy2();" href="javascript:;">同上</a> </span> </li>
+      <li>
+        <label class="field">生产英文</label>
+        <em></em><span>
+        <input type="text" id="prod_addr_e" name="prod_addr_e" value="<?=$prod_addr_e;?>" class="input" style="width:328px" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="prod_addrcode" dataType="Require" msg="请输入企业生产地址邮编！" name="prod_addrcode" value="<?=$prod_addrcode;?>" class="input" size="6" />
+        </span> </li>
+      <li>
+        <label class="field">经营地址</label>
+        <em>*</em><span>
+        <input type="text" id="buss_addr" dataType="Require" msg="请输入企业生产地址！" name="buss_addr" value="<?=$buss_addr;?>" class="input" style="width:432px" />
+        </li>
+      <li>
+        <label class="field">经营英文</label>
+        <em></em><span>
+        <input type="text" id="buss_addr_e" name="buss_addr_e" value="<?=$buss_addr_e;?>" class="input" style="width:328px" />
+        </span>
+        <label class="field3">邮编</label>
+        <em>*</em><span>
+        <input type="text" id="buss_addrcode" dataType="Require" msg="请输入企业生产地址邮编！" name="buss_addrcode" value="<?=$buss_addrcode;?>" class="input" size="6" />
+        </span> </li>
+    </ul>
+    <p>
+      <center>
+      <?php if($_GET[type]=="view"){ ?>
+      <a href="javascript:window.close()" title="关闭窗口">关闭</a>
+      <?php }else{ ?>
+        <button class="btn btn-submit submit-btn" type="button"> 保 存 </button>
+        <?php }?>
+      </center>
+    </p>
+  </div>
+  <div id="tab-contract">
+    <ul class="main-form">
+       <button id="add_per" class="btn btn-button" type="button" title="点击添加联系人" style="padding-right:8px;padding-left:8px;" >添加</button>
+	  <div id="add_persons" >
+         <?php  if($person_list){
+		     foreach($person_list as $key=>$val){
+		 ?>
+		    <div style="border:1px solid grey;margin-top:-20px;margin-bottom:10px;padding-top:10px;width:650px;margin-left:50px;">
+      <li>
+	        <label class="field3">联系人</label>
+	        <em></em><span>
+	        <input type="text" id="person" name="meta[person][]" value="<?=$val['person'];?>" class="input" style="width:120px" />
+	        </span>
+            <label class="field3">部门</label>
+            <em></em><span>
+            <input type="text" name="meta[person_bumen][]" value="<?=$val['person_bumen'];?>" class="input" style="width:120px" />
+	        </span>
+			<label class="field3">职务</label>
+			<em></em><span>
+			<input type="text" name="meta[person_job][]" value="<?=$val['person_job'];?>" class="input" style="width:120px" />
+			</span> 
+        </li>
+		<li>
+		     <label class="field3">座机</label>
+			 <em></em><span>
+			 <input type="text" name="meta[person_tel][]" value="<?=$val['person_tel'];?>" class="input" style="width:120px" />
+			 <label class="field3">手机</label>
+			 <em></em><span>
+			 <input type="text" name="meta[person_mph][]" value="<?=$val['person_mph'];?>" class="input" style="width:120px" />
+			 <label class="field3">邮箱</label>
+			 <em></em><span>
+			 <input type="text" name="meta[person_email][]" value="<?=$val['person_email'];?>" class="input" style="width:120px" />
+		</li>
+		<li>
+		     <label class="field3">备注</label> 
+			 <em></em><span>
+			 <textarea name="meta[person_note][]" style="width:535px;"><?=$val['person_note']?></textarea>
+			 </span>
+		</li>
+     </div>
+		 <?php } }?>   
+     </div>
+	
+    </ul>
+     
+        <ul class="main-form">
+		<li>
+		<label class="field">经度</label>
+		<em></em><span>
+        <input type="text" id="xvalue"  name="xvalue" value="<?=$xvalue;?>" style="width:171px"/>
+       
+        <label class="field2" >纬度</label>
+		<em></em><span>
+        <input type="text" id="yvalue"  name="yvalue" value="<?=$yvalue;?>"  style="width:120px"/>
+        </span>&nbsp;<button class="btn btn-submit" type="button" id="x-y-value">搜索</button> </li>
+      <li>
+        <label class="field">组织网站</label>
+        <em></em><span>
+        <input type="text" id="meta_website" name="meta[website]" value="<?=$website;?>" class="input"  style="width:468px" />
+        </span> </li>
+      <li>
+        <label class="field">经营范围</label>
+        <em></em><span>
+        <textarea cols="74" id="jy_range" rows="3" name="jy_range" style="width:466px"><?=$jy_range;?></textarea>
+        </span> </li>
+      <li>
+        <label class="field">备注信息</label>
+        <em></em><span>
+        <textarea cols="74" id="note" rows="3" name="note" style="width:466px"><?=$note;?></textarea>
+        </span> </li>
+      	
+      
+     
+    </ul>
+    <p>
+      <center>
+         <?php if($_GET[type]=="view"){ ?>
+      <a href="javascript:window.close()" title="关闭窗口">关闭</a>
+      <?php }else{ ?>
+        <button class="btn btn-submit submit-btn" type="button"> 保 存 </button>
+        <?php }?>
+      </center>
+    </p>
+  </div>
+  <div id="tab-fapiao">
+    <ul class="main-form">
+      <?php if($eid){?>
+      <li>
+        <label class="field">企业名称</label>
+        <em></em><span>
+        <input type="text" class="input" style="width:368px" disabled="disabled" value="<?=$ep_name;?>"/>
+        </span> </span> </li>
+      <li>
+        <label class="field">注册地址</label>
+        <em></em><span>
+        <input type="text" class="input" style="width:368px" disabled="disabled" value="<?=$ep_addr;?>"/>
+        </span> </li>
+      <li>
+        <label class="field">组织电话</label>
+        <em></em><span>
+        <input type="text" class="input" style="width:368px" disabled="disabled" value="<?=$ep_phone;?>"/>
+        </span> </li>
+      <?php }?>
+      <li>
+        <label class="field">开票类型</label>
+        <em></em><span>
+        <input type="radio" name="meta[invoice_type]" value="1" <?php if($invoice_type == 1){echo "checked";}?> />专票&nbsp;&nbsp;
+        <input type="radio" name="meta[invoice_type]" value="2" <?php if($invoice_type == 2){echo "checked";}?> />普票&nbsp;&nbsp;
+        <input type="radio" name="meta[invoice_type]" value="3" <?php if($invoice_type == 3){echo "checked";}?> />不开票
+        </span> </li>
+      <li>
+        <label class="field">公司税号</label>
+        <em></em><span>
+        <input type="text" name="meta[grows]" value="<?=$grows;?>" class="input" style="width:368px" />
+        </span> </li>
+         <li>
+        <label class="field">开户地址</label>
+        <em></em><span>
+        <input type="text" id="kh_addr" name="meta[r_add]" value="<?=$r_add;?>" class="input" style="width:368px" />
+        </span><font style="cursor:pointer;color:blue;"  onclick="copy_addr()">默认</font> </li>
+         <li>
+        <label class="field">开户电话</label>
+        <em></em><span>
+        <input type="text" name="meta[r_tel]" value="<?=$r_tel;?>" class="input" style="width:368px" />
+        </span> </li>
+         <li>
+        <label class="field">开户银行</label>
+        <em></em><span>
+        <input type="text" name="meta[bank]" value="<?=$bank;?>" class="input" style="width:368px"  />
+        </span> </li>
+      <li>
+        <label class="field">银行帐号</label>
+        <em></em><span>
+        <input type="text" name="meta[account]" value="<?=$account;?>" class="input"  style="width:368px" />
+        </span> </li>
+        <li>
+	        <label class="field">开户名称</label>
+	        <em></em><span>
+	        <input type="text" name="meta[name_ac]" value="<?=$name_ac;?>" class="input" style="width:368px" />
+	        </span> 
+        </li>
+        <li>
+	        <label class="field">开票备注</label>
+	        <em></em><span>
+	        <input type="text" name="meta[ac_remark]" value="<?=$ac_remark;?>" class="input" style="width:368px" />
+	        </span> 
+        </li>
+    </ul>
+    <p>
+      <center>
+         <?php if($_GET[type]=="view"){ ?>
+      <a href="javascript:window.close()" title="关闭窗口">关闭</a>
+      <?php }else{ ?>
+        <button class="btn btn-submit submit-btn" type="button"> 保 存 </button>
+        <?php }?>
+      </center>
+    </p>
+  </div>
+  <div id="tab-en">
+  		<ul class="main-form">
+        	<li>
+            	<label class="field">典型生产工艺流程：</label>
+                <label ><input type="text" name="meta[process]" value="<?=$process;?>" class="input" style="width:368px" /></label>
+            </li>
+            <li>
+            	<label class="field">是否有高耗能落后机电设备或工艺：</label>
+                <label>
+                	<input type="radio" class="energy" name="meta[energy]" <?php if($energy == 1 ) echo "checked";?> value="1"/>是
+                    <input type="radio" name="meta[energy]" <?php if($energy == 2 ) echo "checked";?> value="2"/>否
+                </label>
+            </li>
+            <li style="display:none"class="li_s">
+            	<label class="field">落后机电设备清单：</label>
+                <label>
+                	<textarea name="meta[energy_list]" style="width:368px;height:45px;"><?=$energy_list?> </textarea>
+                </label>
+            </li>
+            <li>
+            	<label class="field">是否属于国家"十二五"规定的万家企业:</label>
+                <label>
+                	<input type="radio" name="meta[is_125]" <?php if($is_125 == 1 ) echo "checked";?> value="1"/>是
+                    <input type="radio" name="meta[is_125]" <?php if($is_125 == 2 ) echo "checked";?> value="2"/>否
+                </label>
+            </li>
+            <li>
+            	<label class="field">年度综合能耗（总能耗）：</label>
+                <label><input type="text" name="meta[t_energy]" value="<?=$t_energy?>" class="input" style="width:325px" />吨标煤</label>
+            </li>
+            <li>
+            	<label class="field">能源结构或种类（如煤炭、电力、天然气、热力、汽油、柴油等）：</label>
+                <label>
+                	<textarea name="meta[variety]" style="width:368px;height:75px;"><?=$variety?> </textarea>
+            </li>
+            <li>
+            	<label class="field">用能设备种类：</label>
+			    <label><input type="text" name="meta[type]" value="<?=$type?>" class="input"  /></label>
+                <label class="field2">数量：</label>
+			    <label><input type="text" name="meta[num]" value="<?=$num?>" class="input"  /></label>
+            </li>
+            <li>
+            	<label class="field">能耗核算边界（有多个生产场所时分别描述）：</label>
+                <textarea name="meta[energy_e]" style="width:368px;height:75px;"><?=$energy_e?> </textarea>
+                <!--<label><input type="text" name="meta[energy_e]" value="<?=$energy_e?>" class="input" style="width:368px" /></label>-->
+            </li>
+            <li>
+            	<label class="field">是否有能源服务外包：</label>
+                <label>
+                	<input type="radio" class="energy_s" name="meta[energy_s]" <?php if($energy_s == 1 ) echo "checked";?> value="1"/>是
+                    <input type="radio" name="meta[energy_s]" <?php if($energy_s == 2 ) echo "checked";?> value="2"/>否
+                </label>
+            </li>
+            <li style="display:none" class="li_e">
+            	<label class="field">包含哪些：</label>
+                <label>
+                	<textarea name="meta[include]" style="width:368px;height:45px;"><?=$include?></textarea>
+                </label>
+            </li>
+        </ul>
+        <p>
+          <center>
+             <?php if($_GET[type]=="view"){ ?>
+              <a href="javascript:window.close()" title="关闭窗口">关闭</a>
+              <?php }else{ ?>
+                <button class="btn btn-submit submit-btn" type="button"> 保 存 </button>
+                <?php }?>
+          </center>
+    	</p>
+  </div>
+</form>
+  <?php if($_GET['eid']){?>
+  <div id="tab-zzbook">
+  <?php  if($zz_files){ ?>
+<form method="post" id="zz_book" action="?m=product&c=attachment&a=batdown&class=zz" onSubmit="return download(this.id)">
+    <table width="100%" class="grid-table">
+	 <tr>
+	    <td align="center">选择</td>
+	    <td align="center">修改</td>
+		<td align="center">证书号码</td>
+		<td align="center">证书名称</td>
+		<td align="center">证书范围</td>
+		<td align="center">开始时间</td>
+		<td align="center">到期时间</td>
+		<td align="center">上传人</td>
+		<td align="center">备注</td>
+		<td align="center">下载</td>
+		<td align="center">删除</td>
+	 </tr>
+   <?php  foreach($zz_files as $key => $val) { ?>
+	    <tr>
+		    <td align="center">
+			<?php if($val['filename'] != ''){?>
+			<input type="checkbox" name="aid[]" value="<?=$val['id'];?>" /></td>
+		    <?php }?>
+			<td align="center">
+			<?php if($val['filename'] == ''){?>
+			<a href="?c=enterprise&a=edit&eid=<?=$eid;?>&zz_id=<?=$val['id']?>#tab-zzbook"><img src="theme/images/b_edit.png" border=0 /></a>
+			<?php } ?>
+			</td>
+            <td align="center"><?=$val['zz_code'];?></td>		
+            <td align="center"><?=$val['zz_name'];?></td>		
+            <td align="center"><?=$val['zz_fanwei'];?></td>		
+		    <td align="center"><?=$val['zz_sdate'];?></td>
+		    <td align="center"><?=$val['zz_edate']?></td>
+		    <td align="center"><?=$val['create_user'];?></td>
+		    <td align="center"><?=$val['description'];?></td>
+		    <td align="center">
+			 <?php if($val['filename'] != ''){?>
+			<a href="?m=product&c=attachment&a=down&aid=<?=$val['id'];?>&class=zz"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a>
+			 <?php } ?>
+			</td>
+		    <td align="center"><a href="?m=product&c=attachment&a=del&aid=<?=$val['id'];?>&class=zz"><img src="theme/images/b_drop.png" border=0 /></a></td>
+		</tr>
+	 <?php }} ?>
+	    <tr>
+		   <td colspan="99"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+		</tr>
+  </table>
+    </form>
+  <form method="post" action="?c=enterprise&a=upattach" enctype="multipart/form-data">
+    <input type="hidden" name="eid" value="<?=$_GET['eid'];?>" />
+        <select id="ctfrom" name="ctfrom" dataType="Require" msg="请选择合同来源！" style="width:178px;display:none;">
+          
+          <?=$ctfrom_select;?>
+        </select>
+    <table  width="100%" class="form-table">
+      <tr>
+	    <td id="add_zzs">
+		<?php if($zz_id): ?>
+		<input type="hidden" name="zz_id" value="<?=$zz_id;?>" />
+			 <table style="width:100%">
+	 <tr>
+	     <td>证书名称：</td>
+	     <td><input type="text" name="zz_name[]" value="<?=$zz_name;?>" /></td> 
+		 <td>证书号码：</td>
+	     <td><input type="text" name="zz_code[]" value="<?=$zz_code;?>" /></td> 
+	  </tr>
+	  <tr>
+	     <td>发证日期：</td>
+	     <td><input type="text" name="zz_sdate[]" value="<?=$zz_sdate;?>"  class="input input_date finput" /></td> 	 
+	     <td>到期时间：</td>
+	     <td><input type="text" name="zz_edate[]" value="<?=$zz_edate;?>"  class="input input_date finput" /></td> 
+	  </tr>
+	  <tr>
+		 <td>证书范围：</td>
+	     <td colspan='3'><textarea name="zz_fanwei[]" style="width:98%" rows='3'><?=$zz_fanwei;?></textarea></td>
+      </tr>		 
+      <tr>		 
+		 <td>资质证书上传：</td>
+	     <td colSpan=3><input type="file" name="zz_book[]" value=""  /></td>
+
+	  </tr>
+	  <tr>
+	     <td>证书备注：</td>
+		 <td colspan="3"><textarea name="description[]" style="width:98%" rows='3'><?=$description;?></textarea></td>
+	  </tr>
+	  </table>
+	  <?php endif;?>
+	    </td>
+      </tr>
+    </table>
+	<p>
+	   <font style="color:red;">注：仅支持jpg，pdf格式文件上传，最大10M.</font>
+	</p>
+    <p>
+      <center>
+         <?php if($_GET[type]=="view"){ ?>
+      <a href="javascript:window.close()" title="关闭窗口">关闭</a>
+      <?php }else{ ?>
+        <button class="btn btn-button" type="button" id="add_zzbutton"> 添加 </button>
+        <button class="btn btn-submit " type="submit"> 保 存 </button>
+        <?php }?>
+      </center>
+    </p>
+	</form>
+  </div>
+  <?php }?>
+  <?php if($_GET['eid']){ ?>
+  <div id="tab-epfiles">
+ <form method="post" id="ep_files" action="?c=attachment&a=batdown&class=enterprise" onSubmit="return download(this.id)">
+     <?php if($epfiles){?>
+    <table class="grid-table">
+      <tr>
+        <th width="30">选择</th>
+        <th width="180">文档名</th>
+        <th width="100">文档类型</th>
+        <th width="30">备注</th>
+        <th width="100">上传时间</th>
+        <th width="50">上传人</th>
+        <th width="30">下载</th>
+        <th width="30">删除</th>
+      </tr>
+  <?php foreach($epfiles as $key => $row){
+		$file_type_select_t = $file_type_select;
+		$file_type_select_t = str_replace( "value=\"$row[ftype]\">", "value=\"$row[ftype]\" selected>" , $file_type_select_t );
+
+  ?>
+       
+        <tr>
+          <td align="center"><input type="checkbox" name="aid[]" value="<?=$row['id'];?>" /></td>
+          <td align="center"><?=$row['name'];?></td>
+          <td align="center"><?=$arctype_array[$row['ftype']]['name'];?></td>
+         <td align="center"><?php
+         if( $row['description'] ){
+           ?>
+            <a href="javascript:;" title="<?=$row['description'];?>"><img src="theme/images/other.png" border="0" /></a>
+            <?php  } ?></td>
+          <td align="center"><?=$row['create_date'];?></td>
+          <td align="center"><?=f_username($row['create_uid']);?></td>
+          <td align="center">
+		    <?php if($row['filename'] != ''){?>
+		  <a href="?c=attachment&a=down&aid=<?=$row['id'];?>&class=enterprise"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a>
+		     <?php }?>
+		    </td>
+          <td align="center"><a href="?c=attachment&a=del&aid=<?=$row['id'];?>&class=enterprise"><img src="theme/images/b_drop.png" border=0 /></a></td>
+        </tr>
+  <?php }}?>
+      <tr>
+        <td></td>
+        <td colspan="8"><button type="submit" class="btn btn-submit"> 批量打包下载 </button></td>
+      </tr>
+	  </table>
+	  </form>
+  <form method="post" action="?c=enterprise&a=up_files" enctype="multipart/form-data"> 
+    <input type="hidden" name="eid" value="<?=$_GET['eid'];?>" />
+    <table width="100%" class="form-table">
+      <tr>
+        <td width="200">文档类型</td>
+        <td width="230">上传</td>
+        <td width="*">备注</td>
+      </tr>
+      <tbody id="add-attachs">
+      </tbody>
+      <tr id="add-attach" style="display:none;">
+        <td><select name="ftype[]">
+            <option value="">=请选择=</option>
+            <?=$arctype_select;?>
+
+          </select></td>
+        <td><input type="file" name="archive[]" /></td>
+        <td><input type="text" class="input" name="description[]" size="40" /></td>
+      </tr>
+    </table>
+    <p class="note-msg">提示：最大支持10MB</p>
+    <p>
+      <center>
+        <button class="btn btn-button" type="button" id="add-btn"> 添加 </button>
+        &nbsp;
+        <button class="btn btn-submit" type="submit"> 上传 </button>
+      </center>
+    </p>
+  </form>
+  </div>
+    <?php }?>
+</div>
+ <div id="add_person" style="border:1px solid grey;margin-top:-20px;margin-bottom:10px;padding-top:10px;width:650px;margin-left:50px;display:none;">
+      <li>
+	        <label class="field3">联系人</label>
+	        <em></em><span>
+	        <input type="text" id="person" name="meta[person][]" value="" class="input" style="width:120px" />
+	        </span>
+            <label class="field3">部门</label>
+            <em></em><span>
+            <input type="text" name="meta[person_bumen][]" value="" class="input" style="width:120px" />
+	        </span>
+			<label class="field3">职务</label>
+			<em></em><span>
+			<input type="text" name="meta[person_job][]" value="" class="input" style="width:120px" />
+			</span> 
+        </li>
+		<li>
+		     <label class="field3">座机</label>
+			 <em></em><span>
+			 <input type="text" name="meta[person_tel][]" value="" class="input" style="width:120px" />
+			 <label class="field3">手机</label>
+			 <em></em><span>
+			 <input type="text" name="meta[person_mph][]" value="" class="input" style="width:120px" />
+			 <label class="field3">邮箱</label>
+			 <em></em><span>
+			 <input type="text" name="meta[person_email][]" value="" class="input" style="width:120px" />
+		</li>
+		<li>
+		     <label class="field3">备注</label> 
+			 <em></em><span>
+			 <textarea name="meta[person_note][]" style="width:535px;"></textarea>
+			 </span>
+		</li>
+     </div>
+	 <table id="add_zz" style="display:none;width:100%">
+	 <tr>
+	     <td>证书名称：</td>
+	     <td><input type="text" name="zz_name[]" value="" /></td> 
+		 <td>证书号码：</td>
+	     <td><input type="text" name="zz_code[]" value="" /></td> 
+	  </tr>
+	  <tr>
+	     <td>发证日期：</td>
+	     <td><input type="text" name="zz_sdate[]" value=""  class="input input_date finput" /></td> 	 
+	     <td>到期时间：</td>
+	     <td><input type="text" name="zz_edate[]" value=""  class="input input_date finput" /></td> 
+	  </tr>
+	  <tr>
+		 <td>证书范围：</td>
+	     <td colspan='3'><textarea name="zz_fanwei[]" style="width:98%" rows='3'></textarea></td>
+      </tr>		 
+      <tr>		 
+		 <td>资质证书上传：</td>
+	     <td colSpan=3><input type="file" name="zz_book[]" value=""  /></td>
+
+	  </tr>
+	  <tr>
+	     <td>证书备注：</td>
+		 <td colspan="3"><textarea name="description[]" style="width:98%" rows='3'></textarea></td>
+	  </tr>
+	  </table>
+</body>
+</html>

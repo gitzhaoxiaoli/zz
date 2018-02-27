@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+#allmap {width: 500px;height: 300px;overflow: hidden;margin:0 auto;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+div{margin:0 auto; width:500px;}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=VofpmsviZo6bCVX7CyluORG9"></script>
+<script type="text/javascript" src="theme/js/jquery.js"></script>
+<title>选择原机构</title>
+</head>
+<body>
+	<form method="get" action="">
+	<input type="hidden" name="c" value="<?=$c;?>" />
+	<input type="hidden" name="a" value="<?=$a;?>" />
+	<table>
+		<tr>
+			
+			<td>机构编码：</td>
+			<td ><input type="text" name="code" value="<?=$code;?>"  class="input input-search-basic" /></td>
+            <td>机构名称：</td>
+			<td ><input type="text" name="name" value="<?=$name;?>"  class="input input-search-basic" /></td>
+		</tr>
+		<tr>
+			<td colspan="8" align="left">
+				<button type="submit" class="btn btn-submit"> 搜索 </button>
+			</td>
+		</tr>
+	</table>
+</form>
+
+	<table class="grid-table">
+		<thead>
+		<tr>
+			<th width="30">选择</th>
+			<th width="120">机构编码</th>
+			<th width="150">机构名称</th>
+		</tr>
+		</thead>
+		<tbody>
+<?php
+if( $cnca_list ){
+	foreach( $cnca_list as $id => $row ){
+?>
+		<tr align="cneter">
+			<td><input type="radio" name="" value="<?=$row['code'];?>|<?=$row['name'];?>" /></a></td>
+			<td><?=$row['code'];?></td>
+			<td><?=$row['name'];?></td>
+		</tr>
+<?php
+	}
+} else {
+?>
+		<tr>
+			<td colspan="5">未找到相关记录</td>
+		</tr>
+<?php
+}
+?>
+		</tbody>
+	</table>
+	<?=$pages['pages'];?>
+
+
+</body>
+</html>

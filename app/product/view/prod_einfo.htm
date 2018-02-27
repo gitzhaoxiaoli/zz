@@ -1,0 +1,459 @@
+<script type="text/javascript">
+$(function(){
+	
+	$( "#einfo-tab" ).tabs({
+		collapsible: false
+	});
+
+	$('a.down-more').bind( 'click', function() {
+		var href = '?c=ajax&a=list_attach&eid='+$(this).attr('rel');
+		$('<iframe border="0" id="frame1" frameborder="no" src="' + href + '" />').dialog({
+			title: '客户文档',
+			autoOpen: true,
+			width: 620,
+			height: 380,
+			modal: true,
+			resizable: false,
+			autoResize: true,
+			overlay: {opacity: 0.5,background: "black"},
+			close: function(ev,ui){$(this).remove();}
+			}).width(600).height(380);
+	});
+	$(".a_link").live("click",function(){
+		$(this).parent().find("span").toggle();
+		})
+
+}); 
+function showCti(cti_id){
+	iframe_dialog("查看项目",'?m=product&c=ajax&a=showCti&cti_id='+cti_id,700,400);
+	}
+function showEp(eid,type){
+	if(type==1)
+		title="委托人信息";
+	else if(type==2)
+		title="生成者信息";
+	else
+		title="生产企业信息";
+	iframe_dialog(title,'?m=product&c=ajax&a=showEp&eid='+eid,700,400);
+	}
+</script>
+<div id="einfo-tab" style="margin:0 auto;width:<?=$args['width'];?>px;" class="tal">
+	<ul>
+<?php if($is_view['ep_prod']):?><li><a href="#tab-prod">生产企业</a></li><?php endif;?>
+<?php if($is_view['contract']):?><li><a href="#tab-contract">项目信息</a></li><?php endif;?>
+<?php if($is_view['audit']):?><li><a href="#tab-audit">检查派人</a></li><?php endif;?>
+<?php if($is_view['cert']):?><li><a href="#tab-cert">证书信息</a></li><?php endif;?>
+<?php if($is_view['archive']):?><li><a href="#tab-archive">文档</a></li><?php endif;?>
+<?php if($is_view['progress']):?><li><a href="#tab-progress">项目进度</a></li><?php endif;?>
+</ul>	
+
+<?php if( $is_view['ep_prod'] ):?>
+	<div id="tab-prod" style="display:none;">
+		<table width="100%" class="grid-table">
+		
+			<tr>
+				<td class='tdright'>工厂编号</td>
+				<td class='tdleft'><?=$e_info['fac_code'];?></td>
+				<td class='tdright'>组织人数</td>
+				<td class='tdleft'><span id="ep-amount"><?=$e_info['ep_amount'];?></span></td>
+			</tr>
+			<tr>
+				<td class='tdright'>工厂名称</td>
+				<td colspan="3" class='tdleft'><?=$e_info['ep_name'];?></td>
+			</tr>
+			<tr>
+				<td class='tdright'>注册地址</td>
+				<td colspan="3" class='tdleft'><?=$e_info['ep_addr'];?></td>
+			</tr>
+			<tr>
+				<td class='tdright'>通讯地址</td>
+				<td colspan="3" class='tdleft'><?=$e_info['cta_addr'];?></td>
+			</tr>
+			<tr>
+				<td class='tdright'>生产地址</td>
+				<td colspan="3" class='tdleft'><?=$e_info['prod_addr'];?></td>
+			</tr>
+			<tr>
+				<td class='tdright'>县/区级地址</td>
+				<td class='tdleft'><?=$e_info['areaaddr'];?></td>
+				<td class='tdright'>县/区级代码</td>
+				<td class='tdleft'><?=$e_info['areacode'];?></td>
+			</tr>
+			<tr>
+				<td class='tdright'>合同来源</td>
+				<td class='tdleft'><?=$e_info['ctfrom'];?></td>
+				<td class='tdright'>组织联系传真</td>
+				<td class='tdleft'><?=$e_info['ep_fax'];?></td>
+			</tr>
+            <tr>
+				<td class='tdright'>联系人</td>
+				<td class='tdleft'><?=sub_Str($e_info['person'],"||:||");?></td>
+				<td class='tdright'>联系人职务</td>
+				<td class='tdleft'><?=sub_Str($e_info['person_job'],"||:||");?></td>
+			</tr> 
+             <tr>
+				<td class='tdright'>联系人手机</td>
+				<td class='tdleft'><?=sub_Str($e_info['person_mph'],"||:||");?></td>
+				<td class='tdright'>联系人邮箱</td>
+				<td class='tdleft'><?=sub_Str($e_info['person_mail'],"||:||");?></td>
+			</tr> 
+            <tr>
+				<td class='tdright'>法    人</td>
+				<td class='tdleft'><?=$e_info['delegate'];?></td>
+				<td class='tdright'>管理者代表</td>
+				<td class='tdleft'><?=$e_info['manager_daibiao'];?></td>
+			</tr>
+			<tr>
+				<td class='tdright'>备注</td>
+				<td class='tdleft'><?=$e_info['note']; ?></td>
+				<td class='tdright'></td>
+				<td class='tdleft'><!--<a href="?c=enterprise&a=edit&eid=<?=$e_info['eid'];?>&type=view#tab-contract" target="_blank">查看</a>--></td>
+			</tr>
+            <?php if($e_info['is_energy']){ ?>
+            <tr>
+            	<td class='tdleft' style="background-color:#CCC" colspan="4"><b>能源信息：</b></td>
+                
+            </tr>
+            <tr>
+				<td class='tdright'>典型生产工艺流程</td>
+				<td class='tdleft'><?=$e_info['process']?></td>
+				<td class='tdright'>是否有高耗能落后机电设备或产品</td>
+				<td class='tdleft'><?=$e_info['energy']?"是":"否";?></td>
+			</tr>
+            <tr>
+				<td class='tdright'>是否属于国家"十二五"规定的万家企业</td>
+				<td class='tdleft'><?=$e_info[is_125]?"是":"否";?></td>
+				<td class='tdright'>落后机电设备清单</td>
+				<td class='tdleft'><?=$e_info['energy_list']?></td>
+			</tr>
+            <tr>
+				<td class='tdright'>年度综合能耗（总能耗）</td>
+				<td class='tdleft'><?=$e_info['t_energy']?></td>
+				<td class='tdright'>能源结构或种类（如煤炭、电力、天然气、热力、汽油、柴油等）</td>
+				<td class='tdleft'><?=$e_info['variety']?></td>
+			</tr>
+            <tr>
+				<td class='tdright'>用能设备种类或主要能源使用数量</td>
+				<td class='tdleft'><?=$e_info['num']?></td>
+				<td class='tdright'>能耗核算边界（有多个生产场所时分别描述）</td>
+				<td class='tdleft'><?=$e_info['energy_e']?></td>
+			</tr>
+            <tr>
+				<td class='tdright'>是否有能源服务外包</td>
+				<td class='tdleft'><?=$e_info['energy_s']?"是":"否";?></td>
+				<td class='tdright'>包含哪些</td>
+				<td class='tdleft'><?=$e_info['include']?></td>
+			</tr>
+           <?php } ?>
+		</table>
+<?php if( $union_enterprises ):?>
+		<table class="grid-table" style="margin-top:12px;">
+			<tr>
+				<td colspan="4">关联企业&gt;&gt;</td>
+			</tr>
+			<tr>
+				<th>组织名称</th>
+				<th>组织人数</th>
+				<!--<th>专业代码</th>-->
+				<!--<th>审核范围</th>-->
+			</tr>
+<?php foreach( $union_enterprises as $row ):?>
+			<tr>
+				<td><?=$row['ep_name'];?></td>
+				<td><?=$row['ep_amount'];?></td>
+				<!--<td><?=$row['audit_code'];?></td>-->
+				<!--<td><?php if($row['scope'])foreach($row[scope] as $k=>$v){if($v) echo f_iso($k).":".$v."<br/>";}?></td>-->
+			</tr>
+<?php endforeach;?>
+		</table>
+<?php endif;
+
+if( $sub_sites ):?>
+		<table class="grid-table" style="margin-top:12px;">
+			<tr>
+				<td colspan="36">分场所&gt;&gt;</td>
+			</tr>
+			<tr>
+				<th>分场所名称</th>
+				<th>部门</th>
+				<th>联系人</th>
+				<th>电话</th>
+				<th>人数</th>
+				<th>距离</th>
+				<th>范围</th>
+			</tr>
+<?php foreach( $sub_sites as $site ):?>
+			<tr>
+				<td><?=$site['es_name'];?></td>
+				<td><?=$site['es_dpart'];?></td>
+				<td align='center'><?=$site['es_person'];?></td>
+				<td align='center'><?=$site['es_tel'];?></td>
+				<td align='center'><?=$site['es_num'];?></td>
+				<td align='center'><?=$site['es_km'];?></td>
+				<td align='center'>
+				<?php
+if( $site['es_scope'] ){
+?>
+<a href="javascript:;" title="<?=$site['es_scope']?>"><img src="theme/images/other.png" border="0" /></a> 
+<?php
+}
+?>
+				</td>
+			</tr>
+<?php endforeach;?>
+		</table>
+<?php endif;?>
+	</div>
+<?php endif;?>
+
+<?php if( $is_view['contract'] ):?>
+<div id="tab-contract" style="display:none;">
+		
+<table class="grid-table">
+			<tr>
+            <th>认证申请编号</th>
+            <th>委托人</th>
+            <th>生产者</th>
+            <th>生产企业</th>
+            <th>小类</th>
+            <th width="100">产品名称</th>
+            <th width="150">产品型号</th>
+            </tr>
+<?php 
+foreach($cti_infos as $cti_id=>$cti){ 
+?>
+			<tr>
+				<td><?=$cti[cti_code];?><img src="theme/images/other.png" border="0" onclick="showCti(<?=$cti_id;?>)" /></td>
+                <td><?=$cti[ep_name];?><img src="theme/images/other.png" border="0" onclick="showEp(<?=$cti[eid];?>,1)" /></td>
+                <td><?=$cti[manu_name];?><img src="theme/images/other.png" border="0" onclick="showEp(<?=$cti[ep_manu_id];?>,2)" /></td>
+                <td><?=$cti[prod_name];?><img src="theme/images/other.png" border="0" onclick="showEp(<?=$cti[ep_prod_id];?>,3)" /></td>
+                <td><?=$cti[prod_id];?></td>
+                <td><?=$cti[prod_name_chinese];?></td>
+                <td><?=$cti[scope];?></td>
+			</tr>
+            
+
+<?php } ?>
+</table>
+</div>
+<?php endif;?>
+
+<?php if( $is_view['audit'] ):?>
+	<div id="tab-audit" style="display:none;">
+	<table class="grid-table">
+			<tr>
+				<th>检查计划号</th>
+				<td><?=$t_info['task_code'];?></td>
+				<th>总人日</th>
+				<td><?=$t_info['tk_num'];?></td>
+			</tr>
+			<tr>
+				<th>检查开始</th>
+				<td><?=$t_info['tb_date'];?></td>
+				<th>检查结束</th>
+				<td><?=$t_info['te_date'];?></td>
+			</tr>
+			<tr>
+				<td colspan="4">
+					
+					<?php if( $auditors ):?>
+					<table class="grid-table" style="margin-top:9px;" >
+						<tr>
+							<th>审核员</th>
+							<th>体系</th>
+							<!-- <th>是否组长</th> -->
+							<th>组内身份</th>
+							<th>注册资格</th>
+                            <th>专业</th>
+							<!--th>专业代码</th-->
+							<th>联系方式</th>
+                            <!--<th width="80">审核开始</th>
+                            <th width="80">审核结束</th>
+                            <th>天数</th>-->
+						</tr>
+						<?php foreach( $auditors as $pid => $auditor ) { 
+							//@HBJ 2013-9-28 没有注册资格的不显示
+							if (!empty($auditor['qua_type_V']) or 1){
+							?>
+						<tr>
+							<td><?=$auditor['name'];?></td>
+							<td><?=f_iso($auditor['iso']);?></td>
+							<!-- <td><?=$auditor['is_leader'];?></td> -->
+							<td><?=f_audit_role($auditor['role']);?></td>
+							<td><?=$auditor['qua_type_V'];?></td>
+                            <td><?=$auditor['use_code'];?></td>
+							<!--td><?=$auditor['audit_code'];?></td-->
+							<td><?=$auditor['tel'];?></td>
+                            <!--<td><?=$auditor['taskBeginDate'];?></td>
+                            <td><?=$auditor['taskEndDate'];?></td>
+                            <td><?=$auditor['num'];?></td>-->
+						</tr>
+
+						<?php }}?>
+					</table>
+					<?php  endif;?>
+					<br/>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+	
+<?php endif;?>
+
+
+
+
+<?php if( $is_view['cert'] ):?>
+	<div id="tab-cert" style="display:none;">
+		<table class="grid-table">
+			<tr>
+				<th width="80">证书编号</th>
+				
+				<th width="80">发证日期</th>
+				<th width="80">证书有效期至</th>
+				<th width="60">换证日期</th>
+				<th width="80">型号</th>
+				<th width="60">状态</th>
+			</tr>
+<?php foreach($certs as $cid => $cert ){ ?>		
+			<tr align='center'>
+				<td><?=$cert['certno'];?></td>
+				<td><?=$cert['s_date'];?></td>
+				<td><?=$cert['e_date'];?></td>
+				<td><?=$cert['change_date'];?></td>
+				<td><a href='#' title='<?=$cert['cert_scope'];?>' class="a_link"><img src="theme/images/other.png" border="0" /><span style="display:none"><?=$cert['cert_scope'];?></span></a></td>
+				<td><?=f_certstate($cert['status']);?></td>
+			</tr>
+<?php } ?>		
+		</table>
+		<table class="grid-table" style="margin-top:9px;">
+			<tr>
+				<td><strong>证书变更记录&gt;&gt;</strong></td>
+			</tr>
+			<tr>
+				<td>
+<?php if( $certs ): foreach( $certs as $zs_id => $cert ): if(!$cert_changes[$zs_id]) continue; ?>
+					<table class="grid-table" style="margin: 5px 0 9px;">
+						<tr>
+							<td colspan="7">证书编号：<a name="<?=$cert['certno'];?>" href="javascript:;"><?=$cert['certno'];?></a></td>
+						</tr>
+						<tr>
+							<th>变更类型</th> 
+							<th>变更内容</th>
+							
+							<th>变更日期</th>
+							<th>暂停到期</th>
+                            <th>审批日期</th>
+							<th>备注</th>
+						</tr>
+		<?php if( isset( $cert_changes[$zs_id] ) ): foreach( $cert_changes[$zs_id] as $cg_id => $log ):?>
+						<tr>
+							<td><?=read_cache('certchange',$log['cg_type']);?></td> 
+							<td><?=$log['cg_content'];?></td>
+ 							<td><?=$log['cgs_date'];?></td>
+							<td><?=$log['cge_date'];?></td>
+                            <td><?=$log['pass_date'];?></td>
+							<td></td>
+						</tr>
+		<?php endforeach;endif;?>
+					</table>
+<?php endforeach;endif;?>
+				</td>
+			</tr>
+		</table>
+	</div>
+<?php endif;?>
+
+<?php if( $is_view['archive'] ):?>
+	<div id="tab-archive" style="display:none;">
+		<table width="100%" class="grid-table">
+			<tr>
+				<th>文档名</th>
+				<th>文档类型</th>
+				<th>备注</th>
+				<th>上传时间</th>
+				<th>上传人</th>
+				<th>下载</th>
+                <th>删除</th>
+			</tr>
+<?php 
+	foreach($archives as $aid => $archive ){
+?>
+			<tr>
+				<td><?=$archive['name'];?></td>
+				<td><?=read_cache("arctype",$archive['ftype']);?></td>
+				<td>
+				<?php if($archive['description']){?><a href="javascript:;" title="<?=$archive['description'];?>"><img src="theme/images/other.png" border="0" /></a><?php } ?>
+				</td>
+				<td><?=$archive['create_date'];?></td>
+				<td><?=$archive['create_user'];?></td>
+				<td align="center"><a href="?c=attachment&a=down&aid=<?=$archive['id'];?>&class=pro" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a></td>
+                <?php if(current_user("uid")==1 or current_user("uid")==$archive[create_uid]){ ?>
+                <td align="center"><a href="?c=attachment&a=del&aid=<?=$archive['id'];?>&class=pro" class="c-del"><img src="theme/images/b_drop.png" border=0 /></a></td>
+                <?php }else{ ?>
+                <td></td>
+                <?php }?>
+			</tr>
+<?php } ?>
+			
+		</table>
+        <p align="right"><a href="?m=product&c=ajax&a=list_attach&eid=<?=$ep_prod_id?>&cti_id=<?=$cti_id;?>" target="_blank">更多</a></p>
+	</div>
+<?php endif;?>
+
+<?php if( $is_view['progress'] ):?>
+	<div id="tab-progress" style="display:none;">
+		<table width="100%" class="grid-table">
+			<tr>
+				<th>申请号</th>
+				<th>类型</th>
+				<th>申请时间</th>
+				<th>历时</th>
+				<th>受理时间</th>
+				<th>历时</th>
+                <th>检测安排时间</th>
+                <th>历时</th>
+				<th>检测结果时间</th>
+				<th>历时</th>
+                <th>检查安排时间</th>
+                <th>历时</th>
+				<th>组长填实际检查时间</th>
+				<th>历时</th>
+                <th>填写检查结论时间</th>
+                <th>历时</th>
+                <th>整改完成时间</th>
+                <th>历时</th>
+				<th>资料收回时间</th>
+				<th>历时</th>
+                <th>认证决定时间</th>
+                <th>历时</th>
+                <th>发证时间</th>
+			</tr>
+<?php 
+	foreach($progress as  $archive ){
+?>
+			<tr>
+				<td><?=$archive['name'];?></td>
+				<td><?=read_cache("arctype",$archive['ftype']);?></td>
+				<td>
+				<?php if($archive['description']){?><a href="javascript:;" title="<?=$archive['description'];?>"><img src="theme/images/other.png" border="0" /></a><?php } ?>
+				</td>
+				<td><?=$archive['create_date'];?></td>
+				<td><?=$archive['create_user'];?></td>
+				<td align="center"><a href="?c=attachment&a=down&aid=<?=$archive['id'];?>&class=pro" title="下载"><img src="theme/images/down.gif" width="16" height="16" border=0 /></a></td>
+                <?php if(current_user("uid")==1 or current_user("uid")==$archive[create_uid]){ ?>
+                <td align="center"><a href="?c=enterprise&a=delattach&aid=<?=$archive['id'];?>&class=pro" class="c-del"><img src="theme/images/b_drop.png" border=0 /></a></td>
+                <?php }else{ ?>
+                <td></td>
+                <?php }?>
+			</tr>
+<?php } ?>
+			
+		</table>
+        <?php if(count($archives)>10){?>
+        <p align="right"><a href="?c=ajax&a=list_attach&eid=<?=$eid?>&ct_id=<?=$ct_id;?>" target="_blank">更多</a></p>
+        <?php }?>
+	</div>
+<?php endif;?>
+</div>
